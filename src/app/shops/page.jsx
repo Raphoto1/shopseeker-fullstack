@@ -17,7 +17,7 @@ export default function Shops() {
       <div className='p-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3'>
         <h1>designs</h1>
         {allDesigns.map((des) => (
-          <div>
+          <div key={des._id}>
             <CardDesign 
               key={des._id}
               id={des._id}
