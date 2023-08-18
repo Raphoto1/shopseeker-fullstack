@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function CardDesign(props) {
   return (
     <>
-      <div className='relative max-w-sm bg-blue-200 border border-gray-500 rounded-lg hover:shadow-xl dark:bg-blue-950'>
+      <div className='relative max-w-sm bg-blue-200 border border-gray-500 rounded-lg hover:shadow-xl dark:bg-blue-950' id={props.key}>
         <div className='absolute z-10 right-3'>
           <LikeButton />
         </div>

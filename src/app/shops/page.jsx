@@ -19,7 +19,7 @@ export default function Shops() {
         {allDesigns.map((des) => (
           <div>
             <CardDesign 
-              key={des._id}
+              key={des.index}
               id={des._id}
               title={des.title}
               description={des.description}
