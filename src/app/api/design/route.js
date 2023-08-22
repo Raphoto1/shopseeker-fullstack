@@ -3,15 +3,25 @@ import { createDesign, getAllDesigns, updateDesign } from "@/service/design.serv
 //imports app
 import { NextResponse } from "next/server";
 
+//todos los productos
 export async function GET(req) {
   try {
-    let designs = await getAllDesigns();
+    const url = new URL(req.url);
+    const searchParam = url.searchParams.get("search");
+    const queryKey = url.searchParams.get("queryKey");
+    const limit = url.searchParams.get("limit");
+    const page = url.searchParams.get("page");
+    //sortQ pegado a title
+    const sortQ = url.searchParams.get("sortQ");
+    let designs = await getAllDesigns(limit, page, sortQ, queryKey, searchParam);
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {
     return NextResponse.json({ message: `error: ${error}` });
   }
 }
 
+
+//agregar diseno
 export async function POST(req) {
   try {
     //capturar data

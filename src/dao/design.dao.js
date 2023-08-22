@@ -1,11 +1,12 @@
 import designModel from "@/models/design.model";
 import { dbConnect } from "@/utils/mongoDb";
 
-export const mongoDbGetAllDesigns = async () => {
+export const mongoDbGetAllDesigns = async (querySearch,options) => {
+
   //logica de mongo
   try {
     await dbConnect();
-    const designs = await designModel.find();
+    const designs = await designModel.paginate(querySearch,options);
     return designs;
   } catch (error) {
     throw new Error(`error desde dao: ${error}`);
@@ -47,10 +48,10 @@ export const mongoDbUpdateDesign = async (id, field, data) => {
 };
 
 export const mongoDbDeleteDesign = async (id) => {
-    try {
-        const designToDelete = await designModel.findByIdAndDelete(id);
-        return designToDelete
-    } catch (error) {
-        throw new Error(error)
-    }
-}
+  try {
+    const designToDelete = await designModel.findByIdAndDelete(id);
+    return designToDelete;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose"
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const DesignSchema = new Schema(
     {
@@ -45,5 +46,7 @@ const DesignSchema = new Schema(
         timestamps: true
     }
 );
+
+DesignSchema.plugin(mongoosePaginate);
 
 export default models.design || model("design", DesignSchema);
