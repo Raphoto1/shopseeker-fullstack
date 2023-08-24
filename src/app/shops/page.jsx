@@ -39,12 +39,12 @@ export default function Shops() {
 
   return (
     <>
-      <div className="flex-col">
-        <div className="">
+      <div className="">
+        <div className="flex content-center  ">
           <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} />
           <h2>filters</h2>
         </div>
-        <div className='flex flex-grid grid-cols-4 gap-2 xs:grid-cols-1 justify-center content-center'>
+        <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2'>
           {allDesigns.map((des) => (
             <div key={des._id}>
               <CardDesign

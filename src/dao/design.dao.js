@@ -6,7 +6,15 @@ export const mongoDbGetAllDesigns = async (querySearch,options) => {
   //logica de mongo
   try {
     await dbConnect();
-    const designs = await designModel.paginate(querySearch,options);
+    console.log(querySearch);
+    // const pureText= 'test'
+    // const textToFind = `/^${querySearch}/`
+    // console.log(textToFind);
+    // const convertido = new RegExp(textToFind.slice(1, -1));
+    // console.log(convertido);
+    const designs = await designModel.paginate(querySearch , options);
+    // const designs = await designModel.find({ title: { $in: [ 'test' ] } }).paginate();
+    console.log(designs);
     return designs;
   } catch (error) {
     throw new Error(`error desde dao: ${error}`);

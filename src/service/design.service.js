@@ -13,15 +13,19 @@ export const getAllDesigns = async (limit, page, sortQ, queryKey, queryParam) =>
   let queryKeyIn = queryKey;
   let queryIn = queryParam;
   if (queryKeyIn) {
-    queryKeyIn   
+    queryKeyIn;
   } else {
-    queryKeyIn= "title"
-  }
+    queryKeyIn = "title";
+  };
   //empaqueto options
   let options = { limit: limitIn, page: pageIn, sort: sortIn };
+  //se ajusta el termino a query a exp regular porque el mongo no acepta string directo
+  //sin ^ para que tome tooodo el string
+  const textToFind = `/${queryIn}/`
+  const textToFindConverted = new RegExp(textToFind.slice(1, -1));
   let querySearch;
   if (queryKeyIn && queryIn) {
-    querySearch = { [queryKeyIn]: [queryIn] };
+    querySearch = { [queryKeyIn]: textToFindConverted };
     options.limit = 5;
   } else {
     {
