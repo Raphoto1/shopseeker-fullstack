@@ -13,6 +13,7 @@ export async function GET(req) {
     const page = url.searchParams.get("page");
     //sortQ pegado a title
     const sortQ = url.searchParams.get("sortQ");
+    console.log(queryKey);
     let designs = await getAllDesigns(limit, page, sortQ, queryKey, searchParam);
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {

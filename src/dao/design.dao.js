@@ -7,11 +7,6 @@ export const mongoDbGetAllDesigns = async (querySearch,options) => {
   try {
     await dbConnect();
     console.log(querySearch);
-    // const pureText= 'test'
-    // const textToFind = `/^${querySearch}/`
-    // console.log(textToFind);
-    // const convertido = new RegExp(textToFind.slice(1, -1));
-    // console.log(convertido);
     const designs = await designModel.paginate(querySearch , options);
     // const designs = await designModel.find({ title: { $in: [ 'test' ] } }).paginate();
     console.log(designs);
