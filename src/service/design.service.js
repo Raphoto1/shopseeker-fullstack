@@ -4,28 +4,28 @@ import fs from "fs";
 //imports propios
 import { mongoDbgetDesignsById, mongoDbCreateNewDesign, mongoDbGetAllDesigns, mongoDbUpdateDesign, mongoDbDeleteDesign } from "@/dao/design.dao";
 //**codigo**
-export const getAllDesigns = async (limit, page,sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
+export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
   //logica y organizacion de data
   //filtros y busqueda
   let limitIn = limit ? limit : 50;
   let pageIn = page ? page : 1;
-  let sortFieldIn = sortField ? sortField : 'title';
+  let sortFieldIn = sortField ? sortField : "title";
   let sortIn = sortQ ? { [sortFieldIn]: sortQ } : false;
   let queryKeyIn = queryKey;
   let queryIn = queryParam;
   let filterCategory = filterCat ? filterCat : false;
   let filterShops = filterShop ? filterShop : false;
-  
+
   if (queryKeyIn) {
     queryKeyIn;
   } else {
     queryKeyIn = "title";
-  };
+  }
   //empaqueto options
   let options = { limit: limitIn, page: pageIn, sort: sortIn };
   //se ajusta el termino a query a exp regular porque el mongo no acepta string directo
   //sin ^ para que tome tooodo el string
-  const textToFind = `/${queryIn}/`
+  const textToFind = `/${queryIn}/`;
   const textToFindConverted = new RegExp(textToFind.slice(1, -1));
   let querySearch;
   if (queryKeyIn && queryIn) {
@@ -35,47 +35,54 @@ export const getAllDesigns = async (limit, page,sortField, sortQ, queryKey, quer
     {
     }
   }
-  let filterPack ={};
-  let filtercatRaw;
-  let filterShopRaw;
+  //filtros
+  let filterPack = {};
   //crear la busqueda de filtro
+  //filtro por categoria
   switch (filterCategory) {
     case "Digital":
-      filtercatRaw = RegExp(`'category':'Digital'`);
+      filterPack.category = "Digital";
       break;
-      case "Photography":
-      filtercatRaw = RegExp(`'category':'Photography'`);
+    case "Photography":
+      filterPack.category = "Photography";
       break;
-      case "Traditional":
-        filtercatRaw = {'category':'Traditional'}
+    case "Traditional":
+      filterPack.category = "Traditional";
       break;
-      case "MixedMedia":
-        filtercatRaw = {'category':'MixedMedia'}
+    case "MixedMedia":
+      filterPack.category = "MixedMedia";
       break;
-    default:filtercatRaw
+    default:
+      filterPack;
       break;
   }
+  //filtro por tienda
   switch (filterShops) {
     case "RedBubble":
-      filterShopRaw = push(`"shops.shopUrl": /displate/`)
+      filterPack["shops.shopUrl"] = /redbubble/;
       break;
     case "Society6":
-      filterShopRaw = push(`"shops.shopUrl": /society6/`)
+      filterPack["shops.shopUrl"] = /society6/;
       break;
-    default:filterShopRaw
+    case "Displate":
+      filterPack["shops.shopUrl"] = /displate/;
+      break;
+      case "TeePublic":
+        filterPack["shops.shopUrl"] = /teepublic/;
+      break;
+      case "Spreadshirt":
+        filterPack["shops.shopUrl"] = /spreadshirt/;
+        break;
+    default:
+      filterPack;
       break;
   }
-  let shoptest ='"shops.shopUrl": /displate/';
-  let cattest = "'category':'Photography'";
-  
-  let querySearchTest;
-  // let querySearchTest = { "shops.shopUrl": /displate/, 'category': 'Photography' }
-  filterPack = `{${shoptest},${cattest}}`
-  // filterPack.push(cattest);
-  console.log(JSON.parse(filterPack));
-  console.log('esto es test '+filterPack+typeof(filterPack));
-  querySearchTest = filterPack;
-  const designs = await mongoDbGetAllDesigns(querySearchTest, options);
+ 
+  querySearch = filterPack;
+
+
+
+  const designs = await mongoDbGetAllDesigns(querySearch, options);
   // const designs = await mongoDbGetAllDesigns({'category':'photo'}, options);
   if (designs === []) {
     return [];

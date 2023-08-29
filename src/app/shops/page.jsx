@@ -97,6 +97,9 @@ export default function Shops() {
             </option>
             <option value='RedBubble'>RedBubble</option>
             <option value='Society6'>Society6</option>
+            <option value='Displate'>Displate</option>
+            <option value='TeePublic'>TeePublic</option>
+            <option value='Spreadshirt'>Spreadshirt</option>
           </select>
           <button className="btn btn-square" onClick={handleApplyFilter}>Apply Filter</button>
         </div>
