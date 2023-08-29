@@ -6,10 +6,8 @@ export const mongoDbGetAllDesigns = async (querySearch,options) => {
   //logica de mongo
   try {
     await dbConnect();
-    console.log(querySearch);
     const designs = await designModel.paginate(querySearch , options);
     // const designs = await designModel.find({ title: { $in: [ 'test' ] } }).paginate();
-    console.log(designs);
     return designs;
   } catch (error) {
     throw new Error(`error desde dao: ${error}`);

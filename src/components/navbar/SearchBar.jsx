@@ -12,12 +12,11 @@ export default function SearchBar({ onSearchTerm, onButtonClick, onSearchFilter 
     setSearchFilter(e.target.value);
     onSearchFilter(e.target.value);
   };
-  console.log(searchFilter);
 
   return (
     <>
-      <div className='form-control justify-center sm:flex'>
-        <div className='input-group'>
+      <div className='form-control'>
+        <div className='sm:input-group-xs md:input-group'>
           <input type='text' onChange={handleSearch} placeholder='Search…' className='input input-bordered' />
           <select className='select select-bordered join-item' onChange={handleFilter} onSelect={onSearchFilter} id='filter' name='filter'>
             <option selected value='title'>

@@ -12,6 +12,7 @@ export default function CardDesign(props) {
         </figure>
         <div className='card-body'>
           <h2 className='card-title'>{props.title}</h2>
+          <h3>{ props.category}</h3>
           <p>{props.description}</p>
           <div className="p-2 grid grid-flow-col auto-cols-auto gap-3 content-center">
           {props.shops.map((shop) => {

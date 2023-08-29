@@ -59,7 +59,12 @@ export default function Upload() {
             <label htmlFor='description'>Description</label>
             <input type='text' id='description' name='description' className='rounded-lg text-slate-900' />
             <label htmlFor='Technique'>Technique</label>
-            <input type='text' id='category' name='category' className='rounded-lg text-slate-900' />
+            <select name="category" id="category">
+              <option value="Digital">Digital</option>
+              <option value="Traditional">Traditional</option>
+              <option value="Photography">Photography</option>
+              <option value="MixedMedia">MixedMedia</option>
+            </select>
           </div>
           <h2>Shops</h2>
           <div>
