@@ -66,9 +66,7 @@ export default function Shops() {
     console.log(filterPathCat, filterPathShop);
     setFilterDef(`${filterPathCat}${filterPathShop}`);
   }
-  console.log(filterCategory);
-  console.log(filterPathShop);
-  console.log(filterDef);
+  
   return (
     <>
       <div className='total'>
@@ -117,7 +115,7 @@ export default function Shops() {
         </div>
 
         <div>
-          <div className="join align-middle">
+          <div className="flex join align-middle justify-center pt-2">
             <button className="join-item btn" onClick={() => setPageIndex(pageIndex - 1)}>«</button>
             <button className="join-item btn">{pageIndex}</button>
             <button className="join-item btn" onClick={() => setPageIndex(pageIndex + 1)}>»</button>
