@@ -9,6 +9,7 @@ export async function GET(req) {
     const url = new URL(req.url);
     const searchParam = url.searchParams.get("search");
     const queryKey = url.searchParams.get("queryKey");
+    //sorts
     const limit = url.searchParams.get("limit");
     const page = url.searchParams.get("page");
     const sortField = url.searchParams.get("sortField");
@@ -16,9 +17,6 @@ export async function GET(req) {
     const sortQ = url.searchParams.get("sortQ");
     const filterCat = url.searchParams.get("filterCat");
     const filterShop = url.searchParams.get("filterShop");
-
-    console.log(filterShop);
-    console.log(filterCat);
     let designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop);
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {

@@ -67,20 +67,18 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
     case "Displate":
       filterPack["shops.shopUrl"] = /displate/;
       break;
-      case "TeePublic":
-        filterPack["shops.shopUrl"] = /teepublic/;
+    case "TeePublic":
+      filterPack["shops.shopUrl"] = /teepublic/;
       break;
-      case "Spreadshirt":
-        filterPack["shops.shopUrl"] = /spreadshirt/;
-        break;
+    case "Spreadshirt":
+      filterPack["shops.shopUrl"] = /spreadshirt/;
+      break;
     default:
       filterPack;
       break;
   }
- 
+
   querySearch = filterPack;
-
-
 
   const designs = await mongoDbGetAllDesigns(querySearch, options);
   // const designs = await mongoDbGetAllDesigns({'category':'photo'}, options);
