@@ -18,7 +18,10 @@ const DesignSchema = new Schema(
             trim: true,
             maxlength: [300, "title cannot be grater than 300 characters"],
         },
-        likes:Number,
+        likes: {
+            type: Number,
+            default:0
+        },
         category: {
             type:String,
         },

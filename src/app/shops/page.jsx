@@ -10,23 +10,32 @@ export default function Shops() {
   //set de paginas
   const [pageIndex, setPageIndex] = useState(1);
   const [searchText, setSearchText] = useState("");
+  //set de busquedas
   const [searchDef, setSearchDef] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  //set de filtros
   const [filterCategory, setFilterCategory] = useState("");
   const [filterShop, setFilterShop] = useState("");
   const [filterDef, setFilterDef] = useState("");
+  //set de sorts
+  const [limitPerPage, setLimitPerPage] = useState("&limit=20");
+
   //se inicializan paths antes de iniciar swr
-  let searchPath = '';
-  let filterPathCat = '';
-  let filterPathShop = '';
-  let basePath = `/api/design?page=${pageIndex}&limit=20${searchDef}${filterDef}`;
+  let searchPath = "";
+  let filterPathCat = "";
+  let filterPathShop = "";
+  let limitDesigns ="&limit=20"
+  let basePath = `/api/design?page=${pageIndex}${limitPerPage}${searchDef}${filterDef}`;
   //se usa swr para manejar el fetch por recomendacion de vercel
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
   const { data, error, isLoading } = useSWR(basePath, fetcher);
   if (error) return <h1>Not designs found</h1>;
-  if (isLoading) return <div className="flex h-full w-full justify-center content-center">
-    <span className="loading loading-infinity loading-lg"/>
-  </div>;
+  if (isLoading)
+    return (
+      <div className='flex h-full w-full justify-center content-center'>
+        <span className='loading loading-infinity loading-lg' />
+      </div>
+    );
   //data de paginacion
   const allDesigns = data.payload.docs;
   const paginationTotal = data.payload.totalPages;
@@ -35,11 +44,11 @@ export default function Shops() {
     searchPath = "";
   } else {
     searchPath = `&search=${searchText}&queryKey=${searchKey}`;
-  };
+  }
 
-//organizar ruta filter
-  filterCategory? filterPathCat = `&filterCat=${filterCategory}` : filterPathCat = "";
-  filterShop? filterPathShop = `&filterShop=${filterShop}` : filterPathShop = "";
+  //organizar ruta filter
+  filterCategory ? (filterPathCat = `&filterCat=${filterCategory}`) : (filterPathCat = "");
+  filterShop ? (filterPathShop = `&filterShop=${filterShop}`) : (filterPathShop = "");
 
   //organizar y capturar busqueda
   const handleSearchText = (value) => {
@@ -65,17 +74,28 @@ export default function Shops() {
   const handleApplyFilter = () => {
     console.log(filterPathCat, filterPathShop);
     setFilterDef(`${filterPathCat}${filterPathShop}`);
+  };
+
+  //organizar y capturar sort
+  const handleLimit = (e) => {
+    console.log(e.target.value);
+    setLimitPerPage(`&limit=${e.target.value}`)
   }
+
+  //captura de like
   
+  console.log(limitPerPage);
   return (
     <>
       <div className='total'>
-        <div className="topbar flex flex-wrap justify-center w-full sm:max-w-fit">
-          <div className="flex w-full justify-center min-w-full">
+        <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit'>
+          <div className='flex w-full justify-center min-w-full'>
             <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} />
           </div>
           <div className='input-group  justify-center'>
-            <span htmlFor='filter' className="btn">Filters</span>
+            <span htmlFor='filter' className='btn'>
+              Filters
+            </span>
             <select name='category' id='categoryFilter' className='select' onChange={handleCategoryFilter}>
               <option disabled selected>
                 Filter by Category
@@ -95,7 +115,9 @@ export default function Shops() {
               <option value='TeePublic'>TeePublic</option>
               <option value='Spreadshirt'>Spreadshirt</option>
             </select>
-            <button className="btn" onClick={handleApplyFilter}>Apply Filter</button>
+            <button className='btn' onClick={handleApplyFilter}>
+              Apply Filter
+            </button>
           </div>
         </div>
         <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2'>
@@ -109,20 +131,35 @@ export default function Shops() {
                 category={des.category}
                 photo={des.photo}
                 shops={des.shops}
+                likes={des.likes}
               />
             </div>
           ))}
         </div>
 
         <div>
-          <div className="flex join align-middle justify-center pt-2">
-            <button className="join-item btn" onClick={() => setPageIndex(pageIndex - 1)}>«</button>
-            <button className="join-item btn">{pageIndex}</button>
-            <button className="join-item btn" onClick={() => setPageIndex(pageIndex + 1)}>»</button>
-            <div className="btn">Of {paginationTotal}</div>
+          <div className='flex join align-middle justify-center pt-2'>
+            <button className='join-item btn' onClick={() => setPageIndex(pageIndex - 1)}>
+              «
+            </button>
+            <button className='join-item btn'>{pageIndex}</button>
+            <button className='join-item btn' onClick={() => setPageIndex(pageIndex + 1)}>
+              »
+            </button>
+            <div className='btn'>Of {paginationTotal}</div>
           </div>
-          <div className="sort">
+          <div className='sort'>
+            <div id="limitselect" className="join">
+              <label className="btn join-item">Designs per page</label>
+              <select name="limit" id="" className="select join-item" onChange={handleLimit}>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div id="sortSelect">
 
+            </div>
           </div>
         </div>
       </div>
