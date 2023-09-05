@@ -22,7 +22,7 @@ export async function GET(req) {
   } catch (error) {
     return NextResponse.json({ message: `error: ${error}` });
   }
-}
+};
 
 //agregar diseno
 export async function POST(req) {
@@ -35,7 +35,9 @@ export async function POST(req) {
   } catch (error) {
     return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
   }
-}
+};
+
+//actualizar diseño
 export async function PUT(req) {
   try {
     //captura de data

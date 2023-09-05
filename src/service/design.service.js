@@ -93,6 +93,9 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
 
 export const getDesignById = async (id) => {
   const design = await mongoDbgetDesignsById(id);
+  if (design===null) {
+    throw new Error('Design not Found')
+  }
   return design;
 };
 
@@ -164,6 +167,29 @@ export const deleteDesign = async (id) => {
     throw new Error("design Not found");
   }
 };
+
+export const likeDesign = async (id, value) => {
+  const chkDesign = await mongoDbgetDesignsById(id);
+  const likeUpdate = value;
+  if (chkDesign) {
+    let likeToUpdate = chkDesign.likes;
+    if (Math.sign(likeUpdate)===1) {
+      const likeToPush = likeToUpdate + 1;
+      const designToUpdate = await mongoDbUpdateDesign(id, 'likes', likeToPush);
+      return designToUpdate;
+    } else {
+      if (likeToUpdate===0) {
+        return 'no permited';
+      } else {
+        const likeToPush = likeToUpdate - 1;
+        const designToUpdate = await mongoDbUpdateDesign(id, 'likes', likeToPush);
+        return designToUpdate;  
+      };
+    };
+  } else {
+   throw new Error('Design Not Found') 
+  }
+}
 
 const imageFileUploaderDesign = async (file, pCode) => {
   if (file.size === 0) {

@@ -2,25 +2,27 @@
 import Image from "next/image";
 import { LikeButton } from "./buttons/LikeButton";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CardDesign(props) {
-  const [likedId, setLikedId] = useState('');
-  
-  const handleLiked = (id) => {
-    
-    console.log('diste like');
-    console.log(likedId);
-}
+  const [likesCount, setLikesCount] = useState(props.likes);
+  const likedSend = (estado) => {
+    if (!estado) {
+      setLikesCount(likesCount + 1);
+    } else {
+      setLikesCount(likesCount - 1);
+    }
+  }
+
 
   return (
     <>
       <div className='card bg-base-100 shadow-xl stretch h-full glass'>
       <div className="flex justify-around ">
-          <LikeButton desId={props.id} />
+          <LikeButton desId={props.id} likedSend={likedSend} />
           {
             props.likes >0 && (
-              <p>liked {props.likes} times</p>    
+              <p>liked {likesCount} times</p>    
             )
           }
           

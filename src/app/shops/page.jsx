@@ -19,13 +19,13 @@ export default function Shops() {
   const [filterDef, setFilterDef] = useState("");
   //set de sorts
   const [limitPerPage, setLimitPerPage] = useState("&limit=20");
+  const [sortOption, setSortOption] = useState("&sortQ=1");
 
   //se inicializan paths antes de iniciar swr
   let searchPath = "";
   let filterPathCat = "";
   let filterPathShop = "";
-  let limitDesigns ="&limit=20"
-  let basePath = `/api/design?page=${pageIndex}${limitPerPage}${searchDef}${filterDef}`;
+  let basePath = `/api/design?page=${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
   //se usa swr para manejar el fetch por recomendacion de vercel
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
   const { data, error, isLoading } = useSWR(basePath, fetcher);
@@ -79,11 +79,15 @@ export default function Shops() {
   //organizar y capturar sort
   const handleLimit = (e) => {
     console.log(e.target.value);
-    setLimitPerPage(`&limit=${e.target.value}`)
-  }
+    setLimitPerPage(`&limit=${e.target.value}`);
+  };
 
+  const handleSort = (e) => {
+    console.log(e.target.value);
+    setSortOption(`&sortQ=${e.target.value}`);
+  }
   //captura de like
-  
+
   console.log(limitPerPage);
   return (
     <>
@@ -148,17 +152,23 @@ export default function Shops() {
             </button>
             <div className='btn'>Of {paginationTotal}</div>
           </div>
-          <div className='sort'>
-            <div id="limitselect" className="join">
-              <label className="btn join-item">Designs per page</label>
-              <select name="limit" id="" className="select join-item" onChange={handleLimit}>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+          <div className='sort flex justify-center join'>
+            <div id='limitselect' className='join'>
+              <label className='btn join-item'>Designs per page</label>
+              <select name='limit' id='' className='select join-item' onChange={handleLimit}>
+                <option value='20'>20</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
               </select>
             </div>
-            <div id="sortSelect">
-
+            <div id='sortSelect'>
+              <div id='sortOrder' className='join'>
+                <label className='btn join-item'>Designs Order</label>
+                <select name='sortOrder' id='' className='select join-item' onChange={handleSort}>
+                  <option value='1'>A-Z</option>
+                  <option value='-1'>Z-A</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
