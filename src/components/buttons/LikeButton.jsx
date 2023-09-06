@@ -2,6 +2,7 @@
 //imports de app
 import { useState } from "react";
 import useSWR from "swr";
+import {  toast } from "react-toastify";
 
 export function LikeButton({ desId, likedSend }) {
   //fetch para agregar
@@ -16,7 +17,7 @@ export function LikeButton({ desId, likedSend }) {
     setAvailableBtn(true);
     setTimeout(() => {
       setAvailableBtn(false);
-    }, "500");
+    }, "800");
 
     if (liked == false) {
       basePath = `/api/design/${desId}?value=1`;
@@ -25,7 +26,11 @@ export function LikeButton({ desId, likedSend }) {
         method: "PUT",
       })
         .then((res) => res.json())
-        .then((data) => {        });
+        .then((data) => {
+          if (data.status === 200) {
+            toast("liked");
+          }
+        });
     } else {
       console.log("resto1");
       basePath = `/api/design/${desId}?value=-1`;
@@ -35,15 +40,17 @@ export function LikeButton({ desId, likedSend }) {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          toast("disliked")
         });
-      console.log(data);
     }
   };
 
   return (
-    <button disabled={availableBtn} onClick={handleLiked}>
-      {liked ? `♥` : `♡`}
-    </button>
+    <>
+      <button disabled={availableBtn} onClick={handleLiked}>
+        {liked ? `♥` : `♡`}
+      </button>
+
+    </>
   );
 }
