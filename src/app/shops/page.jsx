@@ -46,7 +46,9 @@ export default function Shops() {
     );
   //data de paginacion
   const allDesigns = data.payload.docs;
+  const totalDocs = data.payload.totalDocs;
   const paginationTotal = data.payload.totalPages;
+  console.log(totalDocs);
   //organizar ruta search
   if (searchText === "") {
     searchPath = "";
@@ -99,6 +101,7 @@ export default function Shops() {
           <div className='flex w-full justify-center min-w-full'>
             <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText}/>
           </div>
+          {searchText?<span>searching for {searchText}</span>:<div></div>}
           <div className='input-group  justify-center'>
             <span htmlFor='filter' className='btn'>
               Filters
@@ -133,6 +136,7 @@ export default function Shops() {
             </select>
           </div>
         </div>
+          {totalDocs === 0 ? <span>Nope, there's nothing like {searchText } in here, try a diferent term</span>:<div></div>}
         <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2'>
           {allDesigns.map((des) => (
             <div key={des._id}>

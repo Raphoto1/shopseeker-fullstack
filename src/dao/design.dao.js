@@ -4,6 +4,7 @@ import { dbConnect } from "@/utils/mongoDb";
 export const mongoDbGetAllDesigns = async (querySearch,options) => {
   //logica de mongo
   try {
+    await dbConnect();
     const designs = await designModel.paginate(querySearch, options);
     // const designs = await designModel.paginate({'title':/test/, 'shops.shopUrl':/teepublic/}, options);
     return designs;

@@ -33,7 +33,7 @@ export default function SearchBar({ onSearchTerm, onButtonClick, onSearchFilter,
           </div>
           
         </div>
-        {searchTerm===""?<span>searching for {searchTextBack}</span>:<div></div>}
+        
         
       </div>
     </>
