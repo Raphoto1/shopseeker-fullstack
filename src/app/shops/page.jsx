@@ -97,16 +97,13 @@ export default function Shops() {
   return (
     <>
       <div className='total'>
-        <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit'>
-          <div className='flex w-full justify-center min-w-full'>
+        <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit py-2'>
+          <div className='flex justify-center'>
             <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText}/>
           </div>
           {searchText?<span>searching for {searchText}</span>:<div></div>}
-          <div className='input-group  justify-center'>
-            <span htmlFor='filter' className='btn'>
-              Filters
-            </span>
-            <select name='category' id='categoryFilter' className='select' onChange={handleCategoryFilter}>
+          <div className='input-group flex justify-center pt-1'>
+            <select name='category' id='categoryFilter' className='select-sm justify-center' onChange={handleCategoryFilter}>
               <option disabled selected>
                 Filter by Category
               </option>
@@ -120,7 +117,7 @@ export default function Shops() {
                 )
               )}
             </select>
-            <select name='shops' id='shopsFilter' className='select' onChange={handleShopFilter}>
+            <select name='shops' id='shopsFilter' className='select-sm' onChange={handleShopFilter}>
               <option disabled selected>
                 Filter by Shop
               </option>
@@ -137,7 +134,7 @@ export default function Shops() {
           </div>
         </div>
           {totalDocs === 0 ? <span>Nope, there's nothing like {searchText } in here, try a diferent term</span>:<div></div>}
-        <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2'>
+        <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2 px-1'>
           {allDesigns.map((des) => (
             <div key={des._id}>
               <CardDesign
@@ -165,10 +162,12 @@ export default function Shops() {
             </button>
             <div className='btn'>Of {paginationTotal}</div>
           </div>
-          <div className='sort flex justify-center join'>
+          <div className='sort flex justify-center w-30 join'>
             <div id='limitselect' className='join'>
-              <label className='btn join-item'>Designs per page</label>
-              <select name='limit' id='' className='select join-item' onChange={handleLimit}>
+              <select name='limit' id='' className='select-sm join-item' onChange={handleLimit}>
+              <option disabled selected>
+                Designs per page
+              </option>
                 <option value='20'>20</option>
                 <option value='50'>50</option>
                 <option value='100'>100</option>
@@ -176,8 +175,10 @@ export default function Shops() {
             </div>
             <div id='sortSelect'>
               <div id='sortOrder' className='join'>
-                <label className='btn join-item'>Designs Order</label>
-                <select name='sortOrder' id='' className='select join-item' onChange={handleSort}>
+                <select name='sortOrder' id='' className='select-sm join-item' onChange={handleSort}>
+                <option disabled selected>
+                Designs Order
+              </option>
                   <option value='1'>A-Z</option>
                   <option value='-1'>Z-A</option>
                 </select>

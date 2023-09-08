@@ -16,7 +16,7 @@ export default function CardDesign(props) {
 
   return (
     <>
-      <div className='card bg-base-100 shadow-xl stretch h-full glass'>
+      <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto'>
         <div className='flex justify-around '>
           <LikeButton desId={props.id} likedSend={likedSend} />
           {props.likes > 0 && <p>liked {likesCount} times</p>}
