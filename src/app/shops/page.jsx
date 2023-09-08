@@ -1,10 +1,11 @@
 "use client";
 //imports de app
 import useSWR from "swr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //imports propios
 import CardDesign from "@/components/CardDesign";
 import SearchBar from "@/components/navbar/SearchBar";
+import { categories, shops } from "@/enums/SuperVariables";
 
 export default function Shops() {
   //set de paginas
@@ -26,10 +27,17 @@ export default function Shops() {
   let filterPathCat = "";
   let filterPathShop = "";
   let basePath = `/api/design?page=${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
+  //useEffect para aplicar filtros
+  useEffect(() => {
+    console.log("cambie");
+    setFilterDef(`${filterPathCat}${filterPathShop}`);
+    console.log(basePath);
+  }, [filterCategory, filterShop, searchDef]);
+
   //se usa swr para manejar el fetch por recomendacion de vercel
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
   const { data, error, isLoading } = useSWR(basePath, fetcher);
-  if (error) return <h1>Not designs found</h1>;
+  if (error) return <h1>opps, my bad, try reloading :D</h1>;
   if (isLoading)
     return (
       <div className='flex h-full w-full justify-center content-center'>
@@ -71,11 +79,6 @@ export default function Shops() {
     setFilterShop(e.target.value);
   };
 
-  const handleApplyFilter = () => {
-    console.log(filterPathCat, filterPathShop);
-    setFilterDef(`${filterPathCat}${filterPathShop}`);
-  };
-
   //organizar y capturar sort
   const handleLimit = (e) => {
     console.log(e.target.value);
@@ -85,16 +88,16 @@ export default function Shops() {
   const handleSort = (e) => {
     console.log(e.target.value);
     setSortOption(`&sortQ=${e.target.value}`);
-  }
+  };
   //captura de like
 
-  console.log(limitPerPage);
+  console.log(filterCategory);
   return (
     <>
       <div className='total'>
         <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit'>
           <div className='flex w-full justify-center min-w-full'>
-            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} />
+            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText}/>
           </div>
           <div className='input-group  justify-center'>
             <span htmlFor='filter' className='btn'>
@@ -104,24 +107,30 @@ export default function Shops() {
               <option disabled selected>
                 Filter by Category
               </option>
-              <option value='Digital'>Digital</option>
-              <option value='Traditional'>Traditional</option>
-              <option value='Photography'>Photography</option>
-              <option value='MixedMedia'>MixedMedia</option>
+              {categories.map((cat) =>
+                filterCategory === cat ? (
+                  <option selected value={cat}>
+                    {cat}
+                  </option>
+                ) : (
+                  <option value={cat}>{cat}</option>
+                )
+              )}
             </select>
             <select name='shops' id='shopsFilter' className='select' onChange={handleShopFilter}>
               <option disabled selected>
                 Filter by Shop
               </option>
-              <option value='RedBubble'>RedBubble</option>
-              <option value='Society6'>Society6</option>
-              <option value='Displate'>Displate</option>
-              <option value='TeePublic'>TeePublic</option>
-              <option value='Spreadshirt'>Spreadshirt</option>
+              {shops.map((shop) =>
+                filterShop == shop ? (
+                  <option selected value={shop}>
+                    {shop}
+                  </option>
+                ) : (
+                  <option value={shop}>{shop}</option>
+                )
+              )}
             </select>
-            <button className='btn' onClick={handleApplyFilter}>
-              Apply Filter
-            </button>
           </div>
         </div>
         <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2'>

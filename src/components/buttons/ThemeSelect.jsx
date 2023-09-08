@@ -2,15 +2,15 @@
 //imports de app
 import { BsSun, BsMoon } from "react-icons/bs";
 
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ThemeSelect() {
   const [themeSelect, setThemeSelect] = useState("dark");
   useEffect(() => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       let htmlToChange = document.querySelector("html");
       htmlToChange.setAttribute("data-theme", themeSelect);
-    }
+    };
   }, [themeSelect]);
 
   const handleTheme = (e) => {
@@ -18,7 +18,7 @@ export default function ThemeSelect() {
       setThemeSelect("light");
     } else {
       setThemeSelect("dark");
-    }
+    };
   };
 
   return (

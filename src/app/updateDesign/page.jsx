@@ -2,6 +2,8 @@
 //imports de app
 import { useState } from "react";
 import useSWR from "swr";
+//imports propios
+import { categories, shops } from "@/enums/SuperVariables";
 
 export default function UpdateDesign() {
   //control opciones de fields
@@ -62,7 +64,7 @@ export default function UpdateDesign() {
         }
       });
   };
-console.log(idChecked);
+
   return (
     <div>
       <h1>update design</h1>
@@ -136,13 +138,9 @@ console.log(idChecked);
               <div>
                 <h1>choose the shop url to Update</h1>
                 <select name='data' id='shop' className='dark:text-gray-900'>
-                  <option value='RedBubble' selected>
-                    RedBubble
-                  </option>
-                  <option value='Society6'>Society6</option>
-                  <option value='Displate'>Displate</option>
-                  <option value='TeePublic'>TeePublic</option>
-                  <option value='Spreadshirt'>Spreadshirt</option>
+                {shops.map((shop) => (
+                <option value={shop}>{ shop}</option>  
+              ))}
                 </select>
                 <div>
                   <label htmlFor='url'>New Url</label>
@@ -159,10 +157,9 @@ console.log(idChecked);
             {isCategoryOn && (
               <div>
                 <select name='data' id='category'>
-                  <option value='Digital'>Digital</option>
-                  <option value='Traditional'>Traditional</option>
-                  <option value='Photography'>Photography</option>
-                  <option value='MixedMedia'>MixedMedia</option>
+                {categories.map((cat) => (
+                <option value={cat}>{ cat}</option>  
+              ))}
                 </select>
               </div>
             )}

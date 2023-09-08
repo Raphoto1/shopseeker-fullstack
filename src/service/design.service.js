@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 //imports propios
 import { mongoDbgetDesignsById, mongoDbCreateNewDesign, mongoDbGetAllDesigns, mongoDbUpdateDesign, mongoDbDeleteDesign } from "@/dao/design.dao";
+import { categories, shops } from "@/enums/SuperVariables";
 //**codigo**
 export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
   //logica y organizacion de data
@@ -25,76 +26,53 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   let options = { limit: limitIn, page: pageIn, sort: sortIn };
   //se ajusta el termino a query a exp regular porque el mongo no acepta string directo
   //sin ^ para que tome tooodo el string
-  const textToFind = `/${queryIn}/`;
-  const textToFindConverted = new RegExp(textToFind.slice(1, -1));
+
   let querySearch;
   if (queryKeyIn && queryIn) {
+    const textToFind = queryIn.toLowerCase();
+    const textToFindConverted = RegExp(textToFind);
     querySearch = { [queryKeyIn]: textToFindConverted };
     options.limit = 5;
   } else {
     {
     }
   }
-  //filtros
+  //filtros de paquete
   let filterPack = {};
+
   //crear la busqueda de filtro
   //filtro por categoria
-  switch (filterCategory) {
-    case "Digital":
-      filterPack.category = "Digital";
-      break;
-    case "Photography":
-      filterPack.category = "Photography";
-      break;
-    case "Traditional":
-      filterPack.category = "Traditional";
-      break;
-    case "MixedMedia":
-      filterPack.category = "MixedMedia";
-      break;
-    default:
-      filterPack;
-      break;
-  }
-  //filtro por tienda
-  switch (filterShops) {
-    case "RedBubble":
-      filterPack["shops.shopUrl"] = /redbubble/;
-      break;
-    case "Society6":
-      filterPack["shops.shopUrl"] = /society6/;
-      break;
-    case "Displate":
-      filterPack["shops.shopUrl"] = /displate/;
-      break;
-    case "TeePublic":
-      filterPack["shops.shopUrl"] = /teepublic/;
-      break;
-    case "Spreadshirt":
-      filterPack["shops.shopUrl"] = /spreadshirt/;
-      break;
-    default:
-      filterPack;
-      break;
-  }
-
-  querySearch = filterPack;
-
-  const designs = await mongoDbGetAllDesigns(querySearch, options);
-  // const designs = await mongoDbGetAllDesigns({'category':'photo'}, options);
-  if (designs === []) {
-    return [];
-  } else if (!designs) {
-    return error;
+  if (filterCategory) {
+    filterPack.category = filterCategory;
   } else {
+    filterPack;
+  }
+
+  //filtro por tienda
+  if (filterShops) {
+    let filterShopToLow = filterShop.toLowerCase();
+    let regularFilter = RegExp(filterShopToLow);
+    filterPack["shops.shopUrl"] = regularFilter;
+  } else {
+    filterPack;
+  }
+  if (Object.entries(filterPack).length >= 1 && queryIn == null) {
+    const designs = await mongoDbGetAllDesigns(filterPack, options);
+    return designs;
+  } else if (Object.entries(filterPack).length >= 1 && queryIn != null) {
+    let complexQuery = {...filterPack,...querySearch};
+    const designs = await mongoDbGetAllDesigns(complexQuery, options);
+    return designs;
+  } else {
+    const designs = await mongoDbGetAllDesigns(querySearch, options);
     return designs;
   }
 };
 
 export const getDesignById = async (id) => {
   const design = await mongoDbgetDesignsById(id);
-  if (design===null) {
-    throw new Error('Design not Found')
+  if (design === null) {
+    throw new Error("Design not Found");
   }
   return design;
 };
@@ -106,16 +84,12 @@ export const createDesign = async (data) => {
   const pCode = dataToPush["pCode"];
   //manipular links de tiendas para empaquetar
   let shopspack = [];
-  let pushRed = shopFilter(dataToPush, "RedBubble", "urlRed");
-  let pushSoc = shopFilter(dataToPush, "Society6", "urlSoc");
-  let pushDisp = shopFilter(dataToPush, "Displate", "urlDisp");
-  let pushTee = shopFilter(dataToPush, "TeePublic", "urlTee");
-  let pushSpre = shopFilter(dataToPush, "Spreadshirt", "urlSpre");
-  shopspack.push(pushRed);
-  shopspack.push(pushSoc);
-  shopspack.push(pushDisp);
-  shopspack.push(pushTee);
-  shopspack.push(pushSpre);
+  shops.map((shop) => {
+    let shopToPush = shopFilter(dataToPush, shop, `url${shop}`);
+    console.log(shopToPush);
+    shopspack.push(shopToPush);
+  });
+
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
   const photoPath = await imageFileUploaderDesign(photo, pCode);
@@ -173,23 +147,23 @@ export const likeDesign = async (id, value) => {
   const likeUpdate = value;
   if (chkDesign) {
     let likeToUpdate = chkDesign.likes;
-    if (Math.sign(likeUpdate)===1) {
+    if (Math.sign(likeUpdate) === 1) {
       const likeToPush = likeToUpdate + 1;
-      const designToUpdate = await mongoDbUpdateDesign(id, 'likes', likeToPush);
+      const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
       return designToUpdate;
     } else {
-      if (likeToUpdate===0) {
-        return 'no permited';
+      if (likeToUpdate === 0) {
+        return "no permited";
       } else {
         const likeToPush = likeToUpdate - 1;
-        const designToUpdate = await mongoDbUpdateDesign(id, 'likes', likeToPush);
-        return designToUpdate;  
-      };
-    };
+        const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
+        return designToUpdate;
+      }
+    }
   } else {
-   throw new Error('Design Not Found') 
+    throw new Error("Design Not Found");
   }
-}
+};
 
 const imageFileUploaderDesign = async (file, pCode) => {
   if (file.size === 0) {
