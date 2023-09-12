@@ -86,7 +86,6 @@ export const createDesign = async (data) => {
   let shopspack = [];
   shops.map((shop) => {
     let shopToPush = shopFilter(dataToPush, shop, `url${shop}`);
-    console.log(shopToPush);
     shopspack.push(shopToPush);
   });
 
