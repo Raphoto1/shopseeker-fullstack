@@ -1,8 +1,16 @@
+"use client";
 
-export default function detailDesign({id}) {
+import CardHero from "@/components/CardHero";
+
+//imports de app
+
+
+export default function detailDesign({ params }) {
+  const { id } = params;
+   
   return (
     <div>
-      <h1>designs detail{ id}</h1>
+      <CardHero id={id} />
     </div>
-  )
+  );
 }

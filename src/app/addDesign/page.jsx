@@ -6,37 +6,7 @@ import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "@/components/extras/HiddenInput";
 
 export default function Upload() {
-  "use client";
-  //control botones tienda
-  const [isCheckedRed, setCheckedRed] = useState(false);
-  const [isCheckedSoc, setisCheckedSoc] = useState(false);
-  const [isCheckedDis, setisCheckedDis] = useState(false);
-  const [isCheckedTee, setisCheckedTee] = useState(false);
-  const [isCheckedSpread, setisCheckedSpread] = useState(false);
 
-  //clase constructora para las tiendas Deuda Tecnica********
-
-  const testText = "test";
-
-  const handleRed = () => {
-    setCheckedRed(!isCheckedRed);
-  };
-
-  const handleSoc = () => {
-    setisCheckedSoc(!isCheckedSoc);
-  };
-
-  const handleDis = () => {
-    setisCheckedDis(!isCheckedDis);
-  };
-
-  const handleTee = () => {
-    setisCheckedTee(!isCheckedTee);
-  };
-
-  const handleSpread = () => {
-    setisCheckedSpread(!isCheckedSpread);
-  };
   //control de form
 
   const handleSubmit = async (e) => {
@@ -69,15 +39,15 @@ export default function Upload() {
             <input type='text' id='description' name='description' className='rounded-lg text-slate-900' />
             <label htmlFor='Technique'>Technique</label>
             <select name='category' id='category'>
-              {categories.map((cat) => (
-                <option value={cat}>{cat}</option>
+              {categories.map((cat, index) => (
+                <option value={cat} key={index}>{cat}</option>
               ))}
             </select>
           </div>
           <h2>Shops</h2>
           <div>
-            {shops.map((shop) => (
-              <HiddenInput shopName={shop} />
+            {shops.map((shop,index) => (
+              <HiddenInput shopName={shop} key={index}/>
             ))}
           </div>
           <div className='flex justify-center'>

@@ -138,8 +138,8 @@ export default function UpdateDesign() {
               <div>
                 <h1>choose the shop url to Update</h1>
                 <select name='data' id='shop' className='dark:text-gray-900'>
-                {shops.map((shop) => (
-                <option value={shop}>{ shop}</option>  
+                {shops.map((shop,index) => (
+                <option value={shop} key={index}>{ shop}</option>  
               ))}
                 </select>
                 <div>
@@ -157,8 +157,8 @@ export default function UpdateDesign() {
             {isCategoryOn && (
               <div>
                 <select name='data' id='category'>
-                {categories.map((cat) => (
-                <option value={cat}>{ cat}</option>  
+                {categories.map((cat,index) => (
+                <option value={cat} key={index}>{ cat}</option>  
               ))}
                 </select>
               </div>

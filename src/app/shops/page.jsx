@@ -23,15 +23,13 @@ export default function Shops() {
   const [sortOption, setSortOption] = useState("&sortQ=1");
 
   //se inicializan paths antes de iniciar swr
-  let searchPath = "";
   let filterPathCat = "";
   let filterPathShop = "";
+  let searchPath = "";
   let basePath = `/api/design?page=${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
   //useEffect para aplicar filtros
   useEffect(() => {
-    console.log("cambie");
     setFilterDef(`${filterPathCat}${filterPathShop}`);
-    console.log(basePath);
   }, [filterCategory, filterShop, searchDef]);
 
   //se usa swr para manejar el fetch por recomendacion de vercel
@@ -93,27 +91,28 @@ export default function Shops() {
   };
   //captura de like
 
-  console.log(filterCategory);
   return (
     <>
       <div className='total'>
         <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit py-2'>
           <div className='flex justify-center'>
-            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText}/>
+            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText} />
           </div>
-          {searchText?<span>searching for {searchText}</span>:<div></div>}
+          {searchText ? <span>searching for {searchText}</span> : <div></div>}
           <div className='input-group flex justify-center pt-1'>
             <select name='category' id='categoryFilter' className='select-sm justify-center' onChange={handleCategoryFilter}>
               <option disabled selected>
                 Filter by Category
               </option>
-              {categories.map((cat) =>
+              {categories.map((cat, index) =>
                 filterCategory === cat ? (
-                  <option selected value={cat}>
+                  <option selected value={cat} key={index}>
                     {cat}
                   </option>
                 ) : (
-                  <option value={cat}>{cat}</option>
+                  <option value={cat} key={index}>
+                    {cat}
+                  </option>
                 )
               )}
             </select>
@@ -121,19 +120,21 @@ export default function Shops() {
               <option disabled selected>
                 Filter by Shop
               </option>
-              {shops.map((shop) =>
+              {shops.map((shop, index) =>
                 filterShop == shop ? (
-                  <option selected value={shop}>
+                  <option selected value={shop} key={index}>
                     {shop}
                   </option>
                 ) : (
-                  <option value={shop}>{shop}</option>
+                  <option value={shop} key={index}>
+                    {shop}
+                  </option>
                 )
               )}
             </select>
           </div>
         </div>
-          {totalDocs === 0 ? <span>Nope, there's nothing like {searchText } in here, try a diferent term</span>:<div></div>}
+        {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <div></div>}
         <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2 px-1'>
           {allDesigns.map((des) => (
             <div key={des._id}>
@@ -165,9 +166,9 @@ export default function Shops() {
           <div className='sort flex justify-center w-30 join'>
             <div id='limitselect' className='join'>
               <select name='limit' id='' className='select-sm join-item' onChange={handleLimit}>
-              <option disabled selected>
-                Designs per page
-              </option>
+                <option disabled selected>
+                  Designs per page
+                </option>
                 <option value='20'>20</option>
                 <option value='50'>50</option>
                 <option value='100'>100</option>
@@ -176,9 +177,9 @@ export default function Shops() {
             <div id='sortSelect'>
               <div id='sortOrder' className='join'>
                 <select name='sortOrder' id='' className='select-sm join-item' onChange={handleSort}>
-                <option disabled selected>
-                Designs Order
-              </option>
+                  <option disabled selected>
+                    Designs Order
+                  </option>
                   <option value='1'>A-Z</option>
                   <option value='-1'>Z-A</option>
                 </select>

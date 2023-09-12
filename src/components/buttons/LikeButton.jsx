@@ -1,18 +1,19 @@
 "use client";
 //imports de app
-import { useState } from "react";
-import useSWR from "swr";
-import {  toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { LikesCounter } from "../extras/LikesCounter";
 
-export function LikeButton({ desId, likedSend }) {
+export function LikeButton({ desId, likesRecieve }) {
   //fetch para agregar
   let basePath = `/api/design`;
 
   const [liked, setLiked] = useState(false);
   const [availableBtn, setAvailableBtn] = useState(false);
+  const [likesCount, setLikesCount] = useState(likesRecieve);
+
   const handleLiked = async () => {
     setLiked(!liked);
-    likedSend(liked);
     //seguridad para no hacer tantas llamadas
     setAvailableBtn(true);
     setTimeout(() => {
@@ -20,8 +21,8 @@ export function LikeButton({ desId, likedSend }) {
     }, "800");
 
     if (liked == false) {
+      setLikesCount(likesCount + 1);
       basePath = `/api/design/${desId}?value=1`;
-      console.log(basePath);
       let response = await fetch(basePath, {
         method: "PUT",
       })
@@ -32,15 +33,14 @@ export function LikeButton({ desId, likedSend }) {
           }
         });
     } else {
-      console.log("resto1");
+      setLikesCount(likesCount - 1);
       basePath = `/api/design/${desId}?value=-1`;
-      console.log(basePath);
       let response = await fetch(basePath, {
         method: "PUT",
       })
         .then((res) => res.json())
         .then((data) => {
-          toast("disliked")
+          toast("disliked");
         });
     }
   };
@@ -50,7 +50,7 @@ export function LikeButton({ desId, likedSend }) {
       <button disabled={availableBtn} onClick={handleLiked}>
         {liked ? `♥` : `♡`}
       </button>
-
+      {likesCount > 0 && <LikesCounter likeProp={likesCount} liked={liked} />}
     </>
   );
 }
