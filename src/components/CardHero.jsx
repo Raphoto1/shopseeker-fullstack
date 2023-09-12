@@ -7,6 +7,7 @@ import { useState } from "react";
 
 //imports propios
 import { LikeButton } from "@/components/buttons/LikeButton";
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, PinterestShareButton, PinterestIcon } from "next-share";
 
 export default function CardHero(props) {
   //api requests
@@ -28,7 +29,7 @@ export default function CardHero(props) {
               <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />
             </div>
             <h1 className='text-5xl font-bold'>{design.title}</h1>
-            <p className='py-6'>{design.description}</p>
+            <p className='py-6 text-2xl'>{design.description}</p>
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
               {design.shops.map((shop) => {
                 return shop.shopUrl === "null" ? null : (
@@ -39,6 +40,20 @@ export default function CardHero(props) {
                   </div>
                 );
               })}
+            </div>
+            <div className="p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end">
+              <span>Share Your Favorite</span>
+              <div className="flex justify-between content-center">
+                <FacebookShareButton url={`https://shopseeker-fullstack.vercel.app/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
+                  <FacebookIcon size={32} round />
+                </FacebookShareButton>
+                <TwitterShareButton url={`https://shopseeker-fullstack.vercel.app/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}` }>
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+                <PinterestShareButton url={`https://shopseeker-fullstack.vercel.app/shops/${props.id}`} media={`https://shopseeker-fullstack.vercel.app/img/designs/${design.photo}`}>
+                  <PinterestIcon size={32} round/>
+                </PinterestShareButton>
+              </div>
             </div>
           </div>
         </div>
