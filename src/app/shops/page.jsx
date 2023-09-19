@@ -46,7 +46,6 @@ export default function Shops() {
   const allDesigns = data.payload.docs;
   const totalDocs = data.payload.totalDocs;
   const paginationTotal = data.payload.totalPages;
-  console.log(totalDocs);
   //organizar ruta search
   if (searchText === "") {
     searchPath = "";
@@ -81,12 +80,10 @@ export default function Shops() {
 
   //organizar y capturar sort
   const handleLimit = (e) => {
-    console.log(e.target.value);
     setLimitPerPage(`&limit=${e.target.value}`);
   };
 
   const handleSort = (e) => {
-    console.log(e.target.value);
     setSortOption(`&sortQ=${e.target.value}`);
   };
   //captura de like
