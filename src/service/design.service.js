@@ -1,10 +1,18 @@
 //imports de app
 import path from "path";
 import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
 //imports propios
 import { mongoDbgetDesignsById, mongoDbCreateNewDesign, mongoDbGetAllDesigns, mongoDbUpdateDesign, mongoDbDeleteDesign } from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
 //**codigo**
+//cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
   //logica y organizacion de data
   //filtros y busqueda
@@ -60,7 +68,7 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
     const designs = await mongoDbGetAllDesigns(filterPack, options);
     return designs;
   } else if (Object.entries(filterPack).length >= 1 && queryIn != null) {
-    let complexQuery = {...filterPack,...querySearch};
+    let complexQuery = { ...filterPack, ...querySearch };
     const designs = await mongoDbGetAllDesigns(complexQuery, options);
     return designs;
   } else {
@@ -91,7 +99,7 @@ export const createDesign = async (data) => {
 
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
-  const photoPath = await imageFileUploaderDesign(photo, pCode);
+  const photoPath = await imageUploaderCloudinary(photo, pCode);
   dataToPush["photo"] = photoPath;
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
@@ -116,7 +124,7 @@ export const updateDesign = async (data) => {
   if (field === "photo") {
     //organizo data para db y fs
     let pCode = chkDesign.pCode;
-    const photoPush = await imageFileUploaderDesign(photo, pCode);
+    const photoPush = await imageUploaderCloudinary(photo, pCode);
     const designToUpdate = await mongoDbUpdateDesign(id, field, photoPush);
     return designToUpdate;
   } else if (field === "shops") {
@@ -181,6 +189,25 @@ const imageFileUploaderDesign = async (file, pCode) => {
     });
     return fileName;
   }
+};
+
+const imageUploaderCloudinary = async (file, pCode) => {
+  console.log(file);
+  const bytes = await file.arrayBuffer();
+  console.log(bytes);
+  const buffer = Buffer.from(bytes);
+  console.log(buffer);
+  const cloudUpload = await new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream({}, (err, result) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(result)
+    })
+    .end(buffer)
+  })
+  console.log(cloudUpload);
+  return cloudUpload.secure_url
 };
 
 const shopFilter = (arr, shopName, shopUrl) => {

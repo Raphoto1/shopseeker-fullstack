@@ -12,7 +12,7 @@ export default function CardDesign(props) {
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id}/>
         </div>
         <figure>
-          <Image src={`/img/designs/${props.photo}`} width={1000} height={1000} alt={props.title}></Image>
+          <Image src={props.photo} width={1000} height={1000} alt={props.title}></Image>
         </figure>
         <div className='card-body flex items-center'>
           <h1 className='card-title'>{props.title}</h1>

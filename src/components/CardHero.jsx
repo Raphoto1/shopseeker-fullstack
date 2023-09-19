@@ -23,7 +23,7 @@ export default function CardHero(props) {
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
-          <Image src={`/img/designs/${design.photo}`} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
+          <Image src={design.photo} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
           <div>
             <div className='flex justify-around'>
               <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />

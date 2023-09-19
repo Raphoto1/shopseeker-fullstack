@@ -6,7 +6,6 @@ import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "@/components/extras/HiddenInput";
 
 export default function Upload() {
-
   //control de form
 
   const handleSubmit = async (e) => {
@@ -19,7 +18,10 @@ export default function Upload() {
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data);
+        data.error ? alert("error Loading design") : alert("uploaded successfully");
+      });
   };
 
   return (
@@ -40,14 +42,16 @@ export default function Upload() {
             <label htmlFor='Technique'>Technique</label>
             <select name='category' id='category'>
               {categories.map((cat, index) => (
-                <option value={cat} key={index}>{cat}</option>
+                <option value={cat} key={index}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
           <h2>Shops</h2>
           <div>
-            {shops.map((shop,index) => (
-              <HiddenInput shopName={shop} key={index}/>
+            {shops.map((shop, index) => (
+              <HiddenInput shopName={shop} key={index} />
             ))}
           </div>
           <div className='flex justify-center'>
@@ -64,7 +68,7 @@ export default function Upload() {
             </button> */}
             <button
               type='button'
-              class='text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'>
+              className='text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'>
               Upload Secondary Images(future dev)
             </button>
           </div>
