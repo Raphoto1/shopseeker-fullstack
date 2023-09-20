@@ -1,5 +1,6 @@
 //imports propios
 import { createDesign, getAllDesigns, updateDesign } from "@/service/design.service";
+import { stringifyError } from "next/dist/shared/lib/utils";
 //imports app
 import { NextResponse } from "next/server";
 
@@ -33,7 +34,8 @@ export async function POST(req) {
     const result = await createDesign(capturedForm);
     return NextResponse.json({ payload: result }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
+    console.log(`desde route${stringifyError(error)}`);
+    return NextResponse.json({ error: `Error:${stringifyError(error)}` }, { status: 500 });
   }
 };
 

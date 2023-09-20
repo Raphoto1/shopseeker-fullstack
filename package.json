@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "autoprefixer": "10.4.15",
     "cloudinary": "^1.40.0",
     "eslint": "8.47.0",
