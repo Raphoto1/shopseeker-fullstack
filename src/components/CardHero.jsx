@@ -44,13 +44,13 @@ export default function CardHero(props) {
             <div className="p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end">
               <span>Share Your Favorite</span>
               <div className="flex justify-between content-center">
-                <FacebookShareButton url={`https://shops.creativerafa.com/shops${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
+                <FacebookShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
-                <TwitterShareButton url={`https://shops.creativerafa.com/shops${props.id}`} title={`New design avaliable on my shops ${design.title}` }>
+                <TwitterShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}` }>
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
-                <PinterestShareButton url={`https://shops.creativerafa.com/shops${props.id}`} media={`${design.photo}`}>
+                <PinterestShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} media={`${design.photo}`}>
                   <PinterestIcon size={32} round/>
                 </PinterestShareButton>
               </div>
