@@ -17,7 +17,7 @@ export default function CardDesign(props) {
         <div className='card-body flex items-center'>
           <h1 className='card-title'>{props.title}</h1>
           <h3>{props.category}</h3>
-          <p className='text-center'>{props.description}</p>
+          <p className='text-center line-clamp-3'>{props.description}</p>
           <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
             {props.shops.map((shop) => {
               return shop.shopUrl === "null" ? null : (

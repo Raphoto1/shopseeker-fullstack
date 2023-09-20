@@ -61,6 +61,13 @@ export default function Shops() {
   const handleSearchText = (value) => {
     setSearchText(value);
   };
+
+  const handleSearchEnterKey = (e) => {
+    if (e==="Enter") {
+      handleSearch();
+    }
+  }
+
   const handleSearch = () => {
     setSearchDef(searchPath);
   };
@@ -93,7 +100,7 @@ export default function Shops() {
       <div className='total'>
         <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit py-2'>
           <div className='flex justify-center'>
-            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText} />
+            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText} onHandleEnter={handleSearchEnterKey}/>
           </div>
           {searchText ? <span>searching for {searchText}</span> : <div></div>}
           <div className='input-group flex justify-center pt-1'>

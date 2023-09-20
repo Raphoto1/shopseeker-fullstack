@@ -38,7 +38,7 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   let querySearch;
   if (queryKeyIn && queryIn) {
     const textToFind = queryIn.toLowerCase();
-    const textToFindConverted = RegExp(textToFind);
+    const textToFindConverted = RegExp(textToFind,'i');
     querySearch = { [queryKeyIn]: textToFindConverted };
     options.limit = 5;
   } else {
@@ -109,14 +109,12 @@ export const createDesign = async (data) => {
 
 export const updateDesign = async (data) => {
   const dataToUpdate = Object.fromEntries(data);
-  console.log(dataToUpdate);
   const id = dataToUpdate.id;
   const field = dataToUpdate.field;
   const photo = data.get("photo");
   const dataToPush = dataToUpdate.data;
   const url = dataToUpdate.url;
   const idCaptured = dataToUpdate.idCaptured;
-  console.log(idCaptured);
   const chkDesign = await mongoDbgetDesignsById(dataToUpdate.id);
   if (!chkDesign) {
     throw new Error("design does not exist");
@@ -192,11 +190,8 @@ const imageFileUploaderDesign = async (file, pCode) => {
 };
 
 const imageUploaderCloudinary = async (file, pCode) => {
-  console.log(file);
   const bytes = await file.arrayBuffer();
-  console.log(bytes);
   const buffer = Buffer.from(bytes);
-  console.log(buffer);
   const cloudUpload = await new Promise((resolve, reject) => {
     cloudinary.uploader.upload_stream({}, (err, result) => {
       if (err) {
@@ -206,7 +201,6 @@ const imageUploaderCloudinary = async (file, pCode) => {
     })
     .end(buffer)
   })
-  console.log(cloudUpload);
   return cloudUpload.secure_url
 };
 

@@ -1,6 +1,7 @@
 "use client";
 //imports de app
 import { useState } from "react";
+import { toast } from 'react-toastify';
 //imports propios
 import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "@/components/extras/HiddenInput";
@@ -19,8 +20,10 @@ export default function Upload() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        data.error ? alert("error Loading design") : alert("uploaded successfully");
+        console.log(data.error);
+        data.error ? toast(`error Loading design${data.error}`) : toast("uploaded successfully, reload for new upload");
+      }).then(() => {
+        
       });
   };
 

@@ -17,10 +17,10 @@ export default function Navbar() {
           </Link>
         </div>
         <div className='flex justify-between content-center'>
-          <FacebookShareButton url={`https://shopseeker-fullstack.vercel.app/shops`} quote={"Find My shops!!!"} hashtag={`#creativerafa`}>
+          <FacebookShareButton url={`https://shops.creativerafa.com/shops`} quote={"Find My shops!!!"} hashtag={`#creativerafa`}>
             <FacebookIcon size={32} round />
           </FacebookShareButton>
-          <TwitterShareButton url={`https://shopseeker-fullstack.vercel.app/shops`} title={"Find My shops!!!"}>
+          <TwitterShareButton url={`https://shops.creativerafa.com/shops`} title={"Find My shops!!!"}>
             <TwitterIcon size={32} round />
           </TwitterShareButton>
         </div>

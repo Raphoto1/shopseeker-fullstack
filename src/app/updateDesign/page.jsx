@@ -16,21 +16,17 @@ export default function UpdateDesign() {
   //hanlders
   const handleIdCheck = (id) => {
     setIdChecked(id);
-    console.log(id);
 }
 
   const handlePhoto = () => {
-    console.log("llegue a photos");
     setPhotoOn(!isPhotoOn);
   };
 
   const handleShops = () => {
-    console.log("llegue a handle");
     setShopsOn(!isShopsOn);
   };
 
   const handleCategory = () => {
-    console.log("llegue a category");
     setCategoryOn(!isCategoryOn);
   };
 
