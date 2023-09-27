@@ -1,12 +1,9 @@
 "use client";
 import useSWR from "swr";
-import Image from "next/image";
-import Link from "next/link";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { fetcher, favoritesUrl } from "@/config/fetcher.config";
-import { useState } from "react";
-import { testFav } from "@/hooks/useDesigns";
+
 import CardHero from "../CardHero";
 
 export default function FavoritesCarousel() {
