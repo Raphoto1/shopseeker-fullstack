@@ -42,10 +42,12 @@ export default function Shops() {
         <span className='loading loading-infinity loading-lg' />
       </div>
     );
+
   //data de paginacion
   const allDesigns = data.payload.docs;
   const totalDocs = data.payload.totalDocs;
   const paginationTotal = data.payload.totalPages;
+  
   //organizar ruta search
   if (searchText === "") {
     searchPath = "";
@@ -63,10 +65,10 @@ export default function Shops() {
   };
 
   const handleSearchEnterKey = (e) => {
-    if (e==="Enter") {
+    if (e === "Enter") {
       handleSearch();
     }
-  }
+  };
 
   const handleSearch = () => {
     setSearchDef(searchPath);
@@ -98,9 +100,15 @@ export default function Shops() {
   return (
     <>
       <div className='total'>
-        <div className='topbar flex flex-wrap justify-center w-full sm:max-w-fit py-2'>
+        <div className='topbar flex flex-wrap align-middle justify-center xl:max-w-screen sm:max-w-fit py-2'>
           <div className='flex justify-center'>
-            <SearchBar onSearchTerm={handleSearchText} onButtonClick={handleSearch} onSearchFilter={handleSearchFilter} searchTextBack={searchText} onHandleEnter={handleSearchEnterKey}/>
+            <SearchBar
+              onSearchTerm={handleSearchText}
+              onButtonClick={handleSearch}
+              onSearchFilter={handleSearchFilter}
+              searchTextBack={searchText}
+              onHandleEnter={handleSearchEnterKey}
+            />
           </div>
           {searchText ? <span>searching for {searchText}</span> : <div></div>}
           <div className='input-group flex justify-center pt-1'>
@@ -139,7 +147,7 @@ export default function Shops() {
           </div>
         </div>
         {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <div></div>}
-        <div className='grid grid-flow-row md:grid-cols-4 sm:grid-cols-1 gap-2 pt-2 px-1'>
+        <div className='grid grid-flow-row xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1'>
           {allDesigns.map((des) => (
             <div key={des._id}>
               <CardDesign
