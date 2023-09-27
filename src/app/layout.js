@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google'
 import Navbar from '@/components/navbar/Navbar'
 import { ToastContainer } from 'react-toastify'
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -14,13 +15,16 @@ export const metadata = {
   description: 'Shop seeker for print on demand creators',
 }
 
+
 export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+
       <Navbar/>
       <body className={inter.className}>{children}</body>
       <ToastContainer/>
-    </html>
+
+      </html>
   )
 }
