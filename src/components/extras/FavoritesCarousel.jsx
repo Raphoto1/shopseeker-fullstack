@@ -21,13 +21,13 @@ export default function FavoritesCarousel() {
   return (
     <>
       <h1 className='font-bolt text-3xl fixed z-10'>Top 3 Favorites UNDER CONSTRUCTION</h1>
-      <Carousel className='h-screen'>
+      <Carousel className=''>
         {dataToShow.map((des, index) => (
-          <div key={index} className='h-screen'>
+          <div key={index} className=''>
             <CardHero id={ des._id} />
           </div>
         ))}
-      </Carousel>
+      </Carousel>Car
     </>
   );
 }

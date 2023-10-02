@@ -4,6 +4,7 @@ import { BsSearch } from "react-icons/bs";
 export default function SearchBar({ onSearchTerm, onButtonClick, onSearchFilter, searchTextBack, onHandleEnter }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     onSearchTerm(event.target.value);
@@ -29,7 +30,7 @@ export default function SearchBar({ onSearchTerm, onButtonClick, onSearchFilter,
             <option value='description'>description</option>
           </select>
 
-          <button className='btn-sm join-item' onClick={onButtonClick} onKeyDown={handleEnter} >
+          <button className='btn btn-sm join-item' onClick={onButtonClick} onKeyDown={handleEnter} >
             <BsSearch />
           </button>
         </div>

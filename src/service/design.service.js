@@ -38,7 +38,7 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   let querySearch;
   if (queryKeyIn && queryIn) {
     const textToFind = queryIn.toLowerCase();
-    const textToFindConverted = RegExp(textToFind,'i');
+    const textToFindConverted = RegExp(textToFind, "i");
     querySearch = { [queryKeyIn]: textToFindConverted };
     options.limit = 5;
   } else {
@@ -88,6 +88,7 @@ export const getDesignById = async (id) => {
 export const createDesign = async (data) => {
   //manipular imagen para guardar en fs y crear el path
   const photo = data.get("photo");
+  const secondary = data.getAll("secondaryImages");
   const dataToPush = Object.fromEntries(data);
   const pCode = dataToPush["pCode"];
   //manipular links de tiendas para empaquetar
@@ -96,14 +97,19 @@ export const createDesign = async (data) => {
     let shopToPush = shopFilter(dataToPush, shop, `url${shop}`);
     shopspack.push(shopToPush);
   });
-
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
+  const photosToPush = await imageArrayPacker(secondary, pCode);
+  console.log(photosToPush);
+  dataToPush["secondaryImages"] = photosToPush;
+  console.log(dataToPush);
   const photoPath = await imageUploaderCloudinary(photo, pCode);
+  // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
-  // const result = dataToPush
+  // const result = dataToPush;
+  console.log(result);
   return result;
 };
 
@@ -193,15 +199,38 @@ const imageUploaderCloudinary = async (file, pCode) => {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const cloudUpload = await new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({}, (err, result) => {
-      if (err) {
-        reject(err)
-      }
-      resolve(result)
+    cloudinary.uploader
+      .upload_stream({}, (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      })
+      .end(buffer);
+  });
+  return cloudUpload.secure_url;
+};
+
+const objectCreator = (index, string) => {
+  let imageObj = {};
+  imageObj['SIUrl'] = `${string}`;
+  return imageObj;
+};
+
+const imageArrayPacker = async (imgs, pCode) => {
+  let secondaryPhotos = [];
+  const packingPhotos = async (img, index) => {
+    let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
+    let objReady = await objectCreator(index, urlSecondaryImg);
+    await secondaryPhotos.push(objReady);
+  };
+  //organizar la data del form, se elimina la data de photo y se agrega el path
+  const test = await Promise.all(
+    imgs.map(async (img, index) => {
+      await packingPhotos(img, index);
     })
-    .end(buffer)
-  })
-  return cloudUpload.secure_url
+  );
+  return secondaryPhotos;
 };
 
 const shopFilter = (arr, shopName, shopUrl) => {

@@ -5,3 +5,5 @@ export const categories = [
 export const shops = [
     'RedBubble', 'Society6','Displate','TeePublic','Spreadshirt',
 ]
+
+export const allShopsPath = '/api/design?page='

@@ -4,6 +4,8 @@ import useSWR from "swr";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 //imports propios
 import { LikeButton } from "@/components/buttons/LikeButton";
@@ -23,7 +25,22 @@ export default function CardHero(props) {
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
-          <Image src={design.photo} width={400} height={400} alt={design.title} className=' rounded-lg shadow-2xl' />
+          {design.secondaryImages ? (
+            <Carousel>
+              <div>
+                <Image src={design.photo} width={1000} height={1000} alt={design.title} />
+              </div>
+
+              {design.secondaryImages.map((img, index) => (
+                <div>
+                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} />
+                </div>
+              ))}
+            </Carousel>
+          ) : (
+            <Image src={design.photo} width={400} height={400} alt={design.title} className=' rounded-lg shadow-2xl' />
+          )}
+
           <div>
             <div className='flex justify-around'>
               <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />
@@ -41,17 +58,17 @@ export default function CardHero(props) {
                 );
               })}
             </div>
-            <div className="p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end">
+            <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end'>
               <span>Share Your Favorite</span>
-              <div className="flex justify-between content-center">
+              <div className='flex justify-between content-center'>
                 <FacebookShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
-                <TwitterShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}` }>
+                <TwitterShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}`}>
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <PinterestShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} media={`${design.photo}`}>
-                  <PinterestIcon size={32} round/>
+                  <PinterestIcon size={32} round />
                 </PinterestShareButton>
               </div>
             </div>

@@ -1,19 +1,33 @@
 "use client";
+//imports de app
 import Image from "next/image";
-import { LikeButton } from "./buttons/LikeButton";
 import Link from "next/link";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
+//imports propios
+import { LikeButton } from "./buttons/LikeButton";
 
-export default function CardDesign(props) {
-
+export default function CardDesignWithCarousel(props) {
   return (
     <>
       <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto'>
         <div className='flex justify-around '>
-          <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id}/>
+          <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id} />
         </div>
         <figure>
-          <Image src={props.photo} width={1000} height={1000} alt={props.title}></Image>
+          <Carousel>
+            <div>
+              <Image src={props.photo} width={1000} height={1000} alt={props.title} />
+            </div>
+
+            {props.secondaryPhotos.map((img, index) => (
+              <div>
+                <Image src={img.SIUrl} width={1000} height={1000} alt={props.title} />
+              </div>
+            ))}
+          </Carousel>
         </figure>
+
         <div className='card-body flex items-center'>
           <h1 className='card-title capitalize'>{props.title}</h1>
           <h3>{props.category}</h3>

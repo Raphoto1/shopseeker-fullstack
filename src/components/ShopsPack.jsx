@@ -9,7 +9,7 @@ import SortingComboBtn from "@/components/buttons/SortingComboBtn";
 import GridDesigns from "@/components/GridDesigns";
 import Filters from "@/components/navbar/Filters";
 
-export default function Shops() {
+export default function ShopsPack({mainPath}) {
   //set de paginas
   const [pageIndex, setPageIndex] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -28,7 +28,7 @@ export default function Shops() {
   let filterPathCat = "";
   let filterPathShop = "";
   let searchPath = "";
-  let basePath = `/api/design?page=${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
+  let basePath = `${mainPath}${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
   //useEffect para aplicar filtros
   useEffect(() => {
     setFilterDef(`${filterPathCat}${filterPathShop}`);
@@ -93,10 +93,10 @@ export default function Shops() {
               onHandleEnter={handleSearchEnterKey}
             />
           </div>
-          {searchText ? <span>searching for {searchText}</span> : <></>}
+          {searchText ? <span>searching for {searchText}</span> : <div></div>}
           <Filters setFilterCategoryComp={setFilterCategory} setFilterShopComp={setFilterShop} />
         </div>
-        {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <></>}
+        {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <div></div>}
         <GridDesigns designsToSort={allDesigns} />
         <div>
           <PaginationControl totalPages={paginationTotal} pageIndex={pageIndex} currentPage={pageIndex} setCurrentPage={setPageIndex} />
@@ -106,3 +106,4 @@ export default function Shops() {
     </>
   );
 }
+
