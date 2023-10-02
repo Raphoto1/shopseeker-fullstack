@@ -27,13 +27,13 @@ export default function CardHero(props) {
         <div className='hero-content flex-col lg:flex-row-reverse'>
           {design.secondaryImages ? (
             <Carousel>
-              <div>
-                <Image src={design.photo} width={1000} height={1000} alt={design.title} key={1}/>
+              <div key={1}>
+                <Image src={design.photo} width={1000} height={1000} alt={design.title} />
               </div>
 
               {design.secondaryImages.map((img, index) => (
-                <div>
-                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} key={index+1}/>
+                <div key={index+1}>
+                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} />
                 </div>
               ))}
             </Carousel>
