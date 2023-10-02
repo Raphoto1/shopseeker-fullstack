@@ -16,12 +16,12 @@ export default function CardDesignWithCarousel(props) {
         </div>
         <figure>
           <Carousel>
-            <div>
+            <div key={1}>
               <Image src={props.photo} width={1000} height={1000} alt={props.title} />
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
-              <div>
+              <div key={index + 1}>
                 <Image src={img.SIUrl} width={1000} height={1000} alt={props.title} />
               </div>
             ))}
