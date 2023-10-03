@@ -20,7 +20,6 @@ export default function Upload() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.error);
         data.error ? toast(`error Loading design${data.error}`) : toast("uploaded successfully, reload for new upload");
       }).then(() => {
         
@@ -64,16 +63,15 @@ export default function Upload() {
               id='photo'
               className="'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'"
             />
-            {/* <button
+            <input
               type='file'
-              class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>
-              Upload Main Image
-            </button> */}
-            <button
-              type='button'
-              className='text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'>
-              Upload Secondary Images(future dev)
-            </button>
+              name='secondaryImages'
+              id='secondaryImages'
+              label='secondary images'
+              className="'text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'"
+              multiple
+            />
+
           </div>
           <button
             type='submit'

@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export default function HiddenInput({ shopName }) {
     const shopUrl = `url${shopName}`;
-    console.log(shopUrl);
     const [isChecked, setIsChecked] = useState(false);
 
     const handleHide = () => {

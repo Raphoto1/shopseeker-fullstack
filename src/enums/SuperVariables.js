@@ -5,3 +5,7 @@ export const categories = [
 export const shops = [
     'RedBubble', 'Society6','Displate','TeePublic','Spreadshirt',
 ]
+
+export const allShopsPath = '/api/design?page='
+
+export const pageBasePath = 'https://shops.creativerafa.com'
