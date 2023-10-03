@@ -26,8 +26,8 @@ export default function FavoritesCarousel() {
       <div className='min-h-fit'>
         <h1 className='font-bolt text-3xl text-center'>Top 3 Favorites UNDER CONSTRUCTION</h1>
         <Carousel className='' autoPlay infiniteLoop showStatus={false}>
-          {dataToShow.map((des) => (
-            <div className='hero min-h-full' style={{ backgroundImage: `url(${des.photo})` }}>
+          {dataToShow.map((des, index) => (
+            <div className='hero min-h-full' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
               <div className='hero-overlay bg-opacity-20'></div>
               <div className='hero-content text-left text-accent-content drop-shadow-xl'>
                 <div className='max-w-md'>
