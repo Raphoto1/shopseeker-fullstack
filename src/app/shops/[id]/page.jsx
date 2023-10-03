@@ -1,6 +1,6 @@
 "use client";
 
-import CardHero from "@/components/CardHero";
+import CardHero from "@/components/card/CardHero";
 
 //imports de app
 

@@ -1,6 +1,6 @@
 'use client'
 
-import CardDesignWithCarousel from "./CardDesignWithCarousel"
+import CardDesignWithCarousel from "@/components/card/CardDesignWithCarousel"
 
 export default function GridDesigns({ designsToSort }) {
   return (

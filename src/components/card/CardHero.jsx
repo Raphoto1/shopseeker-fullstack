@@ -6,10 +6,11 @@ import Link from "next/link";
 import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, PinterestShareButton, PinterestIcon } from "next-share";
 
 //imports propios
+import { pageBasePath } from "@/enums/SuperVariables";
 import { LikeButton } from "@/components/buttons/LikeButton";
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, PinterestShareButton, PinterestIcon } from "next-share";
 
 export default function CardHero(props) {
   //api requests
@@ -25,21 +26,19 @@ export default function CardHero(props) {
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
-          {design.secondaryImages ? (
-            <Carousel>
+          <div className="max-w-sm rounded-lg shadow-2xl">
+            <Carousel autoPlay dynamicHeight={true}>
               <div key={1}>
-                <Image src={design.photo} width={1000} height={1000} alt={design.title} />
+                <Image src={design.photo} width={500} height={500} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
               </div>
-
+            
               {design.secondaryImages.map((img, index) => (
-                <div key={index+1}>
-                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} />
+                <div key={index + 1}>
+                  <Image src={img.SIUrl} width={500} height={500} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
                 </div>
               ))}
             </Carousel>
-          ) : (
-            <Image src={design.photo} width={400} height={400} alt={design.title} className=' rounded-lg shadow-2xl' />
-          )}
+          </div>
 
           <div>
             <div className='flex justify-around'>
@@ -61,13 +60,13 @@ export default function CardHero(props) {
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end'>
               <span>Share Your Favorite</span>
               <div className='flex justify-between content-center'>
-                <FacebookShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
+                <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
-                <TwitterShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}`}>
+                <TwitterShareButton url={`${pageBasePath}/shops/${props.id}`} title={`New design avaliable on my shops ${design.title}`}>
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
-                <PinterestShareButton url={`https://shops.creativerafa.com/shops/${props.id}`} media={`${design.photo}`}>
+                <PinterestShareButton url={`${pageBasePath}/shops/${props.id}`} media={`${design.photo}`}>
                   <PinterestIcon size={32} round />
                 </PinterestShareButton>
               </div>

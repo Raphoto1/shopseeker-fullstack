@@ -1,6 +1,7 @@
 "use client";
 //import propios
 import SearchBar from "./SearchBar";
+import { pageBasePath } from "@/enums/SuperVariables";
 //imports app
 import Image from "next/image";
 import Link from "next/link";
@@ -13,15 +14,25 @@ export default function Navbar() {
       <header>
         <div className='navbar bg-base-100'>
           <div className='flex-1'>
-            <Link href={"/shops"}>
+            <Link href={"/"}>
               <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Rafa' />
             </Link>
           </div>
+          <div className="">
+            <ul tabIndex={0} className="btn btn-primary sm:btn-xs">
+              <li>
+                <Link href={"/allshops"}>
+                  See All Designs
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div className='flex justify-between content-center'>
-            <FacebookShareButton url={`https://shops.creativerafa.com/shops`} quote={"Find My shops!!!"} hashtag={`#creativerafa`}>
+            <p>Let's Share</p>
+            <FacebookShareButton url={`${pageBasePath}/shops`} quote={"Find My shops!!!"} hashtag={`#creativerafa`}>
               <FacebookIcon size={32} round />
             </FacebookShareButton>
-            <TwitterShareButton url={`https://shops.creativerafa.com/shops`} title={"Find My shops!!!"}>
+            <TwitterShareButton url={`${pageBasePath}/shops`} title={"Find My shops!!!"}>
               <TwitterIcon size={32} round />
             </TwitterShareButton>
           </div>
