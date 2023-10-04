@@ -42,10 +42,15 @@ export default function FavoritesCarousel() {
           ))}
         </Carousel>
       </div>
+      <div className="flex justify-center pb-5">
+        <Link href={'/allshops'}>
+          <h1 className="btn btn-info justify-center text-center text-3xl">Check All My Designs</h1>
+        </Link>
+      </div>
       <div>
         <div className='flex w-full'>
           <Link href={'/allshops'}>
-            <div className='grid h-20 flex-grow card bg-base-300 rounded-box place-items-center'>Find your Favorite design</div>
+            <div className='grid h-20 flex-grow card bg-base-300 rounded-box place-items-center px-5'>Find your Favorite design</div>
           </Link>
           <div className='divider divider-horizontal'><FaCircleArrowRight size={70}/></div>
           <div className='grid h-20 flex-grow card bg-base-300 rounded-box place-items-center'>Follow your preffered shop</div>

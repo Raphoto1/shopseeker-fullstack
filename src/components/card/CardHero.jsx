@@ -26,15 +26,15 @@ export default function CardHero(props) {
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
-          <div className="max-w-sm rounded-lg shadow-2xl">
-            <Carousel autoPlay dynamicHeight={true}>
+          <div className=" rounded-lg shadow-2xl max-h-screen">
+            <Carousel autoPlay dynamicHeight={false} className=" rounded-lg shadow-2xl max-h-screen">
               <div key={1}>
-                <Image src={design.photo} width={500} height={500} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
+                <Image src={design.photo} width={1000} height={1000} alt={design.title} className=" rounded-lg shadow-2xl"/>
               </div>
             
               {design.secondaryImages.map((img, index) => (
                 <div key={index + 1}>
-                  <Image src={img.SIUrl} width={500} height={500} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
+                  <Image src={img.SIUrl} width={1000} height={1000 } alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
                 </div>
               ))}
             </Carousel>
