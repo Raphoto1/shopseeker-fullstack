@@ -7,7 +7,7 @@ export default function GridDesign3({ designsToSort }) {
        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1'>
           {designsToSort.map((des) => (
             <div key={des._id}>
-              <CardDesignWithCarousel
+              <CardDesign
                 key={des._id}
                 id={des._id}
                 title={des.title}
