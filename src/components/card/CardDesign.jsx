@@ -7,7 +7,7 @@ export default function CardDesign(props) {
 
   return (
     <>
-      <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto'>
+      <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto' key={props.id}>
         <div className='flex justify-around '>
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id}/>
         </div>

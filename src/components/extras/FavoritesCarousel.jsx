@@ -7,7 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaCircleArrowRight } from "react-icons/fa6";
 //imports propios
 import { fetcher, favoritesUrl } from "@/config/fetcher.config";
-import CardHero from "@/components/card/CardHero";
+
 
 export default function FavoritesCarousel() {
   const { data, error, isLoading } = useSWR(favoritesUrl, fetcher);
