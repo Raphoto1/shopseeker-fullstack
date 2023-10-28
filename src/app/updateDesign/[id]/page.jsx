@@ -3,7 +3,7 @@ import DesignUploader from "@/components/design/DesignUploader";
 import { updateDesignPath } from "@/enums/SuperVariables";
 import { useEffect, useState } from "react";
 import CardDesign from "@/components/card/CardDesign";
-import useSWR from "swr";
+import UseSWR from "swr";
 
 export default function detailUpdate({ params }) {
   const { id } = params;
@@ -11,7 +11,7 @@ export default function detailUpdate({ params }) {
   //get designs
   let basePath = `/api/design/${id}`;
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(basePath, fetcher);
+  const { data, error, isLoading } = UseSWR(basePath, fetcher);
   if (error) return <h1>Not designs found</h1>;
   if (isLoading) return <h1>Loading...</h1>;
   const des = data.payload;
