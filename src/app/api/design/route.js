@@ -45,8 +45,7 @@ export async function PUT(req) {
     //captura de data
     const capturedForm = await req.formData();
     const result = await updateDesign(capturedForm);
-    console.log(result);
-    return NextResponse.json({ message: "hola", payload: result, status: 200  });
+    return NextResponse.json({ message: "success", payload: result, status: 200  });
   } catch (error) {
     return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
   }

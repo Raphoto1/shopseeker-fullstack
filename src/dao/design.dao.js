@@ -48,6 +48,15 @@ export const mongoDbUpdateDesign = async (id, field, data) => {
   }
 };
 
+export const mongoDbUpdateDesignMultiple = async (id, pack) => {
+  try {
+    const designToUpdate = designModel.updateOne({ _id: id }, [{ $set: pack }]);
+    return designToUpdate
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export const mongoDbDeleteDesign = async (id) => {
   try {
     const designToDelete = await designModel.findByIdAndDelete(id);

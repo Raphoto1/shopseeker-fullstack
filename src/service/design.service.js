@@ -2,8 +2,17 @@
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
+import { diff, applyDiff } from "deep-diff";
+import _ from "lodash";
 //imports propios
-import { mongoDbgetDesignsById, mongoDbCreateNewDesign, mongoDbGetAllDesigns, mongoDbUpdateDesign, mongoDbDeleteDesign } from "@/dao/design.dao";
+import {
+  mongoDbgetDesignsById,
+  mongoDbCreateNewDesign,
+  mongoDbGetAllDesigns,
+  mongoDbUpdateDesign,
+  mongoDbDeleteDesign,
+  mongoDbUpdateDesignMultiple,
+} from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
 //**codigo**
 //cloudinary
@@ -102,45 +111,101 @@ export const createDesign = async (data) => {
   const photosToPush = await imageArrayPacker(secondary, pCode);
   console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
-  console.log(dataToPush);
   const photoPath = await imageUploaderCloudinary(photo, pCode);
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
   // const result = dataToPush;
-  console.log(result);
   return result;
 };
 
 export const updateDesign = async (data) => {
-  const dataToUpdate = Object.fromEntries(data);
+  const dataToUpdate = await Object.fromEntries(data);
   const id = dataToUpdate.id;
-  const field = dataToUpdate.field;
+  const chkDesign = await mongoDbgetDesignsById(id);
   const photo = data.get("photo");
-  const dataToPush = dataToUpdate.data;
-  const url = dataToUpdate.url;
-  const idCaptured = dataToUpdate.idCaptured;
-  const chkDesign = await mongoDbgetDesignsById(dataToUpdate.id);
-  if (!chkDesign) {
-    throw new Error("design does not exist");
+  const secondary = data.getAll("secondaryImages");
+  let secondaryUpdate = dataToUpdate.secondaryUpdate;
+  let updatePack = [];
+  let shopsExist = false;
+  let deletedSimgs = false;
+  let secondaryImagesOld = [...chkDesign.secondaryImages];
+  let secondaryImages = [];
+  let newSimgs = [];
+  let newSimgsExist = false;
+  const shops = [...chkDesign.shops];
+  const packingCycle = async (data) => {
+    for (let item in data) {
+      let field = item;
+      if (data[item] === "") {
+        continue;
+      } else if (field === "photo") {
+        if (photo.size === 0) {
+          continue;
+        }
+        const oldPhoto = chkDesign.photo;
+        await imageDeleterCloudinary(oldPhoto);
+        const newPhotoUrl = await imageUploaderCloudinary(photo);
+        updatePack.push({ photo: newPhotoUrl });
+      } else if (field === "secondaryUpdate") {
+        deletedSimgs = true;
+        //eliminar del cloud las imagenes eliminadas
+        const updateTransformed = JSON.parse(secondaryUpdate);
+        const deleteSimgs = (secondaryImagesOld, updateTransformed) => {
+          const result = _.differenceWith(secondaryImagesOld, updateTransformed, _.isEqual);
+          result.forEach((e) => {
+            imageDeleterCloudinary(e.SIUrl);
+          });
+        };
+        deleteSimgs(secondaryImagesOld, updateTransformed);
+        secondaryImagesOld = JSON.parse(secondaryUpdate);
+      } else if (field === "secondaryImages") {
+        if (secondary[0].size === 0) {
+          continue;
+        }
+        //se deja en test mientras se ajusta, desapues se pasa a real
+        newSimgsExist = true;
+        const imgsUrl = await imageArrayPacker(secondary);
+        newSimgs = imgsUrl;
+      } else if (item.startsWith("url")) {
+        shopsExist = true;
+        const shopName = field.replace("url", "");
+        const shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
+        shops[shopToUpdateIndex].shopUrl = data[item];
+      } else if (field === "id") {
+        continue;
+      } else {
+        updatePack.push({ [item]: data[item] });
+      }
+    }
+    //revisar como cargarlo solo si llega info
+    // updatePack.push(shops);
+  };
+  const secondaryImagesOrganizer = (delImgs, newImgs) => {
+    let repackSimgs = [];
+    if (deletedSimgs) {
+      for (let item of delImgs) {
+        repackSimgs.push(item);
+      }
+    } else {
+      repackSimgs = secondaryImagesOld;
+    }
+    for (let item of newImgs) {
+      repackSimgs.push(item);
+    }
+    updatePack.push({ secondaryImages: repackSimgs });
+  };
+
+  const pack = await packingCycle(dataToUpdate);
+  shopsExist && updatePack.push({ shops: shops });
+  if (deletedSimgs || newSimgsExist) {
+    await secondaryImagesOrganizer(secondaryImagesOld, newSimgs);
   }
-  if (field === "photo") {
-    //organizo data para db y fs
-    let pCode = chkDesign.pCode;
-    const photoPush = await imageUploaderCloudinary(photo, pCode);
-    const designToUpdate = await mongoDbUpdateDesign(id, field, photoPush);
-    return designToUpdate;
-  } else if (field === "shops") {
-    const shops = [...chkDesign.shops];
-    const shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${dataToPush}`);
-    shops[shopToUpdateIndex].shopUrl = url;
-    const designToUpdate = await mongoDbUpdateDesign(id, field, shops);
-    return designToUpdate;
-  } else {
-    const designToUpdate = await mongoDbUpdateDesign(id, field, dataToPush);
-    return designToUpdate;
-  }
+  const objUpdate = Object.fromEntries(updatePack.map((item) => Object.entries(item)[0]));
+  const designToUpdate = await mongoDbUpdateDesignMultiple(id, objUpdate);
+  // const designToUpdate = objUpdate;
+  return designToUpdate;
 };
 
 export const deleteDesign = async (id) => {
@@ -211,20 +276,48 @@ const imageUploaderCloudinary = async (file, pCode) => {
   return cloudUpload.secure_url;
 };
 
+const imageDeleterCloudinary = async (photoUrl) => {
+  const preFilter = photoUrl.lastIndexOf("/") + 1;
+  const fileName = photoUrl.slice(preFilter);
+  const fileNamefilter = fileName.lastIndexOf(".");
+  const fileNameCLear = fileName.slice(0, fileNamefilter);
+  const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
+    console.log(result);
+  });
+  console.log(photoToDelete);
+  return photoToDelete;
+};
+
 const objectCreator = (index, string) => {
   let imageObj = {};
-  imageObj['SIUrl'] = `${string}`;
+  imageObj["SIUrl"] = `${string}`;
   return imageObj;
+};
+
+const imageArrayPackerTest = async (imgs) => {
+  console.log("entro a pack test");
+  let secondaryPhotos = [];
+  const packingPhotos = async (img, index) => {
+    const objectReady = await objectCreator(index, img.name);
+    secondaryPhotos.push(objectReady);
+  };
+  const test = await Promise.all(
+    imgs.map(async (img, index) => {
+      await packingPhotos(img, index);
+    })
+  );
+  return secondaryPhotos;
 };
 
 const imageArrayPacker = async (imgs, pCode) => {
   let secondaryPhotos = [];
   const packingPhotos = async (img, index) => {
+    console.log(img);
     let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
     let objReady = await objectCreator(index, urlSecondaryImg);
     await secondaryPhotos.push(objReady);
   };
-  //organizar la data del form, se elimina la data de photo y se agrega el path
+  //organizar la data del form, se crea promesa por delay de la db
   const test = await Promise.all(
     imgs.map(async (img, index) => {
       await packingPhotos(img, index);

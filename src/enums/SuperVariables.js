@@ -9,3 +9,7 @@ export const shops = [
 export const allShopsPath = '/api/design?page='
 
 export const pageBasePath = 'https://shops.creativerafa.com'
+
+export const updateDesignPath = '/api/design'
+
+export const addDesignPath = '/api/design'
