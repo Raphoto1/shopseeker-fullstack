@@ -14,6 +14,7 @@ export default function detailUpdate({ params }) {
   const { data, error, isLoading } = UseSWR(basePath, fetcher);
   if (error) return <h1>Not designs found</h1>;
   if (isLoading) return <h1>Loading...</h1>;
+
   const des = data.payload;
 
   return (
