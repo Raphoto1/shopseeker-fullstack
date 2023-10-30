@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 //imports propios
 import Navbar from "@/components/navbar/Navbar";
 import { ToastContainer } from "react-toastify";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body className={inter.className}>
+        <GoogleAnalytics/>
         <Navbar />
         {children}
         <ToastContainer />
