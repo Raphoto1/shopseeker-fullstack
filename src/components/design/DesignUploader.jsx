@@ -26,15 +26,13 @@ export default function DesignUploader(props) {
     }
   }, [props]);
   //handlers de old Images
-console.log(oldSecondaryImages);
   const handleOldImages = (e) => {
     e.preventDefault(e);
     const capturedSIUrl = e.currentTarget.id;
     console.log(capturedSIUrl);
     oldSecondaryImages.forEach((img, index) => {
-      console.log(`La imagen ${img} tiene el index${index}`);
-      if (img.SIUrl===capturedSIUrl) {
-        setSIToWork(oldSecondaryImages.splice(index,1))
+      if (img.SIUrl === capturedSIUrl) {
+        setSIToWork(oldSecondaryImages.splice(index, 1));
       }
     });
   };
@@ -43,7 +41,6 @@ console.log(oldSecondaryImages);
   const handleSubmit = async (e) => {
     let form = document.querySelector("form");
     e.preventDefault();
-
     let formData = new FormData(form);
     if (SIToWork.length === 1) {
       formData.append("secondaryUpdate", JSON.stringify(oldSecondaryImages));
