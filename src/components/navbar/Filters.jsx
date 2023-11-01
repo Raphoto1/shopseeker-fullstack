@@ -19,8 +19,8 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
   }
   return (
     <>
-      <div className='input-group flex justify-center pt-1'>
-        <select name='category' id='categoryFilter' className='select-sm justify-center' onChange={handleCategoryFilter}>
+      <div className='join join-vertical md:join-horizontal flex md:justify-center justify-start pt-1'>
+        <select name='category' id='categoryFilter' className='select-sm justify-center join-item' onChange={handleCategoryFilter}>
           <option disabled selected>
             Filter by Category
           </option>
@@ -36,7 +36,7 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
             )
           )}
         </select>
-        <select name='shops' id='shopsFilter' className='select-sm' onChange={handleShopFilter}>
+        <select name='shops' id='shopsFilter' className='select-sm join-item' onChange={handleShopFilter}>
           <option disabled selected>
             Filter by Shop
           </option>
@@ -52,7 +52,7 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
             )
           )}
         </select>
-        <button className="btn btn-sm" onClick={handleResetFilter}>Clear Filters</button>
+        <button className="btn btn-sm join-item" onClick={handleResetFilter}>Clear Filters</button>
       </div>
     </>
   );

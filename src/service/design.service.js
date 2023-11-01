@@ -98,6 +98,8 @@ export const createDesign = async (data) => {
   //manipular imagen para guardar en fs y crear el path
   const photo = data.get("photo");
   const secondary = data.getAll("secondaryImages");
+  const testPhoto = data.get('photoTest');
+  console.log('esto es testPhoto ',testPhoto);
   const dataToPush = Object.fromEntries(data);
   const pCode = dataToPush["pCode"];
   //manipular links de tiendas para empaquetar
@@ -108,9 +110,16 @@ export const createDesign = async (data) => {
   });
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
-  const photosToPush = await imageArrayPacker(secondary, pCode);
-  console.log(photosToPush);
+  console.log(secondary);
+  let photosToPush = [];
+  if (secondary[0].size === 0) {
+    photosToPush = [];
+  } else {
+    photosToPush = await imageArrayPacker(secondary, pCode);
+  }
+  // console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
+  console.log('esto es photo',photo);
   const photoPath = await imageUploaderCloudinary(photo, pCode);
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
@@ -144,6 +153,7 @@ export const updateDesign = async (data) => {
         if (photo.size === 0) {
           continue;
         }
+        console.log(photo);
         const oldPhoto = chkDesign.photo;
         await imageDeleterCloudinary(oldPhoto);
         const newPhotoUrl = await imageUploaderCloudinary(photo);

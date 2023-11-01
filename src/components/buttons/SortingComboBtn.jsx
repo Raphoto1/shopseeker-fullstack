@@ -14,7 +14,7 @@ export default function SortingComboBtn({ setLimitPerPageComp, setSortOptionComp
   };
   return (
     <>
-      <div className='sort flex justify-center w-30 join'>
+      <div className='sort flex justify-center md:justify-end w-30 join pt-2'>
         <div id='limitselect' className='join'>
           <select name='limit' id='' className='select-sm join-item' onChange={handleLimit}>
             <option disabled selected>

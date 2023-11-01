@@ -22,7 +22,7 @@ export default function ThemeSelect() {
   };
 
   return (
-    <div>
+    <div className="flex justify-end items-end">
       <BsMoon className='m-1' />
       <input type='checkbox' name='checkTheme' id='theme' className='toggle' onChange={handleTheme} />
       <BsSun className='m-1' />
