@@ -19,7 +19,7 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
   }
   return (
     <>
-      <div className='join join-vertical md:join-horizontal flex justify-center justify-start pt-1'>
+      <div className='join join-vertical md:join-horizontal flex justify-center pt-1'>
         <select name='category' id='categoryFilter' className='select-sm justify-center join-item' onChange={handleCategoryFilter}>
           <option disabled selected>
             Filter by Category

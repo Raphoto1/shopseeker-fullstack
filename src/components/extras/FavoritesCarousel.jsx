@@ -47,7 +47,7 @@ export default function FavoritesCarousel() {
         </Link>
       </div>
       <div>
-        <div className='md:2xl:flex-col sm:flex w-full sm:h-20'>
+        <div className='md:5xl:flex-col sm:flex w-full sm:h-20'>
           <Link href={'/allshops'} className='grid flex-grow card bg-base-300 rounded-box place-items-center px-5'>
             <div >Find your Favorite design</div>
           </Link>
