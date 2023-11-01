@@ -83,7 +83,7 @@ export default function Shops() {
   return (
     <>
       <div className='total'>
-        <div className='topbar flex flex-wrap align-middle justify-center xl:max-w-screen sm:max-w-fit py-2'>
+        <div className='topbar flex flex-wrap align-middle justify-center justify-items-center xl:max-w-screen sm:max-w-fit py-2'>
           <div className='flex justify-center'>
             <SearchBar
               onSearchTerm={handleSearchText}
@@ -94,7 +94,7 @@ export default function Shops() {
             />
           </div>
           {searchText ? <span>searching for {searchText}</span> : <></>}
-          <Filters setFilterCategoryComp={setFilterCategory} setFilterShopComp={setFilterShop} />
+          <Filters setFilterCategoryComp={setFilterCategory} setFilterShopComp={setFilterShop} className='align-center justify-center' />
         </div>
         {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <></>}
         <GridDesigns designsToSort={allDesigns} />
