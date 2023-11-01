@@ -8,16 +8,17 @@ import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "../extras/HiddenInput";
 import DnDSpaceSingle from "../extras/DnDSpaceSingle";
 import DnDSpaceMultiple from "../extras/DnDSpaceMultiple";
+import DnDTest from "../extras/DnDTest";
 
 export default function DesignUploader(props) {
   //capturar imagenes secundarias
   const [oldSecondaryImages, setOldSecondaryImages] = useState([]);
   const [SIToWork, setSIToWork] = useState([...oldSecondaryImages]);
+  const [photoFile, setPhotoFile] = useState([]);
 
   //revisar si existeel diseño y llenar con la data
   const [shopsFromUpdate, setShopsFromUpdate] = useState([]);
   useEffect(() => {
-    console.log("llegaron props");
     if (props.shops) {
       setShopsFromUpdate(props.shops);
     }
@@ -42,12 +43,17 @@ export default function DesignUploader(props) {
     let form = document.querySelector("form");
     e.preventDefault();
     let formData = new FormData(form);
+    for (const value of formData.values()) {
+      console.log(value);
+    }
     if (SIToWork.length === 1) {
       formData.append("secondaryUpdate", JSON.stringify(oldSecondaryImages));
     }
     if (props.desId) {
       formData.append("id", props.desId);
     }
+    console.log('esto es photofile ', photoFile);
+    formData.append('photoTest',photoFile)
     let response = await fetch(props.path, {
       method: props.method,
       credentials: "include",
@@ -149,7 +155,7 @@ export default function DesignUploader(props) {
           </div>
           <div className='mainImageDrop'>
             <h2 className='block text-center'>Main Image</h2>
-            <DnDSpaceSingle name={"photo"} />
+            <DnDSpaceSingle name={"photo"} setPhotoFile={setPhotoFile} />
           </div>
           <div className='secondaryImageDrop h-10'>
             <h2 className='block text-center'>Secondary Images</h2>
