@@ -15,7 +15,8 @@ export default function DesignUploader(props) {
   const [oldSecondaryImages, setOldSecondaryImages] = useState([]);
   const [SIToWork, setSIToWork] = useState([...oldSecondaryImages]);
   const [photoFile, setPhotoFile] = useState([]);
-
+  const [files, setFiles] = useState([]);
+  const [multipleFiles, setMultipleFiles] = useState([]);
   //revisar si existeel diseño y llenar con la data
   const [shopsFromUpdate, setShopsFromUpdate] = useState([]);
   useEffect(() => {
@@ -52,8 +53,8 @@ export default function DesignUploader(props) {
     if (props.desId) {
       formData.append("id", props.desId);
     }
-    console.log('esto es photofile ', photoFile);
-    formData.append('photoTest',photoFile)
+    files.forEach((file) => formData.append("photo", file));
+    multipleFiles.forEach((file) => formData.append("secondaryImages", file));
     let response = await fetch(props.path, {
       method: props.method,
       credentials: "include",
@@ -155,11 +156,12 @@ export default function DesignUploader(props) {
           </div>
           <div className='mainImageDrop'>
             <h2 className='block text-center'>Main Image</h2>
-            <DnDSpaceSingle name={"photo"} setPhotoFile={setPhotoFile} />
+            <DnDSpaceSingle files={files } setFiles={setFiles} />
+            {/* <DnDTest name={'photoTest'} /> */}
           </div>
           <div className='secondaryImageDrop h-10'>
             <h2 className='block text-center'>Secondary Images</h2>
-            <DnDSpaceMultiple name={"secondaryImages"} />
+            <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
             {props.secondaryImages && (
               <div className='oldSecondary block pt-5'>
                 <h2>Actual Secondary Images</h2>

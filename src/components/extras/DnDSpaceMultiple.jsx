@@ -36,8 +36,8 @@ const img = {
   height: '100%'
 };
 
-export default function DnDSpaceMultiple(props) {
-    const [files, setFiles] = useState([]);
+export default function DnDSpaceMultiple({ files, setFiles }) {
+  //file y set file se ajusta en el padre
     const {getRootProps, getInputProps} = useDropzone({
       maxFiles:6,
       accept: {
@@ -72,7 +72,7 @@ export default function DnDSpaceMultiple(props) {
       <section className="container border-2 bg-slate-200 p-2 rounded-md">
         <div className="">
           <div {...getRootProps({className: 'dropzone'})} className="bg-slate-100 border-2 border-slate-300 rounded-md">
-            <input {...getInputProps({name:props.name})} multiple={true} />
+            <input {...getInputProps()} multiple={true} />
             <p className="text-center">Drag 'n' drop max 4 Images, or click to select files</p>
           </div>
           <div  className="grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 xs:grid-cols-2 gap-2 px-1 pt-2">
