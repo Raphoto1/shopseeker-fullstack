@@ -29,7 +29,7 @@ export default function CardHero(props) {
           <div className=" rounded-lg shadow-2xl max-h-screen">
             <Carousel autoPlay dynamicHeight={false} className=" rounded-lg shadow-2xl max-h-screen">
               <div key={1}>
-                <Image src={design.photo} width={1000} height={1000} alt={design.title} className=" rounded-lg shadow-2xl"/>
+                <Image src={design.photo} width={1000} height={1000} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
               </div>
             
               {design.secondaryImages.map((img, index) => (

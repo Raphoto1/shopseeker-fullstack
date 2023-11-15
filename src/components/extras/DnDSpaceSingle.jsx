@@ -34,9 +34,9 @@ const img = {
   height: "100%",
 };
 
-export default function DnDSpaceSingle({name, setPhotoFile} ) {
-  const [files, setFiles] = useState([]);
-  // setPhotoFile(files);
+export default function DnDSpaceSingle({ files, setFiles} ) {
+
+    //file y set file se ajusta en el padre
    const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: {
@@ -44,13 +44,6 @@ export default function DnDSpaceSingle({name, setPhotoFile} ) {
     },
      onDrop: acceptedFiles => {
       setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-       );
-       setPhotoFile(
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
@@ -83,7 +76,7 @@ export default function DnDSpaceSingle({name, setPhotoFile} ) {
   return (
     <section className='container border-2 bg-slate-200 p-2 rounded-md'>
       <div {...getRootProps({ className: 'dropzone' })} className='bg-slate-100 border-2 border-slate-300 rounded-md'>
-        <input {...getInputProps({name:name})} />
+        <input {...getInputProps()} />
         <p>Drag 'n' drop some file here, or click to select file</p>
       </div>
       <aside style={thumbsContainer}>{thumbs}</aside>
