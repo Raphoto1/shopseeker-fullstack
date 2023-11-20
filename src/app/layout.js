@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Inter } from "next/font/google";
 //imports propios
 import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 import { ToastContainer } from "react-toastify";
 import GoogleAnalytics from "./GoogleAnalytics";
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
         <ToastContainer />
+        <Footer/>
       </body>
     </html>
   );
