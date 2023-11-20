@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { updateTest } from "@/service/design.service";
+import { sendContactMail } from "@/utils/mailContact";
 
 export async function GET() {
     try {
@@ -20,4 +21,12 @@ export async function PUT(req) {
     } catch (error) {
       return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
     }
+}
+  
+export async function POST() {
+  try {
+    return NextResponse.json({status:200}, {message:'successfully connected to api'})
+  } catch (error) {
+    return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
   }
+}

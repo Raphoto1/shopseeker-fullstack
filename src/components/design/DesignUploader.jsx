@@ -44,9 +44,6 @@ export default function DesignUploader(props) {
     let form = document.querySelector("form");
     e.preventDefault();
     let formData = new FormData(form);
-    for (const value of formData.values()) {
-      console.log(value);
-    }
     if (SIToWork.length === 1) {
       formData.append("secondaryUpdate", JSON.stringify(oldSecondaryImages));
     }
