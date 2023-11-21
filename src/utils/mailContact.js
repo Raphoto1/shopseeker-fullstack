@@ -37,5 +37,6 @@ export async function sendContactMail(name,email,messageToSend) {
       </div>`
     });
     console.log('mail enviado', info.messageId);
-    return info.messageId
+    const response = await info.messageId
+    return response
 }
