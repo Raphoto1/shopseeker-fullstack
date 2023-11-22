@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 //imports propios
 import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "../extras/HiddenInput";
@@ -11,6 +12,7 @@ import DnDSpaceMultiple from "../extras/DnDSpaceMultiple";
 import DnDTest from "../extras/DnDTest";
 
 export default function DesignUploader(props) {
+  const router = useRouter()
   //capturar imagenes secundarias
   const [oldSecondaryImages, setOldSecondaryImages] = useState([]);
   const [SIToWork, setSIToWork] = useState([...oldSecondaryImages]);
@@ -59,7 +61,14 @@ export default function DesignUploader(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        data.error ? toast(`error Loading design${data.error}`) : toast("uploaded successfully, reload for new upload");
+        if (data.error) {
+          toast(`error Loading design${data.error}`)
+        } else {
+          toast("uploaded successfully, reload for new upload");
+          router.push('/allshops');
+        }
+          
+        // data.error ? toast(`error Loading design${data.error}`) : toast("uploaded successfully, reload for new upload");
         console.log(data);
       })
       .then(() => {
@@ -143,6 +152,7 @@ export default function DesignUploader(props) {
                 <label htmlFor='shops' className='bold'>
                   URL to Shops
                 </label>
+                <p>add 'null' to desactivate</p>
               </div>
               <div className='max-w-xs'>
                 {shops.map((shop, index) => (

@@ -26,7 +26,6 @@ export default function ContactForm() {
           toast('Successfully Contacted to CreativeRafa'); 
           document.getElementById("contactModal").close();
         }
-        console.log(data);
     })
   }
 
@@ -35,7 +34,7 @@ export default function ContactForm() {
       
       {/* Open the modal using document.getElementById('ID').showModal() method */}
       <button className='btn' onClick={modalController}>
-        Let's Talk
+        Let's Talk(Contact me)
       </button>
       <dialog id='contactModal' className='modal modal-bottom sm:modal-middle'>
         <div className='modal-box flex align-middle justify-center'>

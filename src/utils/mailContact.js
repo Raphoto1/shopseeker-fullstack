@@ -36,7 +36,6 @@ export async function sendContactMail(name,email,messageToSend) {
         <p>${messageToSend }</p>
       </div>`
     });
-    console.log('mail enviado', info.messageId);
     const response = await info.messageId
     return response
 }

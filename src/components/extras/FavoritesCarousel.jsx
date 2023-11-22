@@ -28,9 +28,9 @@ export default function FavoritesCarousel() {
           {dataToShow.map((des, index) => (
             <div className='hero min-h-full' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
               <div className='hero-overlay bg-opacity-20'></div>
-              <div className='hero-content text-center text-accent-content drop-shadow-xl'>
+              <div className='hero-content text-center text-neutral-content drop-shadow-xl'>
                 <div className='max-w-md'>
-                  <h1 className='mb-5 text-5xl font-bold drop-shadow-md capitalize'>{des.title}</h1>
+                  <h1 className='mb-5 text-5xl font-bold drop-shadow-md capitalize '>{des.title}</h1>
 
                   <Link href={`/shops/${des._id}`}>
                     <button className='btn btn-primary'>Show Details</button>
