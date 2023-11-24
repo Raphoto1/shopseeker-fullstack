@@ -23,9 +23,15 @@ export async function PUT(req) {
     }
 }
   
-export async function POST() {
+export async function POST(req) {
   try {
-    return NextResponse.json({status:200}, {message:'successfully connected to api'})
+    //captura de data
+    console.log('entro a post');
+    const capturedForm = await req.formData();
+    const result = capturedForm
+    // const dataToUpdate = await Object.fromEntries(capturedForm);
+    console.log(result);
+    return NextResponse.json({status:200}, {message:'successfully connected to api', payload:result})
   } catch (error) {
     return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
   }

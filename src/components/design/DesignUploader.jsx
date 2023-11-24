@@ -62,17 +62,14 @@ export default function DesignUploader(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          toast(`error Loading design${data.error}`)
+          toast(`error Loading design, try again${data.error}`)
         } else {
           toast("uploaded successfully, reload for new upload");
           router.push('/allshops');
         }
-          
-        // data.error ? toast(`error Loading design${data.error}`) : toast("uploaded successfully, reload for new upload");
-        console.log(data);
       })
       .then(() => {
-        console.log(data.payload);
+       
       });
   };
 

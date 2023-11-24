@@ -1,14 +1,8 @@
 "use client";
 //imports de app
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-
-// const thumbsContainer = {
-//   display: 'flex',
-//   flexDirection: 'row',
-//   flexWrap: 'wrap',
-//   marginTop: 16
-// };
 
 const thumb = {
   display: 'inline-flex',

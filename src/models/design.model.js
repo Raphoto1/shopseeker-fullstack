@@ -1,6 +1,8 @@
 import { Schema, model, models } from "mongoose"
 import mongoosePaginate from "mongoose-paginate-v2"
 
+const designCollection = "designs"
+
 const DesignSchema = new Schema(
     {
         pCode: {
@@ -16,7 +18,7 @@ const DesignSchema = new Schema(
         description: {
             type: String,
             trim: true,
-            maxlength: [300, "title cannot be grater than 300 characters"],
+            maxlength: [500, "title cannot be grater than 500 characters"],
         },
         likes: {
             type: Number,
