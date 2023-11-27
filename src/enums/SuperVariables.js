@@ -14,6 +14,7 @@ export const updateDesignPath = '/api/design'
 
 export const addDesignPath = '/api/design'
 
-export const contactPath = '/api/contact'
+// export const contactPath = '/api/contact'
+export const contactPath = 'https://shops.creativerafa.com/api/contact/'
 
 export const testPath = '/api'
