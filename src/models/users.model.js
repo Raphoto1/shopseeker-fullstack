@@ -1,10 +1,11 @@
 import { Schema, model, models } from "mongoose";
+import cartCollection from "../models/cart.model"
 
 const userCollection = "users";
 
 const UserSchema = new Schema(
   {
-    first_name: String,
+    name: String,
     last_name: String,
     email: String,
     age: Number,
@@ -13,7 +14,11 @@ const UserSchema = new Schema(
       type: String,
       require: true,
       enum: ["fan", "artist", "rafa", "premiumArtist", "admin"],
-      default: "user",
+      default: "fan",
+    },
+    isAdmin: {
+      type: Boolean,
+      default:false
     },
     description: {
       type: String,

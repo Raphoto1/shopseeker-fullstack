@@ -7,8 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeSelect from "../buttons/ThemeSelect";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const { data: session, status, update } = useSession()
+  console.log(session.user.name);
+
   return (
     <>
       <header>
@@ -36,6 +40,9 @@ export default function Navbar() {
             </TwitterShareButton>
           </div>
           <ThemeSelect />
+          <div>
+            <p>{session.user.name }</p>
+          </div>
         </div>
       </header>
     </>

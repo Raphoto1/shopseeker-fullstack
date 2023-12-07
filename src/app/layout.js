@@ -2,12 +2,13 @@
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Inter } from "next/font/google";
+
 //imports propios
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import { ToastContainer } from "react-toastify";
 import GoogleAnalytics from "./GoogleAnalytics";
-
+import Providers from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,14 +17,19 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <GoogleAnalytics/>
+
+          <GoogleAnalytics />
+        <Providers>
         <Navbar />
-        {children}
-        <ToastContainer />
-        <Footer/>
+          {children}
+          </Providers>
+          <ToastContainer />
+          <Footer />
+
       </body>
     </html>
   );

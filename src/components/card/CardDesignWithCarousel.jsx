@@ -15,7 +15,7 @@ export default function CardDesignWithCarousel(props) {
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id} />
         </div>
         <figure>
-          <Carousel showStatus={false}>
+          <Carousel showStatus={false} showThumbs={false}>
             <div key={1}>
               <Image src={props.photo} width={1000} height={1000} alt={props.title} />
             </div>

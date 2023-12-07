@@ -1,14 +1,15 @@
 import { Schema, model, models } from "mongoose"
+import designCollection from "../models/design.model"
 
-const cartCollection = "cart";
+const cartCollection = "carts";
 
 const cartSchema = new Schema({
   designs: {
     type: [
       {
         design: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "designs",
+          type: Schema.Types.ObjectId,
+          ref: designCollection,
         },
         quantity: Number,
       },
@@ -21,5 +22,5 @@ cartSchema.pre("findOne", function () {
   this.populate("design.design");
 });
 
-const cartModel = model("carts", cartsSchema);
-export default models.cart || cartModel;
+
+export default models.carts || model("carts", cartSchema);

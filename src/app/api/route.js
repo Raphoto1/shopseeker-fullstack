@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 
 import { updateTest } from "@/service/design.service";
 import { sendContactMail } from "@/utils/mailContact";
+import { mongoDbUserChkEmail } from "@/dao/user.dao";
 
 export async function GET() {
-    try {
+  try {
+    const test = mongoDbUserChkEmail("rafa@creativerafa.com")
+    console.log(test);
         return NextResponse.json({status:"success", message:"Successfully connected to Api"})
     } catch (error) {
         return NextResponse.json({status:"failed", message:`error: ${error}`})
