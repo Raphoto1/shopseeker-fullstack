@@ -11,7 +11,6 @@ import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { data: session, status, update } = useSession()
-  console.log(session.user.name);
 
   return (
     <>
@@ -41,7 +40,7 @@ export default function Navbar() {
           </div>
           <ThemeSelect />
           <div>
-            <p>{session.user.name }</p>
+            <p>{session?.user.name }</p>
           </div>
         </div>
       </header>
