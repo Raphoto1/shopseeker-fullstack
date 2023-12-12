@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className='navbar bg-base-200'>
           <div className='sm:flex-1'>
             <Link href={"/"}>
-              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Rafa' />
+              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50 } alt='Icono Rafa' />
             </Link>
           </div>
           <div className="">

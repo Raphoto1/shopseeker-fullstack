@@ -23,6 +23,7 @@ export default function CardHero(props) {
   const design = data.payload;
 
   return (
+    
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
@@ -60,6 +61,7 @@ export default function CardHero(props) {
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end'>
               <span>Share Your Favorite</span>
               <div className='flex justify-between content-center'>
+                
                 <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>

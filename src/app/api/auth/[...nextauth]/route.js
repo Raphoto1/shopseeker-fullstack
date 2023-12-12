@@ -14,14 +14,12 @@ const handler = NextAuth({
           if (user?._id) token._id = user._id;
           if (user?.isAdmin) token.isAdmin = user.isAdmin;
           if (user?.role) token.role = user.role;
-          console.log("estes es user de jwt",user);
           return token;
         },
         async session({ session, token }) {
           if (token?._id) session.user._id = token._id;
           if (token?.isAdmin) session.user.isAdmin = token.isAdmin;
           if (token?.role) session.user.role = token.role;
-          console.log('esto es session',session);
           return session;
         },
       },
