@@ -7,15 +7,18 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeSelect from "../buttons/ThemeSelect";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const { data: session, status, update } = useSession()
+
   return (
     <>
       <header>
         <div className='navbar bg-base-200'>
           <div className='sm:flex-1'>
             <Link href={"/"}>
-              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Rafa' />
+              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50 } alt='Icono Rafa' />
             </Link>
           </div>
           <div className="">
@@ -36,6 +39,9 @@ export default function Navbar() {
             </TwitterShareButton>
           </div>
           <ThemeSelect />
+          <div>
+            <p>{session?.user.name }</p>
+          </div>
         </div>
       </header>
     </>

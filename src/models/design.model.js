@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose"
 import mongoosePaginate from "mongoose-paginate-v2"
 
-const designCollection = "designs"
+const designCollection = "design"
 
 const DesignSchema = new Schema(
     {

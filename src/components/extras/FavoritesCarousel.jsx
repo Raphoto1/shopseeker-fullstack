@@ -7,6 +7,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { FaCircleArrowRight } from "react-icons/fa6";
 //imports propios
 import { fetcher, favoritesUrl } from "@/config/fetcher.config";
+import VaraText from "./decals/VaraText";
 
 
 export default function FavoritesCarousel() {
@@ -23,12 +24,19 @@ export default function FavoritesCarousel() {
 
   return (
     <>
-      <div className='sm:min-h-fit md:min-h-auto'>
-        <Carousel className='' autoPlay infiniteLoop showStatus={false}>
+      <div className="indicator absolute m-5 ml-2">
+          <VaraText text={"Top 3 designs"}/>
+        </div>
+      <div className='h-screen'>
+      {/* <div className="indicator absolute mt-10 ml-20">
+        <span className="indicator-item indicator-middle indicator-center badge badge-secondary">top3 favs</span>
+        </div> */}
+        
+        <Carousel className='h-screen' autoPlay infiniteLoop dynamicHeight={true} showStatus={false} showThumbs={false}>
           {dataToShow.map((des, index) => (
-            <div className='hero min-h-full' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
+            <div className='hero h-screen' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
               <div className='hero-overlay bg-opacity-20'></div>
-              <div className='hero-content text-center text-neutral-content drop-shadow-xl'>
+              <div className='hero-content text-left align-top text-neutral-content drop-shadow-xl'>
                 <div className='max-w-md'>
                   <h1 className='mb-5 text-5xl font-bold drop-shadow-md capitalize '>{des.title}</h1>
 
@@ -41,13 +49,9 @@ export default function FavoritesCarousel() {
           ))}
         </Carousel>
       </div>
-      <div className="flex justify-center pb-5">
-        <Link href={'/allshops'}>
-          <h1 className="btn btn-info h-auto justify-center text-center text-3xl">Check All My Designs</h1>
-        </Link>
-      </div>
+     
       <div>
-        <div className='md:5xl:flex-col sm:flex w-full sm:h-20'>
+        <div className='md:5xl:flex-col sm:flex w-full sm:h-20 pt-5'>
           <Link href={'/allshops'} className='grid flex-grow card bg-base-300 rounded-box place-items-center px-5'>
             <div >Find your Favorite design</div>
           </Link>
@@ -56,6 +60,11 @@ export default function FavoritesCarousel() {
           <div className='divider sm:divider-vertical md:divider-horizontal'><FaCircleArrowRight size={70} className="rotate-90 md:rotate-0"/></div>
           <div className='grid flex-grow card bg-base-300 rounded-box place-items-center'>Enjoy!!!</div>
         </div>
+      </div>
+      <div className="flex justify-center p-5">
+        <Link href={'/allshops'}>
+          <h1 className="btn btn-info h-auto justify-center text-center text-2xl">Check All My Designs</h1>
+        </Link>
       </div>
     </>
   );
