@@ -1,9 +1,12 @@
 "use client";
 
 import { testPath } from "@/enums/SuperVariables";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 export default function Login() {
+  const router = useRouter();
 
   const modalController = () => {
     document.getElementById("loginModal").showModal();
@@ -13,15 +16,18 @@ export default function Login() {
     e.preventDefault();
     let form = document.getElementById("loginForm");
     let formData = new FormData(form);
-    let response = await fetch(testPath, {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+    const emailCatch = formData.get('email');
+    const passCath = formData.get('password');
+    const response = await packSession(emailCatch,passCath)
+    async function packSession(emailIn, passIn) {
+      const setSession = await signIn("credentials", {
+        email: emailIn,
+        password: passIn,
+        redirect: false
       });
+      if (setSession.ok) return router.push("/")
+      if (setSession.error) return alert('email or password error')
+    };
   };
 
   return (

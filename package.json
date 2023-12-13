@@ -38,6 +38,7 @@
     "vara": "^1.4.1"
   },
   "devDependencies": {
+    "@types/react": "18.2.45",
     "daisyui": "^4.0.5"
   }
 }

@@ -1,16 +1,8 @@
 //imports de app
 import { mongoDbCreateCart } from "@/dao/cart.dao";
-import { mongoDbUserChkEmail, mongoDbUserRegister } from "@/dao/user.dao";
+import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserRegister } from "@/dao/user.dao";
 import bcrypt from "bcrypt";
 //imports propios
-
-export const login = async (data) => {
-    const pass = data['password'];
-    if (pass=='123') {
-        return true
-    }
-    return pass
-}
 
 export const register = async (data) => {
     const email = data['email'];
@@ -40,4 +32,11 @@ export const register = async (data) => {
 
     const userCreated = await mongoDbUserRegister(newUser);
     return userCreated
+}
+
+export const getUserInfo = async (idIn) => {
+    const userChk = await mongoDbUserChkId(idIn);
+    const userToWork = userChk._doc
+    delete userToWork.password
+    return userToWork
 }

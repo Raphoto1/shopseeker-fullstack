@@ -8,9 +8,11 @@ import Link from "next/link";
 import ThemeSelect from "../buttons/ThemeSelect";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function Navbar() {
-  const { data: session, status, update } = useSession()
+  const { data: session, status, update } = useSession();
+  const { user, setUser } = useState([]);
 
   return (
     <>
@@ -18,15 +20,13 @@ export default function Navbar() {
         <div className='navbar bg-base-200'>
           <div className='sm:flex-1'>
             <Link href={"/"}>
-              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50 } alt='Icono Rafa' />
+              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Rafa' />
             </Link>
           </div>
-          <div className="">
-            <ul tabIndex={0} className="btn btn-primary btn-xs invisible md:visible">
+          <div className=''>
+            <ul tabIndex={0} className='btn btn-primary btn-xs invisible md:visible'>
               <li>
-                <Link href={"/allshops"}>
-                  See All Designs
-                </Link>
+                <Link href={"/allshops"}>See All Designs</Link>
               </li>
             </ul>
           </div>
@@ -40,7 +40,13 @@ export default function Navbar() {
           </div>
           <ThemeSelect />
           <div>
-            <p>{session?.user.name }</p>
+            {session ? (
+              <Link href={"/api/auth/signout"}>{session?.user.name.split(" ")[0]} </Link>
+            ) : (
+              <Link href={"/auth"}>
+                <p>Register/Login</p>
+              </Link>
+            )}
           </div>
         </div>
       </header>

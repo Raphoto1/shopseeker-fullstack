@@ -19,4 +19,6 @@ export const contactPath = '/api/contact/'
 
 export const testPath = '/api'
 
-export const registerPath='/api/auth/register'
+export const registerPath = '/api/auth/register'
+
+export const loginPath = '/api/auth/login'
