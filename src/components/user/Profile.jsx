@@ -1,10 +1,10 @@
 "use client";
 //imports de app
-import { UseSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import UseSWR from "swr";
 
-export default function profile(props) {
-  const { data: session, status, update } = UseSession();
+export default function profile() {
+  const { data: session, status, update } = useSession();
   const userId = session?.user._id;
   const userPath = `/api/user/${userId}`;
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());

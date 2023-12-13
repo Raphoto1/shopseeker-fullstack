@@ -5,7 +5,7 @@ export default function user() {
    
     return (
         <>
-            <Profile  />
+            <Profile/>
         </>
     );
 }
