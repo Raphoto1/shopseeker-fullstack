@@ -1,3 +1,5 @@
+import { getUserInfo } from "@/service/auth.service";
+import { addToCart, getCart } from "@/service/cart.service";
 import { getDesignById, deleteDesign, likeDesign } from "@/service/design.service";
 import { NextResponse } from "next/server";
 
@@ -25,10 +27,20 @@ export async function DELETE(req, { params }) {
 //like
 export async function PUT(req, { params }) {
   try {
-    const id = params.id
+    const id = params.id;
     const url = new URL(req.url);
     const value = url.searchParams.get("value");
-    const liked = await likeDesign(id, value);
+    const capturedForm = await req.formData();
+    const userId = capturedForm.get("userId");
+    console.log('esto es use id',userId);
+    let userCart = null;
+    if (userId === 'null') {
+      console.log("no hay user");
+    } else {
+      const user = await getUserInfo(userId);
+      userCart = user.cart;
+    }
+    const liked = await likeDesign(id, value, userCart);
     return NextResponse.json({ status: 200, payload: liked });
   } catch (error) {
     return NextResponse.json({ message: `error: ${error}` }, { status: 500 });

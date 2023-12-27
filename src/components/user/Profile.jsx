@@ -1,7 +1,11 @@
 "use client";
 //imports de app
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import UseSWR from "swr";
+//imports propios
+import FanOptions from "./fan/FanOptions";
+
 
 export default function profile() {
   const { data: session, status, update } = useSession();
@@ -13,13 +17,15 @@ export default function profile() {
   if (isLoading) return <h1>Loading...</h1>;
   const user = data.payload;
   console.log(user);
+  console.log(user?.cart[0]);
 
   return (
     <>
       <div id='generalInfo' className='flex flex-col items-center pt-5'>
         <div className='avatar placeholder'>
           <div className='bg-neutral text-neutral-content rounded-full w-24'>
-            <span className='text-xl'>name</span>
+            {user?.avatar ? <Image href={user?.avatar} /> : <span className='text-4xl'>{user?.name.slice(0,1)}</span>}
+            
           </div>
         </div>
         <div id='userInf' className='flex flex-col items-center'>
@@ -39,10 +45,12 @@ export default function profile() {
         {user?.role === "artist" ? (
           <div>
             <h1> opciones de artist/designs</h1>
+            
           </div>
         ) : (
           <div>
-            <h1> opciones de fan/carrito(likes)/actualizar datos/contrasena y eliminar cuenta </h1>
+              <h1> opciones de fan/carrito(likes)/actualizar datos/contrasena y eliminar cuenta </h1>
+              <FanOptions cart={user?.cart[0]._id } />
           </div>
         )}
       </div>

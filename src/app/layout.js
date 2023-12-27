@@ -8,7 +8,8 @@ import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import { ToastContainer } from "react-toastify";
 import GoogleAnalytics from "./GoogleAnalytics";
-import Providers from "./Providers";
+import { Providers } from "./Providers";
+import { CartProvider } from "@/context/cartContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,19 +18,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang='en'>
       <body className={inter.className}>
-
-          <GoogleAnalytics />
+        <GoogleAnalytics />
         <Providers>
-        <Navbar />
-          {children}
-          </Providers>
-          <ToastContainer />
-          <Footer />
-
+          <CartProvider>
+            <Navbar />
+            {children}
+          </CartProvider>
+        </Providers>
+        <ToastContainer />
+        <Footer />
       </body>
     </html>
   );

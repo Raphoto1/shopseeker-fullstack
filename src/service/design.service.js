@@ -14,6 +14,7 @@ import {
   mongoDbUpdateDesignMultiple,
 } from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
+import { addToCart, deleteFromCart, getCart } from "./cart.service";
 //**codigo**
 //cloudinary
 cloudinary.config({
@@ -226,12 +227,16 @@ export const deleteDesign = async (id) => {
   }
 };
 
-export const likeDesign = async (id, value) => {
+export const likeDesign = async (id, value, userCart) => {
   const chkDesign = await mongoDbgetDesignsById(id);
   const likeUpdate = value;
   if (chkDesign) {
     let likeToUpdate = chkDesign.likes;
     if (Math.sign(likeUpdate) === 1) {
+      if (userCart) {
+        console.log('llega carrito', userCart);
+        // await addToCart(userCart, id);
+      }
       const likeToPush = likeToUpdate + 1;
       const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
       return designToUpdate;
@@ -239,7 +244,12 @@ export const likeDesign = async (id, value) => {
       if (likeToUpdate === 0) {
         return "no permited";
       } else {
+        if (userCart) {
+          console.log('llega carrito a menos', id);
+          deleteFromCart(userCart, id);
+        }
         const likeToPush = likeToUpdate - 1;
+        console.log('se quita por fuera');
         const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
         return designToUpdate;
       }

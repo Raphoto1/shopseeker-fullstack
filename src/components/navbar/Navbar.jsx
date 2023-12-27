@@ -2,17 +2,36 @@
 //import propios
 import SearchBar from "./SearchBar";
 import { pageBasePath } from "@/enums/SuperVariables";
+import { useCart } from "@/context/cartContext";
 //imports app
 import Image from "next/image";
 import Link from "next/link";
 import ThemeSelect from "../buttons/ThemeSelect";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const { data: session, status, update } = useSession();
-  const { user, setUser } = useState([]);
+  const { getCartInfo, cartContent, cart } = useCart();
+let cartCount = 0
+  if (session) {
+    getCartInfo(session?.cart)
+    if (cart===undefined) {
+      console.log('no llega info del carrito');
+    } else {
+      console.log('llego info del carrito');
+      cartCount = cart.length
+      console.log(cartCount);
+    }
+  }
+
+  useEffect(() => {
+    getCartInfo(session?.cart)
+    cartCount=cartContent.length
+    console.log('effect en nav');
+    console.log(cartCount);
+},[cartContent])
 
   return (
     <>
@@ -40,6 +59,7 @@ export default function Navbar() {
           </div>
           <ThemeSelect />
           <div>
+            <p>{cartCount}</p>
             {session ? (
               <Link href={"/api/auth/signout"}>{session?.user.name.split(" ")[0]} </Link>
             ) : (
