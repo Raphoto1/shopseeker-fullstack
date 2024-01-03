@@ -235,7 +235,7 @@ export const likeDesign = async (id, value, userCart) => {
     if (Math.sign(likeUpdate) === 1) {
       if (userCart) {
         console.log('llega carrito', userCart);
-        // await addToCart(userCart, id);
+        await addToCart(userCart, id);
       }
       const likeToPush = likeToUpdate + 1;
       const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
@@ -246,7 +246,8 @@ export const likeDesign = async (id, value, userCart) => {
       } else {
         if (userCart) {
           console.log('llega carrito a menos', id);
-          deleteFromCart(userCart, id);
+          const deleted = await deleteFromCart(userCart, id);
+          return deleted
         }
         const likeToPush = likeToUpdate - 1;
         console.log('se quita por fuera');

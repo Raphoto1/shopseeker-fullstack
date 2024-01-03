@@ -17,7 +17,7 @@ export function LikeButton({ desId, likesRecieve }) {
 
   //fetch para agregar
   let basePath = `/api/design`;
-
+//revisar actualizacion de dislike!!!!!!!!!!
   const [liked, setLiked] = useState(false);
   const [availableBtn, setAvailableBtn] = useState(false);
   const [likesCount, setLikesCount] = useState(likesRecieve);
@@ -33,6 +33,8 @@ export function LikeButton({ desId, likesRecieve }) {
       const chk = cart?.findIndex((des) => des.design._id.toString() === desIn);
       if (chk !== -1) {
         setLiked(true);
+      }else{
+        setLiked(false);
       }
     }
   };
@@ -51,7 +53,7 @@ export function LikeButton({ desId, likesRecieve }) {
 
   useEffect(() => {
     chkPrevLikes(cart, desId);
-  }, [cartContent]);
+  }, [cartContent,liked,cartUpdate]);
 
   const handleLiked = async () => {
     //agregar info de user
@@ -78,7 +80,6 @@ export function LikeButton({ desId, likesRecieve }) {
           }
         });
     } else {
-      console.log("entro al -1");
       setLikesCount(likesCount - 1);
       basePath = `/api/design/${desId}?value=-1`;
       let response = await fetch(basePath, {
@@ -89,6 +90,7 @@ export function LikeButton({ desId, likesRecieve }) {
         .then((data) => {
           if (data.status === 200) {
             toast("disliked");
+            //setTimeout(()=>setCartUpdate(!cartUpdate),"800")
             setCartUpdate(!cartUpdate);
           }
         });

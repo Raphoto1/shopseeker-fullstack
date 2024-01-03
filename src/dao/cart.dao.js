@@ -35,6 +35,16 @@ export const mongoDbGetCart = async (idIn) => {
   }
 };
 
+export const mongoDbGetCartClean= async(idIn)=>{
+  try {
+    await dbConnect();
+    const getCart = await cartModel.find({ _id: idIn });
+    return getCart;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export const mongoDbAddToCart = async (cId, dId, quantity) => {
   try {
     await dbConnect();
@@ -47,3 +57,17 @@ export const mongoDbAddToCart = async (cId, dId, quantity) => {
     throw new Error(error);
   }
 };
+
+export const mongoDbDeleteFromCart = async (cId,dId)=>{
+  try {
+    let prodToDelete = await cartModel.updateOne(
+      {_id:cId},
+      {$pull:{designs:{design:dId}}}
+    )
+    console.log(prodToDelete);
+    return prodToDelete
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+}

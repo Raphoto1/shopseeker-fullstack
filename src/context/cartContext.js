@@ -35,7 +35,7 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("entro al effect");
+    console.log("entro al effect del context");
     loadCartInfo(cartId);
     console.log(cart);
   }, [cartId, cartUpdate]);
