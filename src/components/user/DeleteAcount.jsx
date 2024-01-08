@@ -1,33 +1,36 @@
-'use client'
-export default function Forgot() {
+export default function DeleteAccount() {
   const modalController = () => {
-    document.getElementById("forgotPassModal").showModal();
+    document.getElementById("deleteAccountModal").showModal();
   };
-  const handleForgotPass = () => {
-    alert("Check your email and continue the process");
+  const handleDeleteAccount = () => {
+    alert("hago el delete de acccountr");
   };
   return (
     <>
-      <button className='btn' onClick={modalController}>
-        Forgot Password
+      <button className='btn btn-error' onClick={modalController}>
+        Delete Account
       </button>
-      <dialog id='forgotPassModal' className='modal modal-bottom sm:modal-middle'>
+      <dialog id='deleteAccountModal' className='modal modal-bottom sm:modal-middle'>
         <div className='modal-box flex align-middle justify-center'>
           <form method='dialog'>
             <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</button>
           </form>
           <div>
-            <h3 className='font-bold text-xl pr-2'>Reset Password</h3>
+            <h3 className='font-bold text-xl'>Delete Account</h3>
           </div>
           <div>
-            <form onSubmit={handleForgotPass} id='forgotPassForm'>
+            <form onSubmit={handleDeleteAccount} id='deleteAccountForm'>
               <div className='pb-2'>
                 <label htmlFor='email'>Email</label>
                 <input type='email' name='email' className='input input-bordered w-full' />
               </div>
               <div className='pb-2'>
+                <label htmlFor='Password'>Password</label>
+                <input type='password' name='Password' className='input input-bordered w-full' />
+              </div>
+              <div className='pb-2'>
                 <button className='btn' type='submit'>
-                  Reset Password
+                  Delete Account
                 </button>
               </div>
             </form>

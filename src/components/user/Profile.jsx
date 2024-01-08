@@ -4,10 +4,13 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UseSWR from "swr";
 import Link from "next/link";
+import { useState } from "react";
 //imports propios
 import FanOptions from "./fan/FanOptions";
 import ArtistOptions from "./artist/ArtistOptions";
 import EditInfoForm from "./EditInfoForm";
+import ChangePassword from "./ChangePassword";
+import DeleteAccount from "./DeleteAcount";
 
 export default function profile() {
   const { data: session, status, update } = useSession();
@@ -19,7 +22,6 @@ export default function profile() {
   if (isLoading) return <h1>Loading...</h1>;
   const user = data.payload;
   console.log(user?._id);
-
 
   return (
     <>
@@ -42,7 +44,10 @@ export default function profile() {
           </p>
         </div>
       </div>
-      <div id='generalOptions' className='flex justify-evenly p-2'>
+        <p className="flex justify-center">
+          Registered Email {user?.email}
+        </p>
+      <div id='generalOptions' className='flex justify-evenly p-2 bg-base-300'>
         <div id='logout'>
           <Link href={"/api/auth/signout"}>
             <button className='btn'>Logout</button>
@@ -52,10 +57,13 @@ export default function profile() {
           <EditInfoForm/>
         </div>
         <div>
-          <button className='btn btn-warning'>Change Password</button>
+          <ChangePassword/>
         </div>
         <div>
-          <button className='btn btn-error'>Delete Account</button>
+          <DeleteAccount/>
+        </div>
+        <div>
+          <button className="btn">Change to {user?.role==="artist"?"Fan":"Artist" }</button>
         </div>
       </div>
       <div id='special'>

@@ -35,6 +35,10 @@ export default function EditInfoForm() {
                   <input type='text' name='lastName' className='input input-bordered w-full' />
                 </div>
                 <div className='pb-2'>
+                  <label htmlFor='email'>email</label>
+                  <input type='email' name='email' className='input input-bordered w-full' />
+                </div>
+                <div className='pb-2'>
                   <label htmlFor='age'>Age</label>
                   <input type='number' name='age' className='input input-bordered w-full' />
                 </div>
@@ -46,7 +50,7 @@ export default function EditInfoForm() {
                   <label htmlFor='description'>About</label>
                   <textarea name='description' cols='20' rows='5' placeholder='Share About You' className='textarea textarea-bordered w-full' />
                 </div>
-                <div>
+                <div className="pb-2">
                   <button className='btn' type='submit'>
                     Update Info
                   </button>

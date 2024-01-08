@@ -1,6 +1,7 @@
 //imports propios
 import Register from "@/components/user/Register";
 import Login from "@/components/user/Login";
+import Forgot from "@/components/user/Forgot";
 export default function auth() {
     return (
         <>
@@ -10,6 +11,9 @@ export default function auth() {
                 </div>
                 <div>
                     <Login/>
+                </div>
+                <div>
+                    <Forgot/>
                 </div>
             </div>
         </>
