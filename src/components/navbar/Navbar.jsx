@@ -10,28 +10,29 @@ import ThemeSelect from "../buttons/ThemeSelect";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { GiLoveLetter } from "react-icons/gi";
 
 export default function Navbar() {
   const { data: session, status, update } = useSession();
   const { getCartInfo, cartContent, cart } = useCart();
-let cartCount = 0
+  let cartCount = 0;
   if (session) {
-    getCartInfo(session?.cart)
-    if (cart===undefined) {
-      console.log('no llega info del carrito');
+    getCartInfo(session?.cart);
+    if (cart === undefined) {
+      console.log("no llega info del carrito");
     } else {
-      console.log('llego info del carrito');
-      cartCount = cart.length
+      console.log("llego info del carrito");
+      cartCount = cart.length;
       console.log(cartCount);
     }
   }
 
   useEffect(() => {
-    getCartInfo(session?.cart)
-    cartCount=cartContent.length
-    console.log('effect en nav');
+    getCartInfo(session?.cart);
+    cartCount = cartContent.length;
+    console.log("effect en nav");
     console.log(cartCount);
-},[cartContent])
+  }, [cartContent]);
 
   return (
     <>
@@ -59,9 +60,15 @@ let cartCount = 0
           </div>
           <ThemeSelect />
           <div>
-            <p>{cartCount}</p>
             {session ? (
-              <Link href={"/api/auth/signout"}>{session?.user.name.split(" ")[0]} </Link>
+              <div className='flex' id='user'>
+                <Link href={"/user"} className="flex pr-2">
+                <div className="pr-1">
+                  <p className='absolute pt-1 text-info drop-shadow-sm'>{cartCount}</p>
+                  <GiLoveLetter />
+                </div>
+                {session?.user.name.split(" ")[0]} </Link>
+              </div>
             ) : (
               <Link href={"/auth"}>
                 <p>Register/Login</p>

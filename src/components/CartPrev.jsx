@@ -4,9 +4,8 @@ export default function CartPrev({ cart }) {
   return (
     <>
       <div>
-        <h2>Your Favorites</h2>
-        {cart.map((des) => (
-          <div key={des.design._id}>
+        {cart.length >= 1? ( cart.map((des) => (
+          <div key={des.design._id} className="p-2">
             <CardDesignWithCarousel
               key={des.design._id}
               id={des.design._id}
@@ -19,7 +18,8 @@ export default function CartPrev({ cart }) {
               likes={des.design.likes}
             />
           </div>
-        ))}
+        ))):(<p className="flex justify-center text-warning font-bold p-2">No designs Saved</p>)}
+       
       </div>
     </>
   );

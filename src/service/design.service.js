@@ -23,7 +23,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
+export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop,userId) => {
   //logica y organizacion de data
   //filtros y busqueda
   let limitIn = limit ? limit : 50;
@@ -34,7 +34,7 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   let queryIn = queryParam;
   let filterCategory = filterCat ? filterCat : false;
   let filterShops = filterShop ? filterShop : false;
-
+  let userCode = userId ? userId : false;
   if (queryKeyIn) {
     queryKeyIn;
   } else {
@@ -74,14 +74,26 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   } else {
     filterPack;
   }
+
+  //filtro por user
+  if (userCode) {
+    console.log('esto es user code' + userCode);
+    filterPack["owner"] = userCode
+    console.log(filterPack);
+  } else {
+    filterPack
+  }
   if (Object.entries(filterPack).length >= 1 && queryIn == null) {
+    
     const designs = await mongoDbGetAllDesigns(filterPack, options);
     return designs;
   } else if (Object.entries(filterPack).length >= 1 && queryIn != null) {
+    
     let complexQuery = { ...filterPack, ...querySearch };
     const designs = await mongoDbGetAllDesigns(complexQuery, options);
     return designs;
   } else {
+    
     const designs = await mongoDbGetAllDesigns(querySearch, options);
     return designs;
   }
@@ -119,10 +131,11 @@ export const createDesign = async (data) => {
   }
   // console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
-  console.log('esto es photo',photo);
   const photoPath = await imageUploaderCloudinary(photo, pCode);
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
+  // se grega owner
+  
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
   // const result = dataToPush;
@@ -218,6 +231,11 @@ export const updateDesign = async (data) => {
 };
 
 export const deleteDesign = async (id) => {
+  //borrar imagenes antes de borrar en db
+  const chkDes = await getDesignById(id);
+  await imageDeleterCloudinary(chkDes.photo);
+
+  await chkDes.secondaryImages.map((e)=>imageDeleterCloudinary(e.SIUrl))
   const designToDelete = await mongoDbgetDesignsById(id);
   if (designToDelete) {
     const designDeleted = await mongoDbDeleteDesign(id);

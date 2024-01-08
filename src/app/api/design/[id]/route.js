@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET(req, { params }) {
   try {
     const id = params.id;
+    console.log(id);
     const design = await getDesignById(id);
     return NextResponse.json({ status: "success", payload: design });
   } catch (error) {
