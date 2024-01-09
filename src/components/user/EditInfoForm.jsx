@@ -1,16 +1,34 @@
 "use client";
+//imports de app
 import { useState } from "react";
+import { toast } from "react-toastify";
 //imports Propios
 import DnDSpaceSingle from "../extras/DnDSpaceSingle";
-export default function EditInfoForm() {
+export default function EditInfoForm(props) {
   const [files, setFiles] = useState([]);
+  const userId = props.userId;
 
   const modalController = () => {
     document.getElementById("editInfoModal").showModal();
   };
 
   const handleSubmit = () => {
-    alert("hago update");
+    const url = `/api/user/${userId}`;
+    let form = document.getElementById("editInfoForm");
+    let formData = new FormData(form);
+    files.forEach((file)=> formData.append('photo',file))
+    const result = fetch(url, {
+      method: "PUT",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          toast(`Error Updating User, Try Again${data.error}`);
+        } else {
+          toast("Succesfully Updated");
+        }
+      });
   };
   return (
     <>
@@ -35,10 +53,6 @@ export default function EditInfoForm() {
                   <input type='text' name='lastName' className='input input-bordered w-full' />
                 </div>
                 <div className='pb-2'>
-                  <label htmlFor='email'>email</label>
-                  <input type='email' name='email' className='input input-bordered w-full' />
-                </div>
-                <div className='pb-2'>
                   <label htmlFor='age'>Age</label>
                   <input type='number' name='age' className='input input-bordered w-full' />
                 </div>
@@ -50,7 +64,7 @@ export default function EditInfoForm() {
                   <label htmlFor='description'>About</label>
                   <textarea name='description' cols='20' rows='5' placeholder='Share About You' className='textarea textarea-bordered w-full' />
                 </div>
-                <div className="pb-2">
+                <div className='pb-2'>
                   <button className='btn' type='submit'>
                     Update Info
                   </button>

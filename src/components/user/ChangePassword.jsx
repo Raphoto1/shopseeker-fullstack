@@ -1,9 +1,25 @@
+import { useState } from "react";
+
 export default function ChangePassword() {
+  const [pass, setPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
   const modalController = () => {
     document.getElementById("changePassModal").showModal();
   };
-  const handleChangePass = () => {
-    alert("voy a cambiar pass");
+  const handleChangePass = (e) => {
+    if (pass===confirmPass) {
+      if (confirm('Are you sure to Change your Password')) {
+        alert('se cambia')
+        let form = document.getElementById('changePassForm');
+        let formData = new FormData(form);
+      } else {
+        alert('no se cambia')
+      }
+    } else {
+      e.preventDefault();
+      alert('New Password and confirm do not match')
+    }
   };
   return (
     <>
@@ -26,11 +42,11 @@ export default function ChangePassword() {
               </div>
               <div className='pb-2'>
                 <label htmlFor='newPass'>New Password</label>
-                <input type='password' name='newPass' className='input input-bordered w-full' />
+                <input type='password' name='newPass' className='input input-bordered w-full' onChange={(e) => setPass(e.target.value)} />
               </div>
               <div className='pb-2'>
                 <label htmlFor='newPassConfirm'>New Password Confirm</label>
-                <input type='password' name='newPassConfirm' className='input input-bordered w-full' />
+                <input type='password' name='newPassConfirm' className='input input-bordered w-full' onChange={(e)=>setConfirmPass(e.target.value)}/>
               </div>
               <div className='pb-2'>
                 <button className='btn' type='submit'>

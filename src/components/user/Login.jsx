@@ -51,15 +51,12 @@ export default function Login() {
                 <label htmlFor='password'>Password</label>
                 <input type='password' name='password' id='password' className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2' />
               </div>
-              <div className='flex justify-evenly pt-2'>
+              <div className='flex justify-end pt-2'>
                 <button type='submit' className='btn btn-success'>
                   Login
                 </button>
               </div>
             </form>
-                <div className="flex justify-end pt-2">
-                  <button className='btn btn-xs'>Forgot Password</button>
-                </div>
           </div>
         </div>
       </dialog>

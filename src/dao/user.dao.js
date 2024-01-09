@@ -30,3 +30,13 @@ export const mongoDbUserRegister = async (data) => {
     throw new Error(error);
   }
 };
+
+export const mongoDbUserUpdate = async (id,pack) => {
+  try {
+    await dbConnect();
+    const userUpdate = await usersModel.updateOne({ _id: id }, [{ $set: pack }])
+    return userUpdate
+  } catch (error) {
+    throw new Error(error)
+  }
+}

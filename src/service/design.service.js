@@ -2,7 +2,6 @@
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
-import { diff, applyDiff } from "deep-diff";
 import _ from "lodash";
 //imports propios
 import {
@@ -15,6 +14,7 @@ import {
 } from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
 import { addToCart, deleteFromCart, getCart } from "./cart.service";
+
 //**codigo**
 //cloudinary
 cloudinary.config({
@@ -23,7 +23,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop,userId) => {
+export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop, userId) => {
   //logica y organizacion de data
   //filtros y busqueda
   let limitIn = limit ? limit : 50;
@@ -77,23 +77,20 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
 
   //filtro por user
   if (userCode) {
-    console.log('esto es user code' + userCode);
-    filterPack["owner"] = userCode
+    console.log("esto es user code" + userCode);
+    filterPack["owner"] = userCode;
     console.log(filterPack);
   } else {
-    filterPack
+    filterPack;
   }
   if (Object.entries(filterPack).length >= 1 && queryIn == null) {
-    
     const designs = await mongoDbGetAllDesigns(filterPack, options);
     return designs;
   } else if (Object.entries(filterPack).length >= 1 && queryIn != null) {
-    
     let complexQuery = { ...filterPack, ...querySearch };
     const designs = await mongoDbGetAllDesigns(complexQuery, options);
     return designs;
   } else {
-    
     const designs = await mongoDbGetAllDesigns(querySearch, options);
     return designs;
   }
@@ -122,7 +119,7 @@ export const createDesign = async (data) => {
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
   console.log("esto es photo", photo);
-  console.log("esto es secondary",secondary);
+  console.log("esto es secondary", secondary);
   let photosToPush = [];
   if (!secondary) {
     photosToPush = [];
@@ -135,7 +132,7 @@ export const createDesign = async (data) => {
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   // se grega owner
-  
+
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
   // const result = dataToPush;
@@ -235,7 +232,7 @@ export const deleteDesign = async (id) => {
   const chkDes = await getDesignById(id);
   await imageDeleterCloudinary(chkDes.photo);
 
-  await chkDes.secondaryImages.map((e)=>imageDeleterCloudinary(e.SIUrl))
+  await chkDes.secondaryImages.map((e) => imageDeleterCloudinary(e.SIUrl));
   const designToDelete = await mongoDbgetDesignsById(id);
   if (designToDelete) {
     const designDeleted = await mongoDbDeleteDesign(id);
@@ -252,7 +249,7 @@ export const likeDesign = async (id, value, userCart) => {
     let likeToUpdate = chkDesign.likes;
     if (Math.sign(likeUpdate) === 1) {
       if (userCart) {
-        console.log('llega carrito', userCart);
+        console.log("llega carrito", userCart);
         await addToCart(userCart, id);
       }
       const likeToPush = likeToUpdate + 1;
@@ -263,12 +260,12 @@ export const likeDesign = async (id, value, userCart) => {
         return "no permited";
       } else {
         if (userCart) {
-          console.log('llega carrito a menos', id);
+          console.log("llega carrito a menos", id);
           const deleted = await deleteFromCart(userCart, id);
-          return deleted
+          return deleted;
         }
         const likeToPush = likeToUpdate - 1;
-        console.log('se quita por fuera');
+        console.log("se quita por fuera");
         const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
         return designToUpdate;
       }
@@ -329,21 +326,6 @@ const objectCreator = (index, string) => {
   let imageObj = {};
   imageObj["SIUrl"] = `${string}`;
   return imageObj;
-};
-
-const imageArrayPackerTest = async (imgs) => {
-  console.log("entro a pack test");
-  let secondaryPhotos = [];
-  const packingPhotos = async (img, index) => {
-    const objectReady = await objectCreator(index, img.name);
-    secondaryPhotos.push(objectReady);
-  };
-  const test = await Promise.all(
-    imgs.map(async (img, index) => {
-      await packingPhotos(img, index);
-    })
-  );
-  return secondaryPhotos;
 };
 
 const imageArrayPacker = async (imgs, pCode) => {

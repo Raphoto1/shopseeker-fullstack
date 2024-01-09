@@ -43,7 +43,6 @@ export default function Register() {
     if (pass === passConf) {
       let form = document.getElementById("registerForm");
       let formData = new FormData(form);
-      console.log(formData.get("password"));
       const emailCatch = formData.get('email');
       const passCatch = formData.get('password');
       formData.append("role", role);

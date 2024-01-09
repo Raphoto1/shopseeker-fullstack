@@ -21,20 +21,20 @@ export default function ArtistOptions(props) {
 
   return (
     <>
-      <div id='options' className='flex justify-evenly px-2'>
-        <div>
+      <div id='options' className='flex justify-evenly px-2 sm:flex-wrap'>
+        <div className="px-2">
           <button className="btn">Links To Your Shops</button>
         </div>
-        <div>
+        <div className="px-2">
           <button className="btn">Social Media links</button>
         </div>
-        <Link href={`/shops/user/${props.userId}`}>
+        <Link href={`/shops/user/${props.userId}`} className="px-2">
           <button className="btn">Your CreativeRafa shop link</button>
         </Link>
-        <Link href={`/updateDesign/user/${props.userId}`}>
+        <Link href={`/updateDesign/user/${props.userId}`} className="px-2">
           <button className='btn btn-primary'>Designs Manager</button>
         </Link>
-        <Link href={"/addDesign"}>
+        <Link href={"/addDesign"} className="px-2">
           <button className='btn btn-success'>Upload Design</button>
         </Link>
       </div>
