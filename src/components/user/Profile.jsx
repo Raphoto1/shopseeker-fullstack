@@ -52,7 +52,7 @@ export default function profile() {
           <EditInfoForm userId={session?.user._id} />
         </div>
         <div>
-          <ChangePassword />
+          <ChangePassword userId={session?.user._id} />
         </div>
         <div>
           <DeleteAccount />

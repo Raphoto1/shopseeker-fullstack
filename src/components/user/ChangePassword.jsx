@@ -1,24 +1,46 @@
 import { useState } from "react";
 
-export default function ChangePassword() {
+export default function ChangePassword({ userId }) {
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-
+  const [oldPass, setOldPass] = useState("");
   const modalController = () => {
     document.getElementById("changePassModal").showModal();
   };
   const handleChangePass = (e) => {
-    if (pass===confirmPass) {
-      if (confirm('Are you sure to Change your Password')) {
-        alert('se cambia')
-        let form = document.getElementById('changePassForm');
-        let formData = new FormData(form);
+    if (pass === confirmPass) {
+      if (pass === oldPass) {
+        e.preventDefault();
+        alert("New password can not be the same as Old Password");
       } else {
-        alert('no se cambia')
+        if (confirm("Are you sure to Change your Password")) {
+          e.preventDefault();
+          let form = document.getElementById("changePassForm");
+          let formData = new FormData(form);
+          formData.append("uId", userId);
+          let url = "/api/user/help/change-Pass";
+          const result = fetch(url, {
+            method: "POST",
+            credentials: "include",
+            body: formData,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status===200) {
+                alert("password changed successfully");
+                document.getElementById('changePassModal').close()
+              } else {
+                e.preventDefault()
+                alert(`error updating ${data.message}`);
+              }
+            })
+        } else {
+          alert("Error updating");
+        }
       }
     } else {
       e.preventDefault();
-      alert('New Password and confirm do not match')
+      alert("New Password and confirm do not match");
     }
   };
   return (
@@ -37,8 +59,8 @@ export default function ChangePassword() {
           <div>
             <form onSubmit={handleChangePass} id='changePassForm'>
               <div className='pb-2'>
-                <label htmlFor='password'>Old Password</label>
-                <input type='password' name='oldPassword' className='input input-bordered w-full' />
+                <label htmlFor='oldPass'>Old Password</label>
+                <input type='password' name='oldPass' className='input input-bordered w-full' onChange={(e) => setOldPass(e.target.value)} />
               </div>
               <div className='pb-2'>
                 <label htmlFor='newPass'>New Password</label>
@@ -46,7 +68,7 @@ export default function ChangePassword() {
               </div>
               <div className='pb-2'>
                 <label htmlFor='newPassConfirm'>New Password Confirm</label>
-                <input type='password' name='newPassConfirm' className='input input-bordered w-full' onChange={(e)=>setConfirmPass(e.target.value)}/>
+                <input type='password' name='newPassConfirm' className='input input-bordered w-full' onChange={(e) => setConfirmPass(e.target.value)} />
               </div>
               <div className='pb-2'>
                 <button className='btn' type='submit'>

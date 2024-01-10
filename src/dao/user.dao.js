@@ -40,3 +40,13 @@ export const mongoDbUserUpdate = async (id,pack) => {
     throw new Error(error)
   }
 }
+
+export const mongoDbUserPassUpdate = async (id, dataUpdate) => {
+  try {
+    await dbConnect();
+    const userUpdate = await usersModel.findOneAndUpdate({ _id: id }, dataUpdate)
+    return userUpdate
+  } catch (error) {
+    throw new Error(error)
+  }
+}

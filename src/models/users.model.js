@@ -49,6 +49,7 @@ const UserSchema = new Schema(
       default: null,
     },
     avatar: { type: String, default: "" },
+    securityToken:{type:String, expiresAfterSeconds:7200}
   },
   {
     timestamps: true,

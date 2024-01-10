@@ -1,6 +1,6 @@
 //imports de app
 import { mongoDbCreateCart } from "@/dao/cart.dao";
-import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
+import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserPassUpdate, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
 import bcrypt from "bcrypt";
 //imports propios
 import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
@@ -44,6 +44,12 @@ export const getUserInfo = async (idIn) => {
   return userToWork;
 };
 
+const getUserFull = async (idIn) => {
+  const userChk = await mongoDbUserChkId(idIn);
+  const userToWork = userChk._doc;
+  return userToWork;
+};
+
 export const updateUserInfo = async (user, data) => {
   const dataToUpdate = await Object.fromEntries(data);
   const photo = data.get("photo");
@@ -74,13 +80,33 @@ export const updateUserInfo = async (user, data) => {
   };
   const finalPack = await packingCycle(dataToUpdate);
   const objUpdate = Object.fromEntries(updatePack.map((item) => Object.entries(item)[0]));
+  console.log(objUpdate);
   const userUpdate = await mongoDbUserUpdate(user._id, objUpdate);
   return userUpdate;
 };
 
 export const changeRole = async (uId) => {};
 
-export const changePass = async (oldPass, newPass) => {};
+export const changePass = async (data) => {
+  const uId = data.get("uId");
+  const oldPass = data.get("oldPass");
+  // const oldPass = '1234'
+  const newPass = data.get("newPass");
+  const user = await getUserFull(uId);
+  const chkOldPass = await bcrypt.compare(oldPass,user.password);
+  console.log('chkOldPass',chkOldPass);
+  if (!chkOldPass) {
+    throw new Error("Wrong Password");
+  }
+  const chkNewPass = await bcrypt.compare(newPass, user.password );
+  if (chkNewPass) {
+    throw new Error("New password can not be the same as old password");
+  }
+  const newPassHash = await bcrypt.hash(newPass, 12);
+  const newPassPack = { password: newPassHash };
+  const updatedPass = await mongoDbUserPassUpdate(uId, newPassPack);
+  return true;
+};
 
 export const generateResetPass = async (uEmail) => {};
 
