@@ -2,8 +2,11 @@
 import { mongoDbCreateCart } from "@/dao/cart.dao";
 import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserPassUpdate, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
 import bcrypt from "bcrypt";
+import { v4 } from "uuid";
 //imports propios
 import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
+import { sendResetMailToken } from "@/utils/mailContact";
+import { pageDevPath } from "@/enums/SuperVariables";
 
 export const register = async (data) => {
   const email = data["email"];
@@ -93,12 +96,12 @@ export const changePass = async (data) => {
   // const oldPass = '1234'
   const newPass = data.get("newPass");
   const user = await getUserFull(uId);
-  const chkOldPass = await bcrypt.compare(oldPass,user.password);
-  console.log('chkOldPass',chkOldPass);
+  const chkOldPass = await bcrypt.compare(oldPass, user.password);
+  console.log("chkOldPass", chkOldPass);
   if (!chkOldPass) {
     throw new Error("Wrong Password");
   }
-  const chkNewPass = await bcrypt.compare(newPass, user.password );
+  const chkNewPass = await bcrypt.compare(newPass, user.password);
   if (chkNewPass) {
     throw new Error("New password can not be the same as old password");
   }
@@ -108,9 +111,44 @@ export const changePass = async (data) => {
   return true;
 };
 
-export const generateResetPass = async (uEmail) => {};
+export const generateResetPass = async (uEmail) => {
+  const chkEmail = await mongoDbUserChkEmail(uEmail);
+  if (chkEmail) {
+    const token = await v4();
+    const tokenPack = { securityToken: token };
+    const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
+    const recoveryPath = `${pageDevPath}/user/help/${token}`;
+    const sendMail = await sendResetMailToken(chkEmail.name, uEmail, recoveryPath);
+    console.log("esto es send mail", sendMail);
+    return sendMail;
+  } else {
+    console.log("no existe mail");
+    throw new Error("Email does not Exist");
+  }
+};
 
-export const resetPass = async (uEmail, code, newPass) => {};
+export const resetPass = async (uEmail, password, token) => {
+  console.log(token);
+  const chkMail = await mongoDbUserChkEmail(uEmail);
+  if (chkMail) {
+    if (chkMail.securityToken === token) {
+      console.log("iniciamos proceso de cambio de mail");
+      console.log(password);
+      const hashPass = await bcrypt.hash(password, 12);
+      const newPassPack = { password: hashPass };
+      const passUpdate = await mongoDbUserPassUpdate(chkMail._id, newPassPack);
+      if (passUpdate) {
+        const tokenPack = { securityToken: "" };
+        const deleteToken = await mongoDbUserPassUpdate(chkMail._id, tokenPack);
+        return true;
+      }
+    } else {
+      throw new Error("Wrong Mail or Token");
+    }
+  } else {
+    throw new Error("Wrong Mail or Token");
+  }
+};
 
 export const deleteAccount = async (uid) => {
   //recordar borrar disenos de los artist

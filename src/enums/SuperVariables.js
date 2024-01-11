@@ -10,6 +10,8 @@ export const allShopsPath = '/api/design?page='
 
 export const pageBasePath = 'https://shops.creativerafa.com'
 
+export const pageDevPath = 'http://localhost:3000/'
+
 export const updateDesignPath = '/api/design'
 
 export const addDesignPath = '/api/design'
@@ -22,3 +24,5 @@ export const testPath = '/api'
 export const registerPath = '/api/auth/register'
 
 export const loginPath = '/api/auth/login'
+
+

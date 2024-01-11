@@ -1,5 +1,5 @@
 import { Schema, model, models } from "mongoose";
-import cartCollection from "../models/cart.model"
+import cartCollection from "../models/cart.model";
 
 const userCollection = "users";
 
@@ -18,7 +18,7 @@ const UserSchema = new Schema(
     },
     isAdmin: {
       type: Boolean,
-      default:false
+      default: false,
     },
     description: {
       type: String,
@@ -49,7 +49,7 @@ const UserSchema = new Schema(
       default: null,
     },
     avatar: { type: String, default: "" },
-    securityToken:{type:String, expiresAfterSeconds:7200}
+    securityToken: { type: String, expiresAfterSeconds: 600 },
   },
   {
     timestamps: true,
