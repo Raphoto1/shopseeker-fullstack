@@ -231,7 +231,6 @@ export const deleteDesign = async (id) => {
   //borrar imagenes antes de borrar en db
   const chkDes = await getDesignById(id);
   await imageDeleterCloudinary(chkDes.photo);
-
   await chkDes.secondaryImages.map((e) => imageDeleterCloudinary(e.SIUrl));
   const designToDelete = await mongoDbgetDesignsById(id);
   if (designToDelete) {

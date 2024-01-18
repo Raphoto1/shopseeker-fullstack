@@ -1,9 +1,32 @@
-export default function DeleteAccount() {
+export default function DeleteAccount({userId}) {
   const modalController = () => {
     document.getElementById("deleteAccountModal").showModal();
   };
-  const handleDeleteAccount = () => {
-    alert("hago el delete de acccountr");
+  const handleDeleteAccount = (e) => {
+    if (confirm("You Are About To DELETE your Account, all your data And designs will be deleted!!!")) {
+      e.preventDefault();
+      let form = document.getElementById('deleteAccountForm');
+      let formData = new FormData(form);
+      formData.append("uId", userId);
+      let url = "/api/user"
+      const result = fetch(url, {
+        method: 'delete',
+        credentials: 'include',
+        body:formData
+      }).then((res) => res.json())
+        .then((data) => {
+          if (data.status===200) {
+            alert("Please Check Your Email For Further Instructions");
+            document.getElementById('deleteAccountModal').close()
+          } else {
+            e.preventDefault()
+            alert(`error Processing delete account ${data.message}`);
+          }
+      })
+    } else {
+      alert("Delete Account Aborted")
+    }
+
   };
   return (
     <>
@@ -25,8 +48,8 @@ export default function DeleteAccount() {
                 <input type='email' name='email' className='input input-bordered w-full' />
               </div>
               <div className='pb-2'>
-                <label htmlFor='Password'>Password</label>
-                <input type='password' name='Password' className='input input-bordered w-full' />
+                <label htmlFor='password'>Password</label>
+                <input type='password' name='password' className='input input-bordered w-full' />
               </div>
               <div className='pb-2'>
                 <button className='btn' type='submit'>

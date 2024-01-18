@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 //imports propios
 import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
-import { sendResetMailToken } from "@/utils/mailContact";
+import { sendDeleteToken, sendResetMailToken } from "@/utils/mailContact";
 import { pageDevPath } from "@/enums/SuperVariables";
 
 export const register = async (data) => {
@@ -93,7 +93,6 @@ export const changeRole = async (uId) => {};
 export const changePass = async (data) => {
   const uId = data.get("uId");
   const oldPass = data.get("oldPass");
-  // const oldPass = '1234'
   const newPass = data.get("newPass");
   const user = await getUserFull(uId);
   const chkOldPass = await bcrypt.compare(oldPass, user.password);
@@ -150,6 +149,31 @@ export const resetPass = async (uEmail, password, token) => {
   }
 };
 
-export const deleteAccount = async (uid) => {
-  //recordar borrar disenos de los artist
+export const generateDeletePass = async (uId, uEmail, uPassword) => {
+  const chkUser = internalLogIn(uId,uEmail,uPassword)
+  console.log(chkUser);
+  if (chkUser) {
+    const token = await v4();
+    const tokenPack = { securityToken: token };
+    const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
+    const recoveryPath = `${pageDevPath}/user/help/delete/${token}`;
+    const sendMail = await sendDeleteToken(chkUser.name, uEmail, recoveryPath);
+    return sendMail
+  } else {
+    throw new Error('Wrong Email or password')
+  }
+};
+
+export const deleteAccount = async (uEmail,uPassword,token) => {
+  //recordar borrar disenos de los artist, carrito
+  const chkUser = internalLogIn(uId);
+};
+
+const internalLogIn = async (uId, email, password) => {
+  const userLog = await getUserFull(uId);
+  console.log(userLog);
+  const chkEmail = userLog.email === email ? true : false;
+  const chkPass = await bcrypt.compare(password, userLog.password);
+  const chkFull = chkEmail && chkPass ? true : false;
+  return chkFull
 };

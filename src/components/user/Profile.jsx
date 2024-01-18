@@ -55,7 +55,7 @@ export default function profile() {
           <ChangePassword userId={session?.user._id} />
         </div>
         <div>
-          <DeleteAccount />
+          <DeleteAccount userId={session?.user._id}/>
         </div>
         <div>
           <button className='btn'>Change to {user?.role === "artist" ? "Fan" : "Artist"}</button>

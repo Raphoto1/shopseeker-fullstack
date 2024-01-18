@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    console.log("llegoa  reset");
     const capturedForm = await req.formData();
     const userEmail = capturedForm.get("email");
     const genToken = await generateResetPass(userEmail);

@@ -1,6 +1,7 @@
 //imports propios
 import cartModel from "@/models/cart.model";
 import { dbConnect } from "@/utils/mongoDb";
+import { mongoDbgetDesignsById } from "./design.dao";
 
 export const mongoDbCreateCart = async () => {
   try {
@@ -29,6 +30,20 @@ export const mongoDbGetCart = async (idIn) => {
   try {
     await dbConnect();
     const getCart = await cartModel.find({ _id: idIn }).populate("designs.design");
+    console.log('getcart: ', getCart[0].designs);
+    const cartClean = await mongoDbGetCartClean(idIn);
+    console.log('cartClean: ', cartClean[0].designs);
+    const chkDeletedDesigns = cartClean[0].designs.map(async (des) => {
+      console.log('des map de cart: ',des.design);
+      const chkDes = await mongoDbgetDesignsById(des.design)
+      console.log(chkDes);
+      if (!chkDes) {
+        const kickDesign = await mongoDbDeleteFromCart(idIn, des.design);
+        console.log(kickDesign);
+      } else {
+        console.log('si esta el dise;o');
+      }
+    })
     return getCart;
   } catch (error) {
     throw new Error(error);
