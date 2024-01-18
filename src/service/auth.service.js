@@ -1,12 +1,13 @@
 //imports de app
-import { mongoDbCreateCart } from "@/dao/cart.dao";
-import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserPassUpdate, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
+import { mongoDbCreateCart, mongoDbDeleteCart } from "@/dao/cart.dao";
+import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserDelete, mongoDbUserPassUpdate, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 //imports propios
 import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
 import { sendDeleteToken, sendResetMailToken } from "@/utils/mailContact";
 import { pageDevPath } from "@/enums/SuperVariables";
+import { mongoDbDeleteUserDesigns } from "@/dao/design.dao";
 
 export const register = async (data) => {
   const email = data["email"];
@@ -150,30 +151,78 @@ export const resetPass = async (uEmail, password, token) => {
 };
 
 export const generateDeletePass = async (uId, uEmail, uPassword) => {
-  const chkUser = internalLogIn(uId,uEmail,uPassword)
+  const chkUser = await internalLogIn(uId, uEmail, uPassword);
   console.log(chkUser);
   if (chkUser) {
+    const chkEmail = await mongoDbUserChkId(uId);
     const token = await v4();
     const tokenPack = { securityToken: token };
     const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
-    const recoveryPath = `${pageDevPath}/user/help/delete/${token}`;
-    const sendMail = await sendDeleteToken(chkUser.name, uEmail, recoveryPath);
-    return sendMail
+    const deletePath = `${pageDevPath}/user/help/delete/${token}`;
+    const sendMail = await sendDeleteToken(chkEmail.name, uEmail, deletePath);
+    return sendMail;
   } else {
-    throw new Error('Wrong Email or password')
+    throw new Error("Wrong Email or password");
   }
 };
 
-export const deleteAccount = async (uEmail,uPassword,token) => {
+export const deleteAccount = async (uId, token, uEmail, uPassword) => {
   //recordar borrar disenos de los artist, carrito
-  const chkUser = internalLogIn(uId);
+  const chkUser = await internalLogIn(uId, uEmail, uPassword);
+  const user = await mongoDbUserChkEmail(uEmail);
+  if (chkUser) {
+    const chkToken = user.securityToken === token ? true : false;
+    if (chkToken) {
+      console.log("seBorra", user.role);
+      await deleteCycle(user);
+      return true;
+    } else {
+      throw new Error("please generate a new email");
+    }
+  } else {
+    throw new Error("wrong Password or Email");
+  }
+};
+
+const deleteCycle = async (user) => {
+  const id = user._id;
+  const cart = user.cart[0]._id;
+  const role = user.role;
+  console.log("esto es cart", cart);
+  switch (role) {
+    case "fan":
+      console.log("es fan");
+      //borrar cart
+      // const delCartFan = await mongoDbDeleteCart(cart);
+      //borrar user images
+      //borrar user
+      // const delUserFan = await mongoDbUserDelete(id);
+      return true
+      break;
+    case "artist":
+      console.log("es artist");
+      //borrar dise;os FALTA BORRAR IMAGENES
+      // const delDes = await mongoDbDeleteUserDesigns(id);
+      console.log(delDes);
+      //borrar cart
+      // const delCartArt = await mongoDbDeleteCart(cart);
+      //borrar user
+      // const delUserArt = await mongoDbUserDelete(id);
+      return true
+      break;
+    case "rafa":
+      console.log("hola dios, soy yo de nuevo");
+      throw new Error("only god can manage this user/dios y yo sabiamos como funcionaba este codigo, ahora solo dios lo sabe");
+    default:
+      throw new Error("Error In Back, please reload and try again");
+      break;
+  }
 };
 
 const internalLogIn = async (uId, email, password) => {
   const userLog = await getUserFull(uId);
-  console.log(userLog);
   const chkEmail = userLog.email === email ? true : false;
   const chkPass = await bcrypt.compare(password, userLog.password);
   const chkFull = chkEmail && chkPass ? true : false;
-  return chkFull
+  return chkFull;
 };

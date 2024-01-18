@@ -1,4 +1,4 @@
-import { mongoDbAddToCart, mongoDbCreateCart, mongoDbDeleteFromCart, mongoDbGetCart, mongoDbGetCartClean, mongoDbclearCart } from "@/dao/cart.dao"
+import { mongoDbAddToCart, mongoDbCreateCart, mongoDbDeleteCart, mongoDbDeleteFromCart, mongoDbGetCart, mongoDbGetCartClean, mongoDbclearCart } from "@/dao/cart.dao"
 
 export const createCart = async () => {
     const newCart = await mongoDbCreateCart();
@@ -40,4 +40,9 @@ export const addToCart = async (cId, dId) => {
 export const deleteFromCart = async (cId,dId) => {
     const deleteDes = await mongoDbDeleteFromCart(cId,dId)
     return deleteDes
+}
+
+export const deleteCart = async (cId) => {
+    const deleteCart = await mongoDbDeleteCart(cId);
+    return deleteCart
 }

@@ -241,6 +241,10 @@ export const deleteDesign = async (id) => {
   }
 };
 
+export const deleteDesignsByOwner = async (uId) => {
+
+};
+
 export const likeDesign = async (id, value, userCart) => {
   const chkDesign = await mongoDbgetDesignsById(id);
   const likeUpdate = value;

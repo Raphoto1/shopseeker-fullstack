@@ -64,7 +64,6 @@ export const mongoDbAddToCart = async (cId, dId, quantity) => {
   try {
     await dbConnect();
     const findCart = await cartModel.find({ _id: cId});
-    // console.log(findCart[0]);
     findCart[0].designs.push({ design: dId,quantity:1 });
     return await findCart[0].save();
   } catch (error) {
@@ -75,6 +74,7 @@ export const mongoDbAddToCart = async (cId, dId, quantity) => {
 
 export const mongoDbDeleteFromCart = async (cId,dId)=>{
   try {
+    await dbConnect()
     let prodToDelete = await cartModel.updateOne(
       {_id:cId},
       {$pull:{designs:{design:dId}}}
@@ -83,6 +83,16 @@ export const mongoDbDeleteFromCart = async (cId,dId)=>{
     return prodToDelete
   } catch (error) {
     console.log(error);
+    throw new Error(error);
+  }
+}
+
+export const mongoDbDeleteCart = async (cId) => {
+  try {
+    await dbConnect();
+    const cartToDelete = await cartModel.findByIdAndDelete(cId);
+    return cartToDelete
+  } catch (error) {
     throw new Error(error);
   }
 }
