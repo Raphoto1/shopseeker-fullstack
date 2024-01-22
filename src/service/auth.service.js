@@ -1,26 +1,13 @@
 //imports de app
 import { mongoDbCreateCart, mongoDbDeleteCart } from "@/dao/cart.dao";
-import {
-  mongoDbUserChkEmail,
-  mongoDbUserChkId,
-  mongoDbUserDelete,
-  mongoDbUserPassUpdate,
-  mongoDbUserRegister,
-  mongoDbUserUpdate,
-} from "@/dao/user.dao";
+import { mongoDbUserChkEmail, mongoDbUserChkId, mongoDbUserDelete, mongoDbUserPassUpdate, mongoDbUserRegister, mongoDbUserUpdate } from "@/dao/user.dao";
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 //imports propios
-import {
-  imageUploaderCloudinary,
-  imageDeleterCloudinary,
-} from "@/utils/cloudinaryUtils";
+import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
 import { sendDeleteToken, sendResetMailToken } from "@/utils/mailContact";
 import { pageDevPath } from "@/enums/SuperVariables";
-import {
-  mongoDbDeleteUserDesigns,
-  mongoDbGetDesignsByOwner,
-} from "@/dao/design.dao";
+import { mongoDbDeleteUserDesigns, mongoDbGetDesignsByOwner } from "@/dao/design.dao";
 import { deleteDesignsByOwner } from "./design.service";
 
 export const register = async (data) => {
@@ -97,9 +84,7 @@ export const updateUserInfo = async (user, data) => {
     }
   };
   const finalPack = await packingCycle(dataToUpdate);
-  const objUpdate = Object.fromEntries(
-    updatePack.map((item) => Object.entries(item)[0])
-  );
+  const objUpdate = Object.fromEntries(updatePack.map((item) => Object.entries(item)[0]));
   console.log(objUpdate);
   const userUpdate = await mongoDbUserUpdate(user._id, objUpdate);
   return userUpdate;
@@ -134,11 +119,7 @@ export const generateResetPass = async (uEmail) => {
     const tokenPack = { securityToken: token };
     const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
     const recoveryPath = `${pageDevPath}/user/help/${token}`;
-    const sendMail = await sendResetMailToken(
-      chkEmail.name,
-      uEmail,
-      recoveryPath
-    );
+    const sendMail = await sendResetMailToken(chkEmail.name, uEmail, recoveryPath);
     console.log("esto es send mail", sendMail);
     return sendMail;
   } else {
@@ -212,13 +193,16 @@ const deleteCycle = async (user) => {
   switch (role) {
     case "fan":
       console.log("es fan");
-      //borrar cart
-      // const delCartFan = await mongoDbDeleteCart(cart);
       //borrar user images
-      const photoToDelete = user.avatar;
-      const delUserPhoto = imageDeleterCloudinary(photoToDelete);
+      const photoToDeleteFan = user.avatar;
+      if (photoToDeleteFan !== "") {
+        const delUserPhotoFan = imageDeleterCloudinary(photoToDeleteFan);
+      }
       //borrar user
-      // const delUserFan = await mongoDbUserDelete(id);
+      const delUserFan = await mongoDbUserDelete(id);
+      //borrar cart
+      const delCartFan = await mongoDbDeleteCart(cart);
+      console.log(delCartFan);
       return true;
       break;
     case "artist":
@@ -227,23 +211,22 @@ const deleteCycle = async (user) => {
       const artistDesigns = await mongoDbGetDesignsByOwner(id);
       if (artistDesigns) {
         const deleteDesigns = await deleteDesignsByOwner(id);
-      } else {
-        continue
       }
-      //borrar cart
-      // const delCartArt = await mongoDbDeleteCart(cart);
       //borrar user images
-      const photoToDelete = user.avatar;
-      const delUserPhoto = imageDeleterCloudinary(photoToDelete);
+      const photoToDeleteArtist = user.avatar;
+      if (photoToDeleteArtist !== "") {
+        const delUserPhotoArtist = imageDeleterCloudinary(photoToDeleteArtist);
+      }
       //borrar user
-      // const delUserArt = await mongoDbUserDelete(id);
+      const delUserArt = await mongoDbUserDelete(id);
+      //borrar cart
+      const delCartArt = await mongoDbDeleteCart(cart);
+      console.log(delCartArt);
       return true;
       break;
     case "rafa":
       console.log("hola dios, soy yo de nuevo");
-      throw new Error(
-        "only god can manage this user/dios y yo sabiamos como funcionaba este codigo, ahora solo dios lo sabe"
-      );
+      throw new Error("only god can manage this user/dios y yo sabiamos como funcionaba este codigo, ahora solo dios lo sabe");
     default:
       throw new Error("Error In Back, please reload and try again");
       break;

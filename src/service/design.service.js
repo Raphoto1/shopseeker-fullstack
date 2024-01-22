@@ -262,7 +262,7 @@ export const deleteDesign = async (id) => {
 
 export const deleteDesignsByOwner = async (uId) => {
   const designs = await mongoDbGetDesignsByOwner(uId);
-  const designsDeleted= designs.map((des)=>{
+  const designsDeleted= designs.map(async (des)=>{
 console.log(des.id);
 const desToDel = await deleteDesign(des.id)
   })

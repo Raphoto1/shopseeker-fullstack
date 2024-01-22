@@ -43,21 +43,21 @@ export default function profile() {
       </div>
       <p className='flex justify-center'>Registered Email {user?.email}</p>
       <div id='generalOptions' className='flex justify-evenly flex-wrap p-2 bg-base-300'>
-        <div id='logout'>
+        <div id='logout' className="p-2">
           <Link href={"/api/auth/signout"}>
             <button className='btn'>Logout</button>
           </Link>
         </div>
-        <div id='editInfo'>
+        <div id='editInfo' className="p-2">
           <EditInfoForm userId={session?.user._id} />
         </div>
-        <div>
+        <div className="p-2">
           <ChangePassword userId={session?.user._id} />
         </div>
-        <div>
+        <div className="p-2">
           <DeleteAccount userId={session?.user._id}/>
         </div>
-        <div>
+        <div className="p-2">
           <button className='btn'>Change to {user?.role === "artist" ? "Fan" : "Artist"}</button>
         </div>
       </div>

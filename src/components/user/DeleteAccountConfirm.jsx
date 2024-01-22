@@ -22,8 +22,8 @@ export default function DeleteAccountConfirm({ tokenIn }) {
       .then((data) => {
         if (data.status === 200) {
           alert("successfully Deleted");
-          // signOut();
-          // router.push("/auth");
+          signOut();
+          router.push("/auth");
         } else {
           alert("Error Deleting");
         }

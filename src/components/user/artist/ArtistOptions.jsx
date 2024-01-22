@@ -7,40 +7,29 @@ import Link from "next/link";
 import CartPrev from "@/components/CartPrev";
 
 export default function ArtistOptions(props) {
-  const path = `/api/user/cart/${props.cart}`;
-  const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(path, fetcher);
-  if (error) return <h1>opps, my bad, try reloading :D</h1>;
-  if (isLoading)
-    return (
-      <div className='flex h-full w-full justify-center content-center'>
-        <span className='loading loading-infinity loading-lg' />
-      </div>
-    );
-  const designsToShow = data.payload[0].designs;
 
   return (
     <>
-      <div id='options' className='flex justify-evenly px-2 sm:flex-wrap'>
-        <div className="px-2">
-          <button className="btn">Links To Your Shops</button>
+      <div id='options' className='flex justify-evenly px-2 flex-wrap'>
+        <div className='p-2'>
+          <button className='btn'>Links To Your Shops</button>
         </div>
-        <div className="px-2">
-          <button className="btn">Social Media links</button>
+        <div className='p-2'>
+          <button className='btn'>Social Media links</button>
         </div>
-        <Link href={`/shops/user/${props.userId}`} className="px-2">
-          <button className="btn">Your CreativeRafa shop link</button>
+        <Link href={`/shops/user/${props.userId}`} className='p-2'>
+          <button className='btn'>Your CreativeRafa shop link</button>
         </Link>
-        <Link href={`/updateDesign/user/${props.userId}`} className="px-2">
+        <Link href={`/updateDesign/user/${props.userId}`} className='p-2'>
           <button className='btn btn-primary'>Designs Manager</button>
         </Link>
-        <Link href={"/addDesign"} className="px-2">
+        <Link href={"/addDesign"} className='p-2'>
           <button className='btn btn-success'>Upload Design</button>
         </Link>
       </div>
       <div id='favorites'>
         <h2 className='flex justify-center text-4xl font-bold pb-2'>Designs you love</h2>
-        <CartPrev cart={designsToShow} />
+        <CartPrev cartId={props.cart} />
       </div>
     </>
   );
