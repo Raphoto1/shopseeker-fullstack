@@ -19,7 +19,7 @@ const cartSchema = new Schema({
 });
 
 cartSchema.pre("findOne", function () {
-  this.populate("design.design");
+  this.populate("designs.design");
 });
 
 

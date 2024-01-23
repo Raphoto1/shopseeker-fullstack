@@ -1,7 +1,7 @@
 import designModel from "@/models/design.model";
 import { dbConnect } from "@/utils/mongoDb";
 
-export const mongoDbGetAllDesigns = async (querySearch,options) => {
+export const mongoDbGetAllDesigns = async (querySearch, options) => {
   //logica de mongo
   try {
     await dbConnect();
@@ -19,6 +19,15 @@ export const mongoDbgetDesignsById = async (id) => {
     await dbConnect();
     const design = await designModel.findById(id);
     return design;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const mongoDbGetDesignsByOwner = async (uId) => {
+  try {
+    const designs = designModel.find({ owner: uId });
+    return designs
   } catch (error) {
     throw new Error(error);
   }
@@ -51,16 +60,26 @@ export const mongoDbUpdateDesign = async (id, field, data) => {
 export const mongoDbUpdateDesignMultiple = async (id, pack) => {
   try {
     const designToUpdate = designModel.updateOne({ _id: id }, [{ $set: pack }]);
-    return designToUpdate
+    return designToUpdate;
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 export const mongoDbDeleteDesign = async (id) => {
   try {
     const designToDelete = await designModel.findByIdAndDelete(id);
     return designToDelete;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const mongoDbDeleteUserDesigns = async (uId) => {
+  try {
+    dbConnect();
+    const deleteDesigns = designModel.deleteMany({ owner: uId });
+    return deleteDesigns;
   } catch (error) {
     throw new Error(error);
   }

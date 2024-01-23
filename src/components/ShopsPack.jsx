@@ -1,4 +1,5 @@
 "use client";
+
 //imports de app
 import useSWR from "swr";
 import { useState, useEffect } from "react";
@@ -9,7 +10,7 @@ import SortingComboBtn from "@/components/buttons/SortingComboBtn";
 import GridDesigns from "@/components/GridDesigns";
 import Filters from "@/components/navbar/Filters";
 
-export default function ShopsPack({mainPath}) {
+export default function ShopsPack({ mainPath, userId }) {
   //set de paginas
   const [pageIndex, setPageIndex] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -23,12 +24,30 @@ export default function ShopsPack({mainPath}) {
   //set de sorts
   const [limitPerPage, setLimitPerPage] = useState("&limit=20");
   const [sortOption, setSortOption] = useState("&sortQ=1");
-
+  //set de user
+  const [userIdIn, setUserIdIn] = useState(userId);
+  const [artistName, setArtistName] = useState("");
   //se inicializan paths antes de iniciar swr
   let filterPathCat = "";
   let filterPathShop = "";
   let searchPath = "";
-  let basePath = `${mainPath}${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}`;
+  let userIdPath = ``;
+  //organizar userId
+  if (userIdIn === undefined) {
+    userIdPath = "";
+  } else {
+    userIdPath = `&userId=${userIdIn}`;
+    const getArtistName = fetch(`/api/user/${userIdIn}`, {
+      method: "get",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setArtistName(data.payload.name);
+      });
+  }
+
+  let basePath = `${mainPath}${pageIndex}${limitPerPage}${sortOption}${searchDef}${filterDef}${userIdPath}`;
   //useEffect para aplicar filtros
   useEffect(() => {
     setFilterDef(`${filterPathCat}${filterPathShop}`);
@@ -82,6 +101,9 @@ export default function ShopsPack({mainPath}) {
 
   return (
     <>
+      <div id='shoptitle' className='flex justify-center'>
+        {artistName && <h2 className='text-3xl font-bold drop-shadow-md capitalize p-3'>{artistName}'s Shops</h2>}
+      </div>
       <div className='total'>
         <div className='topbar flex flex-wrap align-middle justify-center xl:max-w-screen sm:max-w-fit py-2'>
           <div className='flex justify-center'>
@@ -106,4 +128,3 @@ export default function ShopsPack({mainPath}) {
     </>
   );
 }
-

@@ -4,13 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { v4 } from "uuid";
 //imports propios
 import { LikeButton } from "@/components/buttons/LikeButton";
 
 export default function CardDesignWithCarousel(props) {
   return (
     <>
-      <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto'>
+      <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto' key={v4()}>
         <div className='flex justify-around '>
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id} />
         </div>

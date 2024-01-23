@@ -18,7 +18,8 @@ export async function GET(req) {
     const sortQ = url.searchParams.get("sortQ");
     const filterCat = url.searchParams.get("filterCat");
     const filterShop = url.searchParams.get("filterShop");
-    let designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop);
+    const userId = url.searchParams.get('userId');
+    let designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop,userId);
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {
     return NextResponse.json({ message: `error: ${error}` });

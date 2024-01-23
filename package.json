@@ -35,9 +35,11 @@
     "swr": "^2.2.1",
     "tailwindcss": "3.3.5",
     "theme-change": "^2.5.0",
+    "uuid": "^9.0.1",
     "vara": "^1.4.1"
   },
   "devDependencies": {
+    "@types/react": "18.2.45",
     "daisyui": "^4.0.5"
   }
 }

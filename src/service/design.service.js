@@ -2,7 +2,6 @@
 import path from "path";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
-import { diff, applyDiff } from "deep-diff";
 import _ from "lodash";
 //imports propios
 import {
@@ -12,8 +11,11 @@ import {
   mongoDbUpdateDesign,
   mongoDbDeleteDesign,
   mongoDbUpdateDesignMultiple,
+  mongoDbGetDesignsByOwner,
 } from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
+import { addToCart, deleteFromCart, getCart } from "./cart.service";
+
 //**codigo**
 //cloudinary
 cloudinary.config({
@@ -22,7 +24,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop) => {
+export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop, userId) => {
   //logica y organizacion de data
   //filtros y busqueda
   let limitIn = limit ? limit : 50;
@@ -33,7 +35,7 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   let queryIn = queryParam;
   let filterCategory = filterCat ? filterCat : false;
   let filterShops = filterShop ? filterShop : false;
-
+  let userCode = userId ? userId : false;
   if (queryKeyIn) {
     queryKeyIn;
   } else {
@@ -73,6 +75,13 @@ export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, que
   } else {
     filterPack;
   }
+
+  //filtro por user
+  if (userCode) {
+    filterPack["owner"] = userCode;
+  } else {
+    filterPack;
+  }
   if (Object.entries(filterPack).length >= 1 && queryIn == null) {
     const designs = await mongoDbGetAllDesigns(filterPack, options);
     return designs;
@@ -108,8 +117,6 @@ export const createDesign = async (data) => {
   });
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
-  console.log("esto es photo", photo);
-  console.log("esto es secondary",secondary);
   let photosToPush = [];
   if (!secondary) {
     photosToPush = [];
@@ -118,10 +125,11 @@ export const createDesign = async (data) => {
   }
   // console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
-  console.log('esto es photo',photo);
   const photoPath = await imageUploaderCloudinary(photo, pCode);
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
+  // se grega owner
+
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
   // const result = dataToPush;
@@ -152,7 +160,6 @@ export const updateDesign = async (data) => {
         if (photo.size === 0) {
           continue;
         }
-        console.log(photo);
         const oldPhoto = chkDesign.photo;
         await imageDeleterCloudinary(oldPhoto);
         const newPhotoUrl = await imageUploaderCloudinary(photo);
@@ -217,6 +224,10 @@ export const updateDesign = async (data) => {
 };
 
 export const deleteDesign = async (id) => {
+  //borrar imagenes antes de borrar en db
+  const chkDes = await getDesignById(id);
+  await imageDeleterCloudinary(chkDes.photo);
+  await chkDes.secondaryImages.map((e) => imageDeleterCloudinary(e.SIUrl));
   const designToDelete = await mongoDbgetDesignsById(id);
   if (designToDelete) {
     const designDeleted = await mongoDbDeleteDesign(id);
@@ -226,12 +237,23 @@ export const deleteDesign = async (id) => {
   }
 };
 
-export const likeDesign = async (id, value) => {
+export const deleteDesignsByOwner = async (uId) => {
+  const designs = await mongoDbGetDesignsByOwner(uId);
+  const designsDeleted = designs.map(async (des) => {
+    const desToDel = await deleteDesign(des.id);
+  });
+  return designsDeleted;
+};
+
+export const likeDesign = async (id, value, userCart) => {
   const chkDesign = await mongoDbgetDesignsById(id);
   const likeUpdate = value;
   if (chkDesign) {
     let likeToUpdate = chkDesign.likes;
     if (Math.sign(likeUpdate) === 1) {
+      if (userCart) {
+        await addToCart(userCart, id);
+      }
       const likeToPush = likeToUpdate + 1;
       const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
       return designToUpdate;
@@ -239,6 +261,10 @@ export const likeDesign = async (id, value) => {
       if (likeToUpdate === 0) {
         return "no permited";
       } else {
+        if (userCart) {
+          const deleted = await deleteFromCart(userCart, id);
+          return deleted;
+        }
         const likeToPush = likeToUpdate - 1;
         const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
         return designToUpdate;
@@ -257,7 +283,6 @@ const imageFileUploaderDesign = async (file, pCode) => {
   const buffer = Buffer.from(bytes);
   const fileName = `${pCode}-design-${file.name}`;
   if (fs.existsSync(`public/img/designs/${fileName}`)) {
-    console.log("el archivo ya existe");
     throw new Error("filename already on database, please change the file name or pCode and try again");
   } else {
     const filePath = path.join(process.cwd(), "public/img/designs", fileName);
@@ -292,7 +317,6 @@ const imageDeleterCloudinary = async (photoUrl) => {
   const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
     console.log(result);
   });
-  console.log(photoToDelete);
   return photoToDelete;
 };
 
@@ -302,25 +326,9 @@ const objectCreator = (index, string) => {
   return imageObj;
 };
 
-const imageArrayPackerTest = async (imgs) => {
-  console.log("entro a pack test");
-  let secondaryPhotos = [];
-  const packingPhotos = async (img, index) => {
-    const objectReady = await objectCreator(index, img.name);
-    secondaryPhotos.push(objectReady);
-  };
-  const test = await Promise.all(
-    imgs.map(async (img, index) => {
-      await packingPhotos(img, index);
-    })
-  );
-  return secondaryPhotos;
-};
-
 const imageArrayPacker = async (imgs, pCode) => {
   let secondaryPhotos = [];
   const packingPhotos = async (img, index) => {
-    console.log(img);
     let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
     let objReady = await objectCreator(index, urlSecondaryImg);
     await secondaryPhotos.push(objReady);

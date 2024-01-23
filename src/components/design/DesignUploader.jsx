@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 //imports propios
 import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "../extras/HiddenInput";
@@ -13,6 +14,10 @@ import DnDTest from "../extras/DnDTest";
 
 export default function DesignUploader(props) {
   const router = useRouter()
+  //user
+  const { data: session, status, update } = useSession();
+
+  const userId=session?.user._id
   //capturar imagenes secundarias
   const [oldSecondaryImages, setOldSecondaryImages] = useState([]);
   const [SIToWork, setSIToWork] = useState([...oldSecondaryImages]);
@@ -52,6 +57,7 @@ export default function DesignUploader(props) {
     if (props.desId) {
       formData.append("id", props.desId);
     }
+    formData.append("owner", userId);
     files.forEach((file) => formData.append("photo", file));
     multipleFiles.forEach((file) => formData.append("secondaryImages", file));
     let response = await fetch(props.path, {
