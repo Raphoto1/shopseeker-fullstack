@@ -32,7 +32,6 @@ export async function POST(req) {
     const capturedForm = await req.formData();
     const result = capturedForm
     // const dataToUpdate = await Object.fromEntries(capturedForm);
-    console.log(result);
     return NextResponse.json({status:200}, {message:'successfully connected to api', payload:result})
   } catch (error) {
     return NextResponse.json({ error: `Error:${error}` }, { status: 500 });

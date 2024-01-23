@@ -10,7 +10,7 @@ export const useCart = () => {
   if (!context) throw new Error("cart context error");
   return context;
 };
-//https://swr.vercel.app/docs/subscription
+
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartId, setCartId] = useState("");
@@ -19,7 +19,6 @@ export const CartProvider = ({ children }) => {
 
   const getCartInfo = (cartIdIn) => {
     setCartId(cartIdIn);
-    // console.log("llame a cart", cartIdIn);
   };
 
   const loadCartInfo = (cartId) => {
@@ -27,18 +26,16 @@ export const CartProvider = ({ children }) => {
     const result = fetch(pathCart2, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.payload)
         cartContent = data.payload[0];
-      }).finally(() => {
+      })
+      .finally(() => {
         return setCart(cartContent.designs);
       });
   };
 
   useEffect(() => {
-    console.log("entro al effect del context");
     loadCartInfo(cartId);
-    console.log(cart);
   }, [cartId, cartUpdate]);
 
-  return <CartContext.Provider value={{ cart, getCartInfo, cartContent, cartUpdate,setCartUpdate }}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={{ cart, getCartInfo, cartContent, cartUpdate, setCartUpdate }}>{children}</CartContext.Provider>;
 };

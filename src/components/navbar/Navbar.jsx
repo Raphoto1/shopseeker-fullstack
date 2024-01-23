@@ -19,19 +19,15 @@ export default function Navbar() {
   if (session) {
     getCartInfo(session?.cart);
     if (cart === undefined) {
-      console.log("no llega info del carrito");
+      cartCount = 0
     } else {
-      console.log("llego info del carrito");
       cartCount = cart.length;
-      console.log(cartCount);
     }
   }
 
   useEffect(() => {
     getCartInfo(session?.cart);
     cartCount = cartContent.length;
-    console.log("effect en nav");
-    console.log(cartCount);
   }, [cartContent]);
 
   return (

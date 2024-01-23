@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export async function GET(req, { params }) {
   try {
     const id = params.id;
-    console.log(id);
     const design = await getDesignById(id);
     return NextResponse.json({ status: "success", payload: design });
   } catch (error) {
@@ -33,7 +32,6 @@ export async function PUT(req, { params }) {
     const value = url.searchParams.get("value");
     const capturedForm = await req.formData();
     const userId = capturedForm.get("userId");
-    console.log('esto es use id',userId);
     let userCart = null;
     if (userId === 'null') {
       console.log("no hay user");

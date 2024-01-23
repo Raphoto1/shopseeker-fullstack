@@ -7,7 +7,6 @@ export async function POST(req) {
     const capturedForm = await req.formData();
     const dataToLogin = Object.fromEntries(capturedForm);
     const result = await register(dataToLogin);
-    console.log(result);
     const responsePack = {
       name: result.name,
       role: result.role,

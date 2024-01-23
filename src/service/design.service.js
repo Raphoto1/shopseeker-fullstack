@@ -24,17 +24,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const getAllDesigns = async (
-  limit,
-  page,
-  sortField,
-  sortQ,
-  queryKey,
-  queryParam,
-  filterCat,
-  filterShop,
-  userId
-) => {
+export const getAllDesigns = async (limit, page, sortField, sortQ, queryKey, queryParam, filterCat, filterShop, userId) => {
   //logica y organizacion de data
   //filtros y busqueda
   let limitIn = limit ? limit : 50;
@@ -88,9 +78,7 @@ export const getAllDesigns = async (
 
   //filtro por user
   if (userCode) {
-    console.log("esto es user code" + userCode);
     filterPack["owner"] = userCode;
-    console.log(filterPack);
   } else {
     filterPack;
   }
@@ -129,8 +117,6 @@ export const createDesign = async (data) => {
   });
   dataToPush["shops"] = shopspack;
   //organizar la data del form, se elimina la data de photo y se agrega el path
-  console.log("esto es photo", photo);
-  console.log("esto es secondary", secondary);
   let photosToPush = [];
   if (!secondary) {
     photosToPush = [];
@@ -174,7 +160,6 @@ export const updateDesign = async (data) => {
         if (photo.size === 0) {
           continue;
         }
-        console.log(photo);
         const oldPhoto = chkDesign.photo;
         await imageDeleterCloudinary(oldPhoto);
         const newPhotoUrl = await imageUploaderCloudinary(photo);
@@ -184,11 +169,7 @@ export const updateDesign = async (data) => {
         //eliminar del cloud las imagenes eliminadas
         const updateTransformed = JSON.parse(secondaryUpdate);
         const deleteSimgs = (secondaryImagesOld, updateTransformed) => {
-          const result = _.differenceWith(
-            secondaryImagesOld,
-            updateTransformed,
-            _.isEqual
-          );
+          const result = _.differenceWith(secondaryImagesOld, updateTransformed, _.isEqual);
           result.forEach((e) => {
             imageDeleterCloudinary(e.SIUrl);
           });
@@ -205,9 +186,7 @@ export const updateDesign = async (data) => {
       } else if (item.startsWith("url")) {
         shopsExist = true;
         const shopName = field.replace("url", "");
-        const shopToUpdateIndex = shops.findIndex(
-          (e) => e.shopName === `${shopName}`
-        );
+        const shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
         shops[shopToUpdateIndex].shopUrl = data[item];
       } else if (field === "id") {
         continue;
@@ -238,9 +217,7 @@ export const updateDesign = async (data) => {
   if (deletedSimgs || newSimgsExist) {
     await secondaryImagesOrganizer(secondaryImagesOld, newSimgs);
   }
-  const objUpdate = Object.fromEntries(
-    updatePack.map((item) => Object.entries(item)[0])
-  );
+  const objUpdate = Object.fromEntries(updatePack.map((item) => Object.entries(item)[0]));
   const designToUpdate = await mongoDbUpdateDesignMultiple(id, objUpdate);
   // const designToUpdate = objUpdate;
   return designToUpdate;
@@ -262,11 +239,10 @@ export const deleteDesign = async (id) => {
 
 export const deleteDesignsByOwner = async (uId) => {
   const designs = await mongoDbGetDesignsByOwner(uId);
-  const designsDeleted= designs.map(async (des)=>{
-console.log(des.id);
-const desToDel = await deleteDesign(des.id)
-  })
-  return designsDeleted
+  const designsDeleted = designs.map(async (des) => {
+    const desToDel = await deleteDesign(des.id);
+  });
+  return designsDeleted;
 };
 
 export const likeDesign = async (id, value, userCart) => {
@@ -276,7 +252,6 @@ export const likeDesign = async (id, value, userCart) => {
     let likeToUpdate = chkDesign.likes;
     if (Math.sign(likeUpdate) === 1) {
       if (userCart) {
-        console.log("llega carrito", userCart);
         await addToCart(userCart, id);
       }
       const likeToPush = likeToUpdate + 1;
@@ -287,17 +262,11 @@ export const likeDesign = async (id, value, userCart) => {
         return "no permited";
       } else {
         if (userCart) {
-          console.log("llega carrito a menos", id);
           const deleted = await deleteFromCart(userCart, id);
           return deleted;
         }
         const likeToPush = likeToUpdate - 1;
-        console.log("se quita por fuera");
-        const designToUpdate = await mongoDbUpdateDesign(
-          id,
-          "likes",
-          likeToPush
-        );
+        const designToUpdate = await mongoDbUpdateDesign(id, "likes", likeToPush);
         return designToUpdate;
       }
     }
@@ -314,10 +283,7 @@ const imageFileUploaderDesign = async (file, pCode) => {
   const buffer = Buffer.from(bytes);
   const fileName = `${pCode}-design-${file.name}`;
   if (fs.existsSync(`public/img/designs/${fileName}`)) {
-    console.log("el archivo ya existe");
-    throw new Error(
-      "filename already on database, please change the file name or pCode and try again"
-    );
+    throw new Error("filename already on database, please change the file name or pCode and try again");
   } else {
     const filePath = path.join(process.cwd(), "public/img/designs", fileName);
     await fs.writeFileSync(filePath, buffer, (error) => {
@@ -348,13 +314,9 @@ const imageDeleterCloudinary = async (photoUrl) => {
   const fileName = photoUrl.slice(preFilter);
   const fileNamefilter = fileName.lastIndexOf(".");
   const fileNameCLear = fileName.slice(0, fileNamefilter);
-  const photoToDelete = await cloudinary.uploader.destroy(
-    `${fileNameCLear}`,
-    (result) => {
-      console.log(result);
-    }
-  );
-  console.log(photoToDelete);
+  const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
+    console.log(result);
+  });
   return photoToDelete;
 };
 
@@ -367,7 +329,6 @@ const objectCreator = (index, string) => {
 const imageArrayPacker = async (imgs, pCode) => {
   let secondaryPhotos = [];
   const packingPhotos = async (img, index) => {
-    console.log(img);
     let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
     let objReady = await objectCreator(index, urlSecondaryImg);
     await secondaryPhotos.push(objReady);

@@ -8,7 +8,6 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   try {
     const url = new URL(req.url);
-    console.log(url);
     const searchParam = url.searchParams.get("search");
     const queryKey = url.searchParams.get("queryKey");
     //sorts
@@ -20,7 +19,6 @@ export async function GET(req) {
     const filterCat = url.searchParams.get("filterCat");
     const filterShop = url.searchParams.get("filterShop");
     const userId = url.searchParams.get('userId');
-    console.log(userId);
     let designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop,userId);
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {

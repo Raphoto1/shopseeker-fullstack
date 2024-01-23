@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 //imports propios
 import { imageUploaderCloudinary, imageDeleterCloudinary } from "@/utils/cloudinaryUtils";
 import { sendDeleteToken, sendResetMailToken } from "@/utils/mailContact";
-import { pageDevPath } from "@/enums/SuperVariables";
+import { pageDevPath, pageBasePath } from "@/enums/SuperVariables";
 import { mongoDbDeleteUserDesigns, mongoDbGetDesignsByOwner } from "@/dao/design.dao";
 import { deleteDesignsByOwner } from "./design.service";
 
@@ -17,7 +17,6 @@ export const register = async (data) => {
   const password = data["password"];
   //revisar que correo no se repita
   const userChk = await mongoDbUserChkEmail(email);
-  console.log(userChk);
   if (userChk) {
     throw new Error("Email already Exist");
   } else {
@@ -98,7 +97,6 @@ export const changePass = async (data) => {
   const newPass = data.get("newPass");
   const user = await getUserFull(uId);
   const chkOldPass = await bcrypt.compare(oldPass, user.password);
-  console.log("chkOldPass", chkOldPass);
   if (!chkOldPass) {
     throw new Error("Wrong Password");
   }
@@ -118,9 +116,8 @@ export const generateResetPass = async (uEmail) => {
     const token = await v4();
     const tokenPack = { securityToken: token };
     const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
-    const recoveryPath = `${pageDevPath}/user/help/${token}`;
+    const recoveryPath = `${pageBasePath}/user/help/${token}`;
     const sendMail = await sendResetMailToken(chkEmail.name, uEmail, recoveryPath);
-    console.log("esto es send mail", sendMail);
     return sendMail;
   } else {
     console.log("no existe mail");
@@ -129,12 +126,9 @@ export const generateResetPass = async (uEmail) => {
 };
 
 export const resetPass = async (uEmail, password, token) => {
-  console.log(token);
   const chkMail = await mongoDbUserChkEmail(uEmail);
   if (chkMail) {
     if (chkMail.securityToken === token) {
-      console.log("iniciamos proceso de cambio de mail");
-      console.log(password);
       const hashPass = await bcrypt.hash(password, 12);
       const newPassPack = { password: hashPass };
       const passUpdate = await mongoDbUserPassUpdate(chkMail._id, newPassPack);
@@ -159,7 +153,7 @@ export const generateDeletePass = async (uId, uEmail, uPassword) => {
     const token = await v4();
     const tokenPack = { securityToken: token };
     const saveToken = await mongoDbUserPassUpdate(chkEmail._id, tokenPack);
-    const deletePath = `${pageDevPath}/user/help/delete/${token}`;
+    const deletePath = `${pageBasePath}/user/help/delete/${token}`;
     const sendMail = await sendDeleteToken(chkEmail.name, uEmail, deletePath);
     return sendMail;
   } else {
@@ -174,7 +168,6 @@ export const deleteAccount = async (uId, token, uEmail, uPassword) => {
   if (chkUser) {
     const chkToken = user.securityToken === token ? true : false;
     if (chkToken) {
-      console.log("seBorra", user.role);
       await deleteCycle(user);
       return true;
     } else {
@@ -192,21 +185,18 @@ const deleteCycle = async (user) => {
   console.log("esto es cart", cart);
   switch (role) {
     case "fan":
-      console.log("es fan");
       //borrar user images
       const photoToDeleteFan = user.avatar;
       if (photoToDeleteFan !== "") {
-        const delUserPhotoFan = imageDeleterCloudinary(photoToDeleteFan);
+        const delUserPhotoFan = await imageDeleterCloudinary(photoToDeleteFan);
       }
       //borrar user
       const delUserFan = await mongoDbUserDelete(id);
       //borrar cart
       const delCartFan = await mongoDbDeleteCart(cart);
-      console.log(delCartFan);
       return true;
       break;
     case "artist":
-      console.log("es artist");
       //borrar dise;os
       const artistDesigns = await mongoDbGetDesignsByOwner(id);
       if (artistDesigns) {
