@@ -62,7 +62,7 @@ export default function profile() {
         </div> */}
       </div>
       <div id='special'>
-        {user?.role === "artist" ? (
+        {user?.role === "artist"||"rafa" ? (
           <div>
             <h1> opciones de artist/designs</h1>
             <ArtistOptions cart={user?.cart[0]._id} userId={session?.user._id} />
