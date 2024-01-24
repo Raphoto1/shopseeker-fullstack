@@ -84,7 +84,6 @@ export const updateUserInfo = async (user, data) => {
   };
   const finalPack = await packingCycle(dataToUpdate);
   const objUpdate = Object.fromEntries(updatePack.map((item) => Object.entries(item)[0]));
-  console.log(objUpdate);
   const userUpdate = await mongoDbUserUpdate(user._id, objUpdate);
   return userUpdate;
 };

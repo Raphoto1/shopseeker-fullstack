@@ -2,9 +2,11 @@
 //imports de app
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 //imports Propios
 import DnDSpaceSingle from "../extras/DnDSpaceSingle";
 export default function EditInfoForm(props) {
+  const router = useRouter()
   const [files, setFiles] = useState([]);
   const userId = props.userId;
 
@@ -27,6 +29,7 @@ export default function EditInfoForm(props) {
           toast(`Error Updating User, Try Again${data.error}`);
         } else {
           toast("Succesfully Updated");
+          router.refresh();
         }
       });
   };
