@@ -15,6 +15,7 @@ import {
 } from "@/dao/design.dao";
 import { categories, shops } from "@/enums/SuperVariables";
 import { addToCart, deleteFromCart, getCart } from "./cart.service";
+import { getUserInfo } from "./auth.service";
 
 //**codigo**
 //cloudinary
@@ -109,6 +110,7 @@ export const createDesign = async (data) => {
   const secondary = data.getAll("secondaryImages");
   const dataToPush = Object.fromEntries(data);
   const pCode = dataToPush["pCode"];
+  const uId = dataToPush["owner"];
   //manipular links de tiendas para empaquetar
   let shopspack = [];
   shops.map((shop) => {
@@ -128,8 +130,12 @@ export const createDesign = async (data) => {
   const photoPath = await imageUploaderCloudinary(photo, pCode);
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
-  // se grega owner
-
+  // se grega owner especial
+  const userInfo = await getUserInfo(uId);
+  if (userInfo.role === "rafa") {
+    console.log("llego el patron jajajaja");
+    dataToPush["owner"] = "rafa";
+  }
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
   // const result = dataToPush;

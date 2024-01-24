@@ -38,7 +38,6 @@ export default function DesignUploader(props) {
   const handleOldImages = (e) => {
     e.preventDefault(e);
     const capturedSIUrl = e.currentTarget.id;
-    console.log(capturedSIUrl);
     oldSecondaryImages.forEach((img, index) => {
       if (img.SIUrl === capturedSIUrl) {
         setSIToWork(oldSecondaryImages.splice(index, 1));
@@ -167,7 +166,6 @@ export default function DesignUploader(props) {
           <div className='mainImageDrop'>
             <h2 className='block text-center'>Main Image</h2>
             <DnDSpaceSingle files={files } setFiles={setFiles} />
-            {/* <DnDTest name={'photoTest'} /> */}
           </div>
           <div className='secondaryImageDrop h-10'>
             <h2 className='block text-center'>Secondary Images</h2>
