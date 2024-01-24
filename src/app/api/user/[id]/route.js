@@ -16,13 +16,13 @@ export async function PUT(req, { params }) {
   try {
     const uId = params.id;
     const capturedForm = await req.formData();
-      const chkUser = await getUserInfo(uId);
-      if (chkUser) {
-          const result = await updateUserInfo(chkUser,capturedForm);
-      } else {
-        throw new Error(message,'user does not exist')
-      }
-    return NextResponse.json({ status: 200, payload: result });
+    const chkUser = await getUserInfo(uId);
+    if (chkUser) {
+      const result = await updateUserInfo(chkUser, capturedForm);
+      return NextResponse.json({ status: 200, payload: result });
+    } else {
+      throw new Error(message, "user does not exist");
+    }
   } catch (error) {
     return NextResponse.json({ message: `error: ${error}` });
   }
