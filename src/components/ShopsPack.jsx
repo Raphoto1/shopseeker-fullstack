@@ -22,7 +22,7 @@ export default function ShopsPack({ mainPath, userId }) {
   const [filterShop, setFilterShop] = useState("");
   const [filterDef, setFilterDef] = useState("");
   //set de sorts
-  const [limitPerPage, setLimitPerPage] = useState("&limit=20");
+  const [limitPerPage, setLimitPerPage] = useState("&limit=100");
   const [sortOption, setSortOption] = useState("&sortQ=1");
   //set de user
   const [userIdIn, setUserIdIn] = useState(userId);
