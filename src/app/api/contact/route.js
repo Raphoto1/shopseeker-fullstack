@@ -12,9 +12,9 @@ export async function POST(req) {
         const email = dataToPush["email"];
         const message = dataToPush["message"];
         const response = await sendContactMail(name, email, message);
-        console.log('mail send');
         return NextResponse.json({status:200})
     } catch (error) {
+        console.log(error);
         return NextResponse.json({error: `Error: ${error}`}, {status:500})
     }
 }
