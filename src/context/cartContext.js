@@ -21,9 +21,9 @@ export const CartProvider = ({ children }) => {
     setCartId(cartIdIn);
   };
 
-  const loadCartInfo = (cartId) => {
+  const loadCartInfo = async (cartId) => {
     const pathCart2 = `/api/user/cart/${cartId}`;
-    const result = fetch(pathCart2, { method: "GET" })
+    const result = await fetch(pathCart2, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
         cartContent = data.payload[0];
