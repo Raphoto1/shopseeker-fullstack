@@ -15,27 +15,29 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartId, setCartId] = useState("");
   const [cartUpdate, setCartUpdate] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   let cartContent = [];
-
+  const pathCart = `/api/user/cart/${cartId}`;
   const getCartInfo = (cartIdIn) => {
     setCartId(cartIdIn);
   };
 
   const loadCartInfo = async (cartId) => {
     const pathCart2 = `/api/user/cart/${cartId}`;
-    const result = await fetch(pathCart2, { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => {
-        cartContent = data.payload[0];
-      })
-      .finally(() => {
-        return setCart(cartContent.designs);
-      });
+    const result = await fetch(pathCart2);
+    if (result.status === 404) {
+      cartContent = [];
+    } else {
+      const resJson = await result.json();
+      cartContent = resJson.payload[0];
+      setCartCount(cartContent.designs.length);
+      return setCart(cartContent.designs);
+    }
   };
 
   useEffect(() => {
     loadCartInfo(cartId);
   }, [cartId, cartUpdate]);
 
-  return <CartContext.Provider value={{ cart, getCartInfo, cartContent, cartUpdate, setCartUpdate }}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={{ cart, getCartInfo, cartContent, cartUpdate, setCartUpdate, cartCount }}>{children}</CartContext.Provider>;
 };
