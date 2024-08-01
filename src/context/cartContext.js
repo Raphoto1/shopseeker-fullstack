@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
-import useSWR from "swr";
 
 export const CartContext = createContext();
 
