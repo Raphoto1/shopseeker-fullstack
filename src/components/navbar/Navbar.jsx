@@ -14,21 +14,13 @@ import { GiLoveLetter } from "react-icons/gi";
 
 export default function Navbar() {
   const { data: session, status, update } = useSession();
-  const { getCartInfo, cartContent, cart } = useCart();
-  let cartCount = 0;
-  if (session) {
-    getCartInfo(session?.cart);
-    if (cart === undefined) {
-      cartCount = 0
-    } else {
-      cartCount = cart.length;
-    }
-  }
-
+  const { getCartInfo, cartContent, cart, cartCount } = useCart();
+  
   useEffect(() => {
-    getCartInfo(session?.cart);
-    cartCount = cartContent.length;
-  }, [cartContent]);
+    if (session) { 
+      getCartInfo(session?.cart);
+    }
+  }, [cartContent,session]);
 
   return (
     <>
@@ -58,12 +50,13 @@ export default function Navbar() {
           <div>
             {session ? (
               <div className='flex' id='user'>
-                <Link href={"/user"} className="flex pr-2">
-                <div className="pr-1">
-                  <p className='absolute pt-1 text-info drop-shadow-sm'>{cartCount}</p>
-                  <GiLoveLetter />
-                </div>
-                {session?.user.name.split(" ")[0]} </Link>
+                <Link href={"/user"} className='flex pr-2'>
+                  <div className='pr-1'>
+                    <p className='absolute pt-1 text-info drop-shadow-sm'>{cartCount}</p>
+                    <GiLoveLetter />
+                  </div>
+                  {session?.user.name.split(" ")[0]}{" "}
+                </Link>
               </div>
             ) : (
               <Link href={"/auth"}>

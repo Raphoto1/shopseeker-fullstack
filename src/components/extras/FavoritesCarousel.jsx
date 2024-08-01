@@ -26,17 +26,17 @@ export default function FavoritesCarousel() {
       <div className='indicator absolute m-5 ml-2'>
         <VaraText text={"Top 3 designs"} />
       </div>
-      <div className='h-screen'>
-        <Carousel className='h-screen' autoPlay infiniteLoop dynamicHeight={true} showStatus={false} showThumbs={false}>
+      <div className='h-full'>
+        <Carousel className='h-full' autoPlay infiniteLoop dynamicHeight={true} showStatus={false} showThumbs={false}>
           {dataToShow.map((des, index) => (
             <div className='hero h-screen' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
               <div className='hero-overlay bg-opacity-20'></div>
               <div className='hero-content text-left align-top text-neutral-content drop-shadow-xl'>
                 <div className='max-w-md'>
-                  <h1 className='mb-5 text-5xl font-bold drop-shadow-md capitalize '>{des.title}</h1>
+                  <h1 className='mb-5 text-4xl font-bold drop-shadow-md capitalize text-gray-50'>{des.title}</h1>
 
                   <Link href={`/shops/${des._id}`}>
-                    <button className='btn btn-primary'>Show Details</button>
+                    <button className='btn btn-info'>Show Details</button>
                   </Link>
                 </div>
               </div>

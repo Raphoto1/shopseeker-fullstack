@@ -31,12 +31,13 @@ export const mongoDbGetCart = async (idIn) => {
     await dbConnect();
     const getCart = await cartModel.find({ _id: idIn }).populate("designs.design");
     const cartClean = await mongoDbGetCartClean(idIn);
+    //kick deleted designs from cart
     const chkDeletedDesigns = cartClean[0].designs.map(async (des) => {
       const chkDes = await mongoDbgetDesignsById(des.design)
       if (!chkDes) {
         const kickDesign = await mongoDbDeleteFromCart(idIn, des.design);
       } else {
-        console.log('si esta el dise;o');
+        null
       }
     })
     return getCart;

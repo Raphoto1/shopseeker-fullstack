@@ -6,7 +6,7 @@ export default function Footer() {
     <>
       <footer className='footer items-center p-4 bg-neutral text-neutral-content'>
         <aside className="items-center grid-flow-col">
-          <p>Rafael Martinez 2023 - All right reserved</p> 
+          <p>Rafael Martinez 2024 - All right reserved</p> 
         </aside>
         <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
           <ContactForm />
