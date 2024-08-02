@@ -32,7 +32,7 @@ export default function HiddenInput({ shopName }) {
             type="text"
             id={shopUrl}
             name={shopUrl}
-            className="rounded-xl text-slate-900 w-full max-w-xs"
+            className="rounded-xl w-full max-w-xs"
           />
         </div>
       )}
