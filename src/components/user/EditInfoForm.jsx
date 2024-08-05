@@ -35,7 +35,7 @@ export default function EditInfoForm(props) {
   };
   return (
     <>
-      <button className='btn' onClick={modalController}>
+      <button className='btn bg-primary-content' onClick={modalController}>
         Edit Info
       </button>
       <dialog id='editInfoModal' className='modal modal-bottom sm:modal-middle'>

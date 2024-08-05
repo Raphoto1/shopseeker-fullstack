@@ -105,18 +105,20 @@ export default function ShopsPack({ mainPath, userId }) {
         {artistName && <h2 className='text-3xl font-bold drop-shadow-md capitalize p-3'>{artistName}'s Shops</h2>}
       </div>
       <div className='total'>
-        <div className='topbar flex flex-wrap align-middle justify-center xl:max-w-screen sm:max-w-fit py-2'>
-          <div className='flex justify-center'>
-            <SearchBar
-              onSearchTerm={handleSearchText}
-              onButtonClick={handleSearch}
-              onSearchFilter={handleSearchFilter}
-              searchTextBack={searchText}
-              onHandleEnter={handleSearchEnterKey}
-            />
+        <div className='flex justify-center'>
+          <div className='topbar flex flex-wrap align-middle justify-evenly xl:max-w-screen sm:max-w-fit py-2'>
+            <div className='flex justify-center pb-3'>
+              <SearchBar
+                onSearchTerm={handleSearchText}
+                onButtonClick={handleSearch}
+                onSearchFilter={handleSearchFilter}
+                searchTextBack={searchText}
+                onHandleEnter={handleSearchEnterKey}
+              />
+            </div>
+            {searchText ? <span>searching for {searchText}</span> : <div></div>}
+            <Filters setFilterCategoryComp={setFilterCategory} setFilterShopComp={setFilterShop} />
           </div>
-          {searchText ? <span>searching for {searchText}</span> : <div></div>}
-          <Filters setFilterCategoryComp={setFilterCategory} setFilterShopComp={setFilterShop} />
         </div>
         {totalDocs === 0 ? <span>Nope, there's nothing like {searchText} in here, try a diferent term</span> : <div></div>}
         <GridDesigns designsToSort={allDesigns} />
