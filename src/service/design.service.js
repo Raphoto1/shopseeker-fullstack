@@ -191,9 +191,11 @@ export const updateDesign = async (data) => {
         newSimgs = imgsUrl;
       } else if (item.startsWith("url")) {
         shopsExist = true;
+        console.log(shops);
         const shopName = field.replace("url", "");
         const shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
         shops[shopToUpdateIndex].shopUrl = data[item];
+        
       } else if (field === "id") {
         continue;
       } else {

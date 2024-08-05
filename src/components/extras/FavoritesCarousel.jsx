@@ -29,7 +29,7 @@ export default function FavoritesCarousel() {
       <div className='h-full'>
         <Carousel className='h-full' autoPlay infiniteLoop dynamicHeight={true} showStatus={false} showThumbs={false}>
           {dataToShow.map((des, index) => (
-            <div className='hero h-screen' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
+            <div className='hero h-80' style={{ backgroundImage: `url(${des.photo})` }} key={index}>
               <div className='hero-overlay bg-opacity-20'></div>
               <div className='hero-content text-left align-top text-neutral-content drop-shadow-xl'>
                 <div className='max-w-md'>

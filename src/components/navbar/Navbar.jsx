@@ -34,7 +34,7 @@ export default function Navbar() {
           <div className=''>
             <ul tabIndex={0} className='btn btn-primary btn-xs invisible md:visible'>
               <li>
-                <Link href={"/allshops"}>See All Designs</Link>
+                <Link href={"/allshops"}>All Designs</Link>
               </li>
             </ul>
           </div>

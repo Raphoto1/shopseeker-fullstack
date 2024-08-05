@@ -13,11 +13,11 @@ import DnDSpaceMultiple from "../extras/DnDSpaceMultiple";
 import DnDTest from "../extras/DnDTest";
 
 export default function DesignUploader(props) {
-  const router = useRouter()
+  const router = useRouter();
   //user
   const { data: session, status, update } = useSession();
 
-  const userId=session?.user._id
+  const userId = session?.user._id;
   //capturar imagenes secundarias
   const [oldSecondaryImages, setOldSecondaryImages] = useState([]);
   const [SIToWork, setSIToWork] = useState([...oldSecondaryImages]);
@@ -26,6 +26,7 @@ export default function DesignUploader(props) {
   const [multipleFiles, setMultipleFiles] = useState([]);
   //revisar si existeel diseño y llenar con la data
   const [shopsFromUpdate, setShopsFromUpdate] = useState([]);
+
   useEffect(() => {
     if (props.shops) {
       setShopsFromUpdate(props.shops);
@@ -59,6 +60,8 @@ export default function DesignUploader(props) {
     formData.append("owner", userId);
     files.forEach((file) => formData.append("photo", file));
     multipleFiles.forEach((file) => formData.append("secondaryImages", file));
+    console.log(formData);
+
     let response = await fetch(props.path, {
       method: props.method,
       credentials: "include",
@@ -67,15 +70,13 @@ export default function DesignUploader(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          toast(`error Loading design, try again${data.error}`)
+          toast(`error Loading design, try again${data.error}`);
         } else {
           toast("uploaded successfully, reload for new upload");
-          router.push('/allshops');
+          router.push("/allshops");
         }
       })
-      .then(() => {
-       
-      });
+      .then(() => {});
   };
 
   return (
@@ -130,42 +131,21 @@ export default function DesignUploader(props) {
               </select>
             </div>
             <div className='shopsPack '>
-              {props.shops && (
-                <div className='overflow-x-auto'>
-                  <h1>Actual Links</h1>
-                  <table className='table table-fixed max-w-xs overflow-x-auto'>
-                    <thead>
-                      <tr>
-                        <th>Shop Name</th>
-                        <th>Shop Url</th>
-                      </tr>
-                      {shopsFromUpdate.map((shop, index) => (
-                        <tr key={index}>
-                          <th>{shop.shopName}</th>
-                          <th>{shop.shopUrl}</th>
-                        </tr>
-                      ))}
-                    </thead>
-                  </table>
-                </div>
-              )}
-
               <div className='flex flex-col justify-center items-center'>
                 <label htmlFor='shops' className='bold'>
                   URL to Shops
                 </label>
-                <p>add 'null' to desactivate</p>
               </div>
               <div className='max-w-xs'>
                 {shops.map((shop, index) => (
-                  <HiddenInput shopName={shop} key={index} />
+                  <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
                 ))}
               </div>
             </div>
           </div>
           <div className='mainImageDrop'>
             <h2 className='block text-center'>Main Image</h2>
-            <DnDSpaceSingle files={files } setFiles={setFiles} />
+            <DnDSpaceSingle files={files} setFiles={setFiles} />
           </div>
           <div className='secondaryImageDrop h-10'>
             <h2 className='block text-center'>Secondary Images</h2>
@@ -187,7 +167,7 @@ export default function DesignUploader(props) {
             )}
           </div>
         </div>
-        <input type='submit' className='btn' />
+        <input type='submit' className='btn' placeholder="Send"/>
       </form>
     </>
   );

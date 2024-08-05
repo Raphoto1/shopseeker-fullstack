@@ -45,7 +45,7 @@ export default function ChangePassword({ userId }) {
   };
   return (
     <>
-      <button className='btn' onClick={modalController}>
+      <button className='btn bg-primary-content' onClick={modalController}>
         Change Password
       </button>
       <dialog id='changePassModal' className='modal modal-bottom sm:modal-middle'>
