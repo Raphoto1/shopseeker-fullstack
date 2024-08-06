@@ -23,19 +23,18 @@ export default function CardHero(props) {
   const design = data.payload;
 
   return (
-    
     <div>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
-          <div className=" rounded-lg shadow-2xl max-h-screen">
-            <Carousel autoPlay dynamicHeight={false} className=" rounded-lg shadow-2xl max-h-screen">
+          <div className=' rounded-lg shadow-2xl max-h-screen'>
+            <Carousel autoPlay dynamicHeight={false} className=' rounded-lg shadow-2xl max-h-screen'>
               <div key={1}>
-                <Image src={design.photo} width={1000} height={1000} alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
+                <Image src={design.photo} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
               </div>
-            
+
               {design.secondaryImages.map((img, index) => (
                 <div key={index + 1}>
-                  <Image src={img.SIUrl} width={1000} height={1000 } alt={design.title} className="max-w-sm rounded-lg shadow-2xl"/>
+                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
                 </div>
               ))}
             </Carousel>
@@ -61,7 +60,6 @@ export default function CardHero(props) {
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end'>
               <span>Share Your Favorite</span>
               <div className='flex justify-between content-center'>
-                
                 <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>

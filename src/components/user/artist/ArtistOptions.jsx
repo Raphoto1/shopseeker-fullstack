@@ -11,10 +11,10 @@ export default function ArtistOptions(props) {
   return (
     <>
       <div id='options' className='flex justify-evenly px-2 flex-wrap'>
-        <div className='p-2'>
+        <div className='p-2 tooltip' data-tip='coming soon'>
           <button className='btn'>Links To Your Shops</button>
         </div>
-        <div className='p-2'>
+        <div className='p-2 tooltip' data-tip='coming soon'>
           <button className='btn'>Social Media links</button>
         </div>
         <Link href={`/shops/user/${props.userId}`} className='p-2'>
