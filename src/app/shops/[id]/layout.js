@@ -2,7 +2,6 @@ import Page from "./page";
 
 export async function generateMetadata({ params }) {
   const { id } = params;
-
   let basePath = `${process.env.URL}/api/design/${id}`;
   const data = await fetch(basePath).then((res) => res.json());
 
@@ -10,6 +9,7 @@ export async function generateMetadata({ params }) {
 
   return {
     openGraph: {
+      url: `${process.env.URL}shops/${id}`,
       title: design.title,
       description: design.description,
       images: [design.photo],
