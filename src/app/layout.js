@@ -16,6 +16,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Shop Seeker",
   description: "Shop seeker for print on demand creators",
+  openGraph: {
+    title: "Creative Rafa Shop Seeker",
+    description: "Shop seeker for print on demand creators",
+  }
 };
 
 export default function RootLayout({ children }) {
