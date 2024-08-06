@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
       url: `${process.env.URL}shops/${id}`,
       title: design.title,
       description: design.description,
-      images: [design.photo],
+      images: design.photo,
     },
   };
 }
