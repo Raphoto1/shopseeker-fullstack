@@ -63,7 +63,7 @@ export default function CardHero(props) {
                 <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
-                <TwitterShareButton children={`${design.photo}`} url={`${pageBasePath}/shops/${props.id}`} title={`New design available on my shops ${design.title}`}>
+                <TwitterShareButton url={`${pageBasePath}/shops/${props.id}`} title={`New design available on my shops ${design.title}`}>
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <PinterestShareButton url={`${pageBasePath}/shops/${props.id}`} media={`${design.photo}`}>
