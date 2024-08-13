@@ -15,12 +15,12 @@ export async function generateMetadata({ params }) {
       images: design.photo,
     },
     twitter: {
-      card:design.title,
+      card: "summary_large_image",
       url: `${process.env.URL}shops/${id}`,
       title: design.title,
       description: design.description,
       images: [design.photo],
-    }
+    },
   };
 }
 export default Page;
