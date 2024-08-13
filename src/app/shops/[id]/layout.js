@@ -14,6 +14,13 @@ export async function generateMetadata({ params }) {
       description: design.description,
       images: design.photo,
     },
+    twitter: {
+      card: "summary_large_image",
+      url: `${process.env.URL}shops/${id}`,
+      title: design.title,
+      description: design.description,
+      images: [design.photo],
+    },
   };
 }
 export default Page;
