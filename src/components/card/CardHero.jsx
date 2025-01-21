@@ -29,12 +29,12 @@ export default function CardHero(props) {
           <div className=' rounded-lg shadow-2xl max-h-screen'>
             <Carousel autoPlay dynamicHeight={false} className=' rounded-lg shadow-2xl max-h-screen'>
               <div key={1}>
-                <Image src={design.photo} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
+                <Image src={design.photo} width={500} height={500} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' loading="lazy"/>
               </div>
 
               {design.secondaryImages.map((img, index) => (
                 <div key={index + 1}>
-                  <Image src={img.SIUrl} width={1000} height={1000} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' />
+                  <Image src={img.SIUrl} width={500} height={500} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' loading="lazy"/>
                 </div>
               ))}
             </Carousel>
@@ -51,7 +51,7 @@ export default function CardHero(props) {
                 return shop.shopUrl === "null" ? null : (
                   <div className='flex justify-center mx-auto content-center'>
                     <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                      <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} />
+                      <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy"/>
                     </Link>
                   </div>
                 );

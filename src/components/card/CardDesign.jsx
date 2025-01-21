@@ -12,7 +12,7 @@ export default function CardDesign(props) {
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id}/>
         </div>
         <figure>
-          <Image src={props.photo} width={1000} height={1000} alt={props.title}></Image>
+          <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy"></Image>
         </figure>
         <div className='card-body flex items-center'>
           <h1 className='card-title capitalize'>{props.title}</h1>
@@ -23,7 +23,7 @@ export default function CardDesign(props) {
               return shop.shopUrl === "null" ? null : (
                 <div className='flex justify-center mx-auto content-center'>
                   <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} />
+                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy"/>
                   </Link>
                 </div>
               );
