@@ -17,13 +17,13 @@ export default function CardDesignWithCarousel(props) {
         </div>
         <figure>
           <Carousel showStatus={false} showThumbs={false}>
-            <div key={1}>
-              <Image src={props.photo} width={1000} height={1000} alt={props.title} />
+            <div key={1} className=" flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
+              <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
-              <div key={index + 1}>
-                <Image src={img.SIUrl} width={1000} height={1000} alt={props.title} />
+              <div key={index + 1} className="flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
+                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
               </div>
             ))}
           </Carousel>
