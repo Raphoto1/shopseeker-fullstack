@@ -17,13 +17,13 @@ export default function CardDesignWithCarousel(props) {
         </div>
         <figure>
           <Carousel showStatus={false} showThumbs={false}>
-            <div key={1}>
-              <Image src={props.photo} width={1000} height={1000} alt={props.title} />
+            <div key={1} className=" flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
+              <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
-              <div key={index + 1}>
-                <Image src={img.SIUrl} width={1000} height={1000} alt={props.title} />
+              <div key={index + 1} className="flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
+                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
               </div>
             ))}
           </Carousel>
@@ -38,7 +38,7 @@ export default function CardDesignWithCarousel(props) {
               return shop.shopUrl === "null" ? null : (
                 <div className='flex justify-center mx-auto content-center'>
                   <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} />
+                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy"/>
                   </Link>
                 </div>
               );

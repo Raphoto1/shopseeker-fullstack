@@ -1,6 +1,7 @@
 //imports de app
 import nodemailer from "nodemailer"
-//imports propios
+
+
 const mailHost = process.env.MAILHOST
 const mailPort = process.env.MAILPORT
 const contactMail = process.env.CONTACT_MAIL
