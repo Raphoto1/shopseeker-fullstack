@@ -2,6 +2,7 @@
 import React from "react";
 import useSWR from "swr";
 import Image from "next/image";
+import Link from "next/link";
 //imports propios
 import { fetcher, favoritesUrl } from "@/config/fetcher.config";
 function FavoritesBasic() {
@@ -16,22 +17,22 @@ function FavoritesBasic() {
     );
 
   const dataToShow = data.payload.docs;
-  //mansory gallery
-  //https://www.june.so/blog/tailwind-css-masonry-layout
-  //https://medium.com/@legithiphop/efficient-masonry-layouts-in-react-with-lazy-loading-and-dynamic-grid-columns-f7a76af32238
-
+  
   const firstColumn = dataToShow.filter((_, index) => index % 4 === 0);
   const secondColumn = dataToShow.filter((_, index) => index % 4 === 1);
   const thirdColumn = dataToShow.filter((_, index) => index % 4 === 2);
   const fourthColumn = dataToShow.filter((_, index) => index % 4 === 3);
   return (
     <div className="px-4">
-      <h1 className="text-5xl pb-2 justify-center text-center">Rocking Designs</h1>
       <section className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         <div className="grid grid-gap-4 gap-2">
           {firstColumn.map((des, index) => (
-            <div key={index} className="flex justify-start align-top">
-              <h6 className="absolute">{des.title}</h6>
+            <Link href={`/shops/${des._id}`} className="flex">
+              <div className="relative top-0">
+                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+                  {des.title}
+                </h6>
+              </div>
               <Image
                 width={500}
                 height={500}
@@ -39,12 +40,17 @@ function FavoritesBasic() {
                 alt={des.title}
                 loading="lazy"
               />
-            </div>
+            </Link>
           ))}
         </div>
         <div className="grid grid-gap-4 gap-2">
           {secondColumn.map((des, index) => (
-            <div key={index} className="flex justify-start align-top">
+            <Link href={`/shops/${des._id}`} className="flex">
+              <div className="relative top-0">
+                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+                  {des.title}
+                </h6>
+              </div>
               <Image
                 width={500}
                 height={500}
@@ -52,12 +58,17 @@ function FavoritesBasic() {
                 alt={des.title}
                 loading="lazy"
               />
-            </div>
+            </Link>
           ))}
         </div>
         <div className="grid grid-gap-4 gap-2">
           {thirdColumn.map((des, index) => (
-            <div key={index} className="flex justify-start align-top">
+            <Link href={`/shops/${des._id}`} className="flex">
+              <div className="relative top-0">
+                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+                  {des.title}
+                </h6>
+              </div>
               <Image
                 width={500}
                 height={500}
@@ -65,21 +76,25 @@ function FavoritesBasic() {
                 alt={des.title}
                 loading="lazy"
               />
-            </div>
+            </Link>
           ))}
         </div>
         <div className="grid grid-gap-4 gap-2">
           {fourthColumn.map((des, index) => (
-            <div key={index} className="flex justify-start align-top">
+            <Link href={`/shops/${des._id}`} className="flex">
+              <div className="relative top-0">
+                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+                  {des.title}
+                </h6>
+              </div>
               <Image
                 width={500}
                 height={500}
                 src={des.photo}
                 alt={des.title}
                 loading="lazy"
-                fill={false}
               />
-            </div>
+            </Link>
           ))}
         </div>
       </section>
