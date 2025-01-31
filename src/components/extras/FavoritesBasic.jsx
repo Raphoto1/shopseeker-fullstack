@@ -27,7 +27,7 @@ function FavoritesBasic() {
       <section className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         <div className="grid grid-gap-4 gap-2">
           {firstColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex">
+            <Link href={`/shops/${des._id}`} className="flex" key={index}>
               <div className="relative top-0">
                 <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
                   {des.title}
@@ -45,7 +45,7 @@ function FavoritesBasic() {
         </div>
         <div className="grid grid-gap-4 gap-2">
           {secondColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex">
+            <Link href={`/shops/${des._id}`} className="flex" key={index}>
               <div className="relative top-0">
                 <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
                   {des.title}
@@ -63,7 +63,7 @@ function FavoritesBasic() {
         </div>
         <div className="grid grid-gap-4 gap-2">
           {thirdColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex">
+            <Link href={`/shops/${des._id}`} className="flex" key={index}>
               <div className="relative top-0">
                 <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
                   {des.title}
@@ -81,7 +81,7 @@ function FavoritesBasic() {
         </div>
         <div className="grid grid-gap-4 gap-2">
           {fourthColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex">
+            <Link href={`/shops/${des._id}`} className="flex" key={index}>
               <div className="relative top-0">
                 <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
                   {des.title}
