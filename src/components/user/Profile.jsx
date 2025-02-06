@@ -40,8 +40,8 @@ export default function profile() {
           <h3 className='text-3xl capitalize'>{user?.name}</h3>
         </div>
         <div className='divider'></div>
-        <div className='bg-base-300 w-4/5 rounded-md p-5'>
-          <h1 className='text-xl'>About</h1>
+        <div className='bg-base-300 w-4/5 rounded-md p-5 text-center'>
+          <h1 className='text-xl text-center'>About</h1>
           <p>{user?.description ? `${user?.description}` : "Tell the world about you, go to edit info and add a description"}</p>
         </div>
       </div>

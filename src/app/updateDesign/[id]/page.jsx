@@ -19,20 +19,22 @@ export default function detailUpdate({ params }) {
 
   return (
     <>
-      <div className='flex'>
-        <div className='preview w-40'>
-          <h3 className="block text-center">Current Design</h3>
-          <CardDesign
-            key={des._id}
-            id={des._id}
-            title={des.title}
-            description={des.description}
-            category={des.category}
-            photo={des.photo}
-            secondaryPhotos={des.secondaryImages}
-            shops={des.shops}
-            likes={des.likes}
-          />
+      <div className='grid grid-cols-2 gap-4'>
+        <div className='flex w-100  h-50'>
+          <div className="h-fit">
+            <h3 className="text-center">Current Design</h3>
+            <CardDesign
+              key={des._id}
+              id={des._id}
+              title={des.title}
+              description={des.description}
+              category={des.category}
+              photo={des.photo}
+              secondaryPhotos={des.secondaryImages}
+              shops={des.shops}
+              likes={des.likes}
+            />
+          </div>
         </div>
         <div>
           <h2 className="block text-center">Let's Update</h2>
