@@ -25,13 +25,15 @@ function FavoritesBasic() {
   return (
     <div className="px-4">
       <section className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-        <div className="grid grid-gap-4 gap-2">
+        <div className="grid grid-gap-4 gap-2 h-fit">
           {firstColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex" key={index}>
-              <div className="relative top-0">
-                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
-                  {des.title}
-                </h6>
+            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
+              <div className="absolute">
+                <div className="flex w-100 h-100">
+                  <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
+                    {des.title}
+                  </h6>
+                </div>
               </div>
               <Image
                 width={500}
@@ -43,58 +45,64 @@ function FavoritesBasic() {
             </Link>
           ))}
         </div>
-        <div className="grid grid-gap-4 gap-2">
+        <div className="grid grid-gap-4 gap-2 h-fit">
           {secondColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex" key={index}>
-              <div className="relative top-0">
-                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
+            <div className="absolute">
+              <div className="flex w-100 h-100">
+                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
                   {des.title}
                 </h6>
               </div>
-              <Image
-                width={500}
-                height={500}
-                src={des.photo}
-                alt={des.title}
-                loading="lazy"
-              />
-            </Link>
+            </div>
+            <Image
+              width={500}
+              height={500}
+              src={des.photo}
+              alt={des.title}
+              loading="lazy"
+            />
+          </Link>
           ))}
         </div>
-        <div className="grid grid-gap-4 gap-2">
+        <div className="grid grid-gap-4 gap-2 h-fit">
           {thirdColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex" key={index}>
-              <div className="relative top-0">
-                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
+            <div className="absolute">
+              <div className="flex w-100 h-100">
+                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
                   {des.title}
                 </h6>
               </div>
-              <Image
-                width={500}
-                height={500}
-                src={des.photo}
-                alt={des.title}
-                loading="lazy"
-              />
-            </Link>
+            </div>
+            <Image
+              width={500}
+              height={500}
+              src={des.photo}
+              alt={des.title}
+              loading="lazy"
+            />
+          </Link>
           ))}
         </div>
-        <div className="grid grid-gap-4 gap-2">
+        <div className="grid grid-gap-4 gap-2 h-fit">
           {fourthColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex" key={index}>
-              <div className="relative top-0">
-                <h6 className="absolute w-60 drop-shadow-md bottom-0 text-center opacity-0 hover:opacity-100 transition-all ">
+            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
+            <div className="absolute">
+              <div className="flex w-100 h-100">
+                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
                   {des.title}
                 </h6>
               </div>
-              <Image
-                width={500}
-                height={500}
-                src={des.photo}
-                alt={des.title}
-                loading="lazy"
-              />
-            </Link>
+            </div>
+            <Image
+              width={500}
+              height={500}
+              src={des.photo}
+              alt={des.title}
+              loading="lazy"
+            />
+          </Link>
           ))}
         </div>
       </section>
