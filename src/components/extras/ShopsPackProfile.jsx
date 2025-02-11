@@ -46,6 +46,14 @@ export default function ShopsPackProfile() {
             </div>
           </Link>
         </div>
+        <div className="stat flex justify-center">
+          <Link href={'https://raphoto1.threadless.com/'} passHref={true} target="blank">
+            <div className='stat-title'> Threadless </div>
+            <div className='stat-figure flex justify-center'>
+              <Image width={"50"} height={"50"} src={`/img/icons/Threadless.png`} alt='redbubble' />
+            </div>
+          </Link>
+        </div>
       </div>
     </>
   );
