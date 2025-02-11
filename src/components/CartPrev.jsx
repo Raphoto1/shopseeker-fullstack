@@ -41,15 +41,17 @@ export default function CartPrev({ cartId }) {
   };
   return (
     <>
-      <div>
         {designsToShow.length >= 1 && (
-          <div className='flex justify-center'>
-            <button className='btn btn-sm btn-secondary' onClick={handleClearCart}>
-              Clear List
-            </button>
+          <div className='flex justify-center w-full'>
+            <div className="flex w-full justify-center">
+              <button className='btn btn-sm btn-secondary' onClick={handleClearCart}>
+                Clear List
+              </button>
+            </div>
           </div>
         )}
-        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1'>
+      <div className="flex justify-center text-center">
+        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1 text-center'>
           {designsToShow.length >= 1 ? (
             designsToShow.map((des) => (
               <div key={v4()} className='p-2'>
@@ -67,7 +69,9 @@ export default function CartPrev({ cartId }) {
               </div>
             ))
           ) : (
-            <p className='flex justify-center text-warning font-bold p-2'>No Designs Saved</p>
+            <div className="flex justify-center text-center">
+              <p className='flex justify-center text-warning font-bold p-2 text-center'>No Designs Saved</p>
+            </div>
           )}
         </div>
       </div>

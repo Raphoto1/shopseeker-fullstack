@@ -70,7 +70,7 @@ export default function DesignUploader(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          toast(`error Loading design, try again${data.error}`);
+          toast(`Error Loading design, try again${data.error}`);
         } else {
           toast("uploaded successfully, reload for new upload");
           router.push("/allshops");
@@ -81,93 +81,104 @@ export default function DesignUploader(props) {
 
   return (
     <>
+      <h2 className="text-center text-2xl">Uploader</h2>
       <form onSubmit={handleSubmit}>
-        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1'>
-          <div className='textData flex-grid px-1'>
-            <div className='justify-center'>
-              <label htmlFor='pCode' className='px-1'>
-                Personal Code
-              </label>
-              <input
-                placeholder={props.pCode ? props.pCode : "Your personal Code/not required"}
-                type='text'
-                id='pCode'
-                name='pCode'
-                className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
-              />
-            </div>
-            <div>
-              <label htmlFor='title' className='px-1'>
-                Title
-              </label>
-              <input
-                placeholder={props.title ? props.title : "Name your work"}
-                type='text'
-                id='title'
-                name='title'
-                className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
-              />
-            </div>
-            <div className='py-2'>
-              <textarea
-                type='text-area'
-                id='description'
-                name='description'
-                className='textarea textarea-bordered h-24 w-full max-w-xs py-2'
-                placeholder={props.description ? props.description : "description, Max.300 Characters"}
-              />
-            </div>
-            <div>
-              <label htmlFor='category' className='px-2'>
-                {" "}
-                Technique
-              </label>
-              <select name='category' id='category' className='select select-sm select-bordered w-full max-w-xs'>
-                {categories.map((cat, index) => (
-                  <option value={cat} key={index} selected={props.category == cat ? true : false}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className='shopsPack '>
-              <div className='flex flex-col justify-center items-center'>
-                <label htmlFor='shops' className='bold'>
-                  URL to Shops
+        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-2 pt-2 px-1 pb-2'>
+          <div className="flex justify-center">
+            <div className='textData flex-grid px-1'>
+              <div className='justify-center'>
+                <label htmlFor='pCode' className='px-1'>
+                  Personal Code
                 </label>
+                <input
+                  placeholder={props.pCode ? props.pCode : "Your personal Code/not required"}
+                  type='text'
+                  id='pCode'
+                  name='pCode'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
+                />
               </div>
-              <div className='max-w-xs'>
-                {shops.map((shop, index) => (
-                  <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
-                ))}
+              <div>
+                <label htmlFor='title' className='px-1'>
+                  Title
+                </label>
+                <input
+                  placeholder={props.title ? props.title : "Name your work"}
+                  type='text'
+                  id='title'
+                  name='title'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
+                />
               </div>
-            </div>
-          </div>
-          <div className='mainImageDrop'>
-            <h2 className='block text-center'>Main Image</h2>
-            <DnDSpaceSingle files={files} setFiles={setFiles} />
-          </div>
-          <div className='secondaryImageDrop h-10'>
-            <h2 className='block text-center'>Secondary Images</h2>
-            <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
-            {props.secondaryImages && (
-              <div className='oldSecondary block pt-5'>
-                <h2>Actual Secondary Images</h2>
-                <div className='grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2  xs:grid-cols-2 gap-2 pt-2 px-1'>
-                  {oldSecondaryImages.map((image, index) => (
-                    <div key={image}>
-                      <button className='EliminateImage absolute btn btn-xs btn-error' id={image.SIUrl} onClick={handleOldImages}>
-                        X
-                      </button>
-                      <Image src={image.SIUrl} width={100} height={100} alt={props.title} className='rounded' />
-                    </div>
+              <div className='py-2'>
+                <textarea
+                  type='text-area'
+                  id='description'
+                  name='description'
+                  className='textarea textarea-bordered h-24 w-full max-w-xs py-2'
+                  placeholder={props.description ? props.description : "description, Max.300 Characters"}
+                />
+              </div>
+              <div>
+                <label htmlFor='category' className='px-2'>
+                  {" "}
+                  Technique
+                </label>
+                <select name='category' id='category' className='select select-sm select-bordered w-full max-w-xs'>
+                  {categories.map((cat, index) => (
+                    <option value={cat} key={index} selected={props.category == cat ? true : false}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className='shopsPack '>
+                <div className='flex flex-col justify-center items-center'>
+                  <label htmlFor='shops' className='bold'>
+                    URL to Shops
+                  </label>
+                </div>
+                <div className='max-w-xs'>
+                  {shops.map((shop, index) => (
+                    <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
                   ))}
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+          <div className='flex justify-center align-middle items-center'>
+            <div className='mainImageDrop justify-center'>
+              <h2 className='text-center'>Main Image</h2>
+              <div className='flex justify-center'>
+                <DnDSpaceSingle files={files} setFiles={setFiles} />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center align-middle items-center">
+            <div className='secondaryImageDrop justify-center'>
+              <h2 className='text-center'>Secondary Images</h2>
+              <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
+              {props.secondaryImages && (
+                <div className='oldSecondary block pt-5'>
+                  <h2>Actual Secondary Images</h2>
+                  <div className='grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2  xs:grid-cols-2 gap-2 pt-2 px-1'>
+                    {oldSecondaryImages.map((image, index) => (
+                      <div key={image}>
+                        <button className='EliminateImage absolute btn btn-xs btn-error' id={image.SIUrl} onClick={handleOldImages}>
+                          X
+                        </button>
+                        <Image src={image.SIUrl} width={100} height={100} alt={props.title} className='rounded' />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='flex justify-center'>
+            <input type='submit' className='btn' placeholder='Send' />
           </div>
         </div>
-        <input type='submit' className='btn' placeholder="Send"/>
       </form>
     </>
   );
