@@ -16,6 +16,7 @@ import {
 import { categories, shops } from "@/enums/SuperVariables";
 import { addToCart, deleteFromCart, getCart } from "./cart.service";
 import { getUserInfo } from "./auth.service";
+import { log } from "console";
 
 //**codigo**
 //cloudinary
@@ -156,7 +157,8 @@ export const updateDesign = async (data) => {
   let secondaryImages = [];
   let newSimgs = [];
   let newSimgsExist = false;
-  const shops = [...chkDesign.shops];
+  let shops = [...chkDesign.shops];
+  
   const packingCycle = async (data) => {
     for (let item in data) {
       let field = item;
@@ -192,14 +194,29 @@ export const updateDesign = async (data) => {
       } else if (item.startsWith("url")) {
         shopsExist = true;
         const shopName = field.replace("url", "");
-        const shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
+        
+        let shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
+        //agregar nueva tienda
+        if (shopToUpdateIndex === -1) {
+          let shopToPush = shopFilter(data, shopName, item);             
+          shops.push(shopToPush);
+          
+        }
+        shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
+        // console.log(shops);
+                
+        updatePack.push(shops);       
+
         shops[shopToUpdateIndex].shopUrl = data[item];
+        //actualizar tienda
       } else if (field === "id") {
         continue;
       } else {
+ 
         updatePack.push({ [item]: data[item] });
       }
     }
+
     //revisar como cargarlo solo si llega info
     // updatePack.push(shops);
   };
@@ -219,6 +236,8 @@ export const updateDesign = async (data) => {
   };
 
   const pack = await packingCycle(dataToUpdate);
+  console.log('llego a la funcion');
+  
   shopsExist && updatePack.push({ shops: shops });
   if (deletedSimgs || newSimgsExist) {
     await secondaryImagesOrganizer(secondaryImagesOld, newSimgs);
