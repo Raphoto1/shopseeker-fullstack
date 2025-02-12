@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import { useEffect, useState } from "react";
 
 export default function HiddenInput({ shopName, shopsFromUpdate }) {
@@ -8,7 +9,7 @@ export default function HiddenInput({ shopName, shopsFromUpdate }) {
   const handleHide = () => {
     setIsChecked(!isChecked);
     if (urlInput) {
-      setUrlInput('null');
+      setUrlInput("null");
       console.log(urlInput);
       setIsChecked(true);
     }
@@ -22,9 +23,14 @@ export default function HiddenInput({ shopName, shopsFromUpdate }) {
   useEffect(() => {
     if (shopsFromUpdate.length !== 0) {
       const filterOld = shopsFromUpdate.filter((item) => item.shopName === shopName);
-      if (filterOld[0].shopUrl.length >= 10) {
-        setIsChecked(true);
-        setUrlInput(filterOld[0].shopUrl);
+      console.log(filterOld);
+      if (filterOld.length === 0) {
+        setIsChecked(false);
+      } else {
+        if (filterOld[0].shopUrl.length >= 10) {
+          setIsChecked(true);
+          setUrlInput(filterOld[0].shopUrl);
+        }
       }
     }
   }, [shopsFromUpdate, shopName]);

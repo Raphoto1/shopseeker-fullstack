@@ -62,6 +62,8 @@ export const mongoDbUpdateDesignMultiple = async (id, pack) => {
     const designToUpdate = designModel.updateOne({ _id: id }, [{ $set: pack }]);
     return designToUpdate;
   } catch (error) {
+    console.log('error desde dao', error);
+    
     throw new Error(error);
   }
 };
