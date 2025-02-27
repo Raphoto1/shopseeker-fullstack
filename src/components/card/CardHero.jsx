@@ -51,7 +51,7 @@ export default function CardHero(props) {
                 return shop.shopUrl === "null" ? null : (
                   <div className='flex justify-center mx-auto content-center'>
                     <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                      <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy"/>
+                      <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full"/>
                     </Link>
                   </div>
                 );
