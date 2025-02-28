@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 export default function InstagramFeed() {
   const instaToken = process.env.NEXT_PUBLIC_INSTATOKEN;
   const instaPath = `https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,media_type&access_token=${instaToken}`;
-  console.log(instaPath);
   
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    // Replace 'YOUR_ACCESS_TOKEN' with your actual Instagram access token
     fetch(
       instaPath
     )
