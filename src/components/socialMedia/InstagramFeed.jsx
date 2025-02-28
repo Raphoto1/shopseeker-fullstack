@@ -1,0 +1,43 @@
+import React, { useEffect, useState } from "react";
+
+export default function InstagramFeed() {
+  const instaToken = process.env.NEXT_PUBLIC_INSTATOKEN;
+  const instaPath = `https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,media_type&access_token=${instaToken}`;
+  console.log(instaPath);
+  
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    // Replace 'YOUR_ACCESS_TOKEN' with your actual Instagram access token
+    fetch(
+      instaPath
+    )
+      .then((response) => response.json())
+      .then((data) => {        
+        setPosts(data.data);
+      })
+      .catch((error) => console.error("Error fetching Instagram posts:", error));
+  }, []);
+  return (
+    <div className="container mx-auto p-4">
+    <h1 className="text-3xl font-bold mb-4 text-center">Latest Post on Instagram</h1>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      {posts.slice(0, 8).map((post) => (
+        <div key={post.id} className="card shadow-lg">
+          <a href={post.permalink} target="_blank" rel="noopener noreferrer">
+            <figure>
+              {post.media_type === "VIDEO" ? (
+                <video controls className="w-full h-auto" autoPlay loop muted>
+                  <source src={post.media_url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img src={post.media_url} alt={post.caption} className="w-full h-auto" />
+              )}
+            </figure>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+  );
+}

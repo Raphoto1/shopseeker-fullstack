@@ -42,7 +42,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://creative-rafa.myspreadshop.es/'} passHref={true} target="blank">
             <div className='stat-title'> SpreadShirt </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='spreadshirt' />
             </div>
           </Link>
         </div>
