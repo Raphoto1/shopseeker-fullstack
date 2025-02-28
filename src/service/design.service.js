@@ -194,19 +194,14 @@ export const updateDesign = async (data) => {
       } else if (item.startsWith("url")) {
         shopsExist = true;
         const shopName = field.replace("url", "");
-        
         let shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
         //agregar nueva tienda
         if (shopToUpdateIndex === -1) {
           let shopToPush = shopFilter(data, shopName, item);             
           shops.push(shopToPush);
-          
         }
         shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
-        // console.log(shops);
-                
         updatePack.push(shops);       
-
         shops[shopToUpdateIndex].shopUrl = data[item];
         //actualizar tienda
       } else if (field === "id") {

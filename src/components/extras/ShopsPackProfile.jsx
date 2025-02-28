@@ -14,14 +14,14 @@ export default function ShopsPackProfile() {
             </div>
           </Link>
         </div>
-        <div className="stat flex justify-center">
+        {/* <div className="stat flex justify-center">
           <Link href={'https://society6.com/rafaelmartinez'} passHref={true} target="blank">
             <div className='stat-title'> Society6 </div>
             <div className='stat-figure flex justify-center'>
               <Image width={"50"} height={"50"} src={`/img/icons/Society6.png`} alt='redbubble' />
             </div>
           </Link>
-        </div>
+        </div> */}
         <div className="stat flex justify-center">
           <Link href={'https://displate.com/Raphoto1?art=5c9d663484046'} passHref={true} target="blank">
             <div className='stat-title justify-center'> Displate </div>
@@ -39,10 +39,10 @@ export default function ShopsPackProfile() {
           </Link>
         </div>
         <div className="stat flex justify-center">
-          <Link href={'https://www.spreadshirt.es/shop/user/raphoto1/?srEdit=pa#?affiliateId=1257693'} passHref={true} target="blank">
+          <Link href={'https://creative-rafa.myspreadshop.es/'} passHref={true} target="blank">
             <div className='stat-title'> SpreadShirt </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='spreadshirt' />
             </div>
           </Link>
         </div>
@@ -50,7 +50,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://raphoto1.threadless.com/'} passHref={true} target="blank">
             <div className='stat-title'> Threadless </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Threadless.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/Threadless.png`} alt='redbubble' className="bg-slate-50 rounded-full"/>
             </div>
           </Link>
         </div>
