@@ -4,13 +4,54 @@ import SearchBar from "./SearchBar";
 import { pageBasePath } from "@/enums/SuperVariables";
 import { useCart } from "@/context/cartContext";
 //imports app
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import ThemeSelect from "../buttons/ThemeSelect";
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from "next-share";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { GiLoveLetter } from "react-icons/gi";
+
+// Cargar componentes de manera diferida
+const ThemeSelect = dynamic(() => import("../buttons/ThemeSelect"), {
+  ssr: false,
+  loading: () => {
+    <div className='flex h-full w-full justify-center content-center'>
+      <span className='loading loading-infinity loading-lg' />
+    </div>;
+  },
+});
+const FacebookShareButton = dynamic(() => import("next-share").then(mod => mod.FacebookShareButton), {
+  ssr: false,
+  loading: () => {
+      <div className='flex h-full w-full justify-center content-center'>
+        <span className='loading loading-infinity loading-lg' />
+      </div>;
+    },
+});
+const FacebookIcon = dynamic(() => import("next-share").then(mod => mod.FacebookIcon), {
+  ssr: false,
+  loading: () => {
+      <div className='flex h-full w-full justify-center content-center'>
+        <span className='loading loading-infinity loading-lg' />
+      </div>;
+    },
+});
+const TwitterShareButton = dynamic(() => import("next-share").then(mod => mod.TwitterShareButton), {
+  ssr: false,
+  loading: () => {
+      <div className='flex h-full w-full justify-center content-center'>
+        <span className='loading loading-infinity loading-lg' />
+      </div>;
+    },
+});
+const TwitterIcon = dynamic(() => import("next-share").then(mod => mod.TwitterIcon), {
+  ssr: false,
+  loading: () => {
+      <div className='flex h-full w-full justify-center content-center'>
+        <span className='loading loading-infinity loading-lg' />
+      </div>;
+    },
+});
 
 export default function Navbar() {
   const { data: session, status, update } = useSession();
@@ -20,7 +61,7 @@ export default function Navbar() {
     if (session) { 
       getCartInfo(session?.cart);
     }
-  }, [cartContent,session]);
+  }, [cartContent, session]);
 
   return (
     <>
