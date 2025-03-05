@@ -18,93 +18,34 @@ function FavoritesBasic() {
 
   const dataToShow = data.payload.docs;
   
-  const firstColumn = dataToShow.filter((_, index) => index % 4 === 0);
-  const secondColumn = dataToShow.filter((_, index) => index % 4 === 1);
-  const thirdColumn = dataToShow.filter((_, index) => index % 4 === 2);
-  const fourthColumn = dataToShow.filter((_, index) => index % 4 === 3);
+  const columns = [[], [], [], []];
+  dataToShow.forEach((des, index) => {
+    columns[index % 4].push(des);
+  });
+
   return (
     <div className="px-4">
       <section className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-        <div className="grid grid-gap-4 gap-2 h-fit">
-          {firstColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
-              <div className="absolute">
-                <div className="flex w-100 h-100">
+        {columns.map((column, colIndex) => (
+          <div key={colIndex} className="grid gap-2 h-fit">
+            {column.map((des, index) => (
+              <Link href={`/shops/${des._id}`} className="flex justify-center items-end relative" key={index}>
+                <div className="absolute flex w-full h-full justify-center items-center">
                   <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
                     {des.title}
                   </h6>
                 </div>
-              </div>
-              <Image
-                width={500}
-                height={500}
-                src={des.photo}
-                alt={des.title}
-                loading="lazy"
-              />
-            </Link>
-          ))}
-        </div>
-        <div className="grid grid-gap-4 gap-2 h-fit">
-          {secondColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
-            <div className="absolute">
-              <div className="flex w-100 h-100">
-                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
-                  {des.title}
-                </h6>
-              </div>
-            </div>
-            <Image
-              width={500}
-              height={500}
-              src={des.photo}
-              alt={des.title}
-              loading="lazy"
-            />
-          </Link>
-          ))}
-        </div>
-        <div className="grid grid-gap-4 gap-2 h-fit">
-          {thirdColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
-            <div className="absolute">
-              <div className="flex w-100 h-100">
-                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
-                  {des.title}
-                </h6>
-              </div>
-            </div>
-            <Image
-              width={500}
-              height={500}
-              src={des.photo}
-              alt={des.title}
-              loading="lazy"
-            />
-          </Link>
-          ))}
-        </div>
-        <div className="grid grid-gap-4 gap-2 h-fit">
-          {fourthColumn.map((des, index) => (
-            <Link href={`/shops/${des._id}`} className="flex justify-center items-end" key={index}>
-            <div className="absolute">
-              <div className="flex w-100 h-100">
-                <h6 className="w-40 drop-shadow-md text-center opacity-0 hover:opacity-100 transition-all text-sm">
-                  {des.title}
-                </h6>
-              </div>
-            </div>
-            <Image
-              width={500}
-              height={500}
-              src={des.photo}
-              alt={des.title}
-              loading="lazy"
-            />
-          </Link>
-          ))}
-        </div>
+                <Image
+                  width={500}
+                  height={500}
+                  src={des.photo}
+                  alt={des.title}
+                  loading="lazy"
+                />
+              </Link>
+            ))}
+          </div>
+        ))}
       </section>
     </div>
   );
