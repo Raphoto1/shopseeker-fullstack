@@ -45,7 +45,12 @@ const DesignSchema = new Schema(
         status: {
             type: Boolean,
             default:true,
-        }
+        },
+        blogLink: String,
+        tags: {
+            type: Array,
+            default:[]
+        },
     },
     {
         timestamps: true

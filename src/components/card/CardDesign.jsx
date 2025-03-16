@@ -29,6 +29,11 @@ export default function CardDesign(props) {
               );
             })}
           </div>
+          {props.blogLink?<div className='card-actions justify-center'>
+                      <Link href={props.blogLink}>
+                        <button className='btn btn-primary'>Blog About {props.title}</button>
+                      </Link>
+                    </div>:null}
           <div className='card-actions justify-center'>
             <Link href={`/shops/${props.id}`}>
               <button className='btn btn-primary'>Show More</button>

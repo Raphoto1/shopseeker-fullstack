@@ -18,6 +18,7 @@ export default function GridDesigns({ designsToSort }) {
                 secondaryPhotos={des.secondaryImages}
                 shops={des.shops}
                 likes={des.likes}
+                blogLink={des.blogLink}
               />
             </div>
           ))}

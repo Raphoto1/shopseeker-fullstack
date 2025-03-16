@@ -120,6 +120,18 @@ export default function DesignUploader(props) {
                 />
               </div>
               <div>
+              <label htmlFor='blogLink' className='px-1'>
+                  Blog/post/process Link
+                </label>
+                <input
+                  placeholder={props.blogLink ? props.blogLink : "Any extra words about your design?"}
+                  type='text'
+                  id='blogLink'
+                  name='blogLink'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
+                />
+              </div>
+              <div>
                 <label htmlFor='category' className='px-2'>
                   {" "}
                   Technique
