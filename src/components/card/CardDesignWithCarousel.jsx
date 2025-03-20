@@ -17,13 +17,13 @@ export default function CardDesignWithCarousel(props) {
         </div>
         <figure>
           <Carousel showStatus={false} showThumbs={false}>
-            <div key={1} className=" flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
-              <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
+            <div key={1} className=' flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
+              <Image src={props.photo} width={500} height={500} alt={props.title} loading='lazy' objectFit='scale-down' />
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
-              <div key={index + 1} className="flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center" >
-                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading="lazy" objectFit="scale-down"/>
+              <div key={index + 1} className='flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
+                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading='lazy' objectFit='scale-down' />
               </div>
             ))}
           </Carousel>
@@ -38,12 +38,24 @@ export default function CardDesignWithCarousel(props) {
               return shop.shopUrl === "null" ? null : (
                 <div className='flex justify-center mx-auto content-center'>
                   <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full"/>
+                    <Image
+                      width={"50"}
+                      height={"50"}
+                      src={`/img/icons/${shop.shopName}.png`}
+                      alt={shop.shopName}
+                      loading='lazy'
+                      className='bg-slate-50 rounded-full'
+                    />
                   </Link>
                 </div>
               );
             })}
           </div>
+          {props.blogLink?<div className='card-actions justify-center'>
+            <Link href={props.blogLink} target="blank">
+              <button className='btn btn-primary'>Blog About {props.title}</button>
+            </Link>
+          </div>:null}
           <div className='card-actions justify-center'>
             <Link href={`/shops/${props.id}`}>
               <button className='btn btn-primary'>Show More</button>

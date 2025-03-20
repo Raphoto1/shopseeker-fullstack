@@ -134,7 +134,6 @@ export const createDesign = async (data) => {
   // se grega owner especial
   const userInfo = await getUserInfo(uId);
   if (userInfo.role === "rafa") {
-    console.log("llego el patron jajajaja");
     dataToPush["owner"] = "rafa";
   }
   //   se envia a DB
