@@ -3,7 +3,6 @@
 import useSWR from "swr";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, PinterestShareButton, PinterestIcon } from "next-share";
@@ -74,7 +73,7 @@ export default function CardHero(props) {
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 justify-end'>
               <span>Share Your Favorite</span>
               <div className='flex justify-between content-center'>
-                <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`}>
+                <FacebookShareButton url={`${pageBasePath}/shops/${props.id}`} quote={design.description} hashtag={`#${design.title}`} title={design.title}>
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
                 <TwitterShareButton url={`${pageBasePath}/shops/${props.id}`} title={`New design available on my shops ${design.title}`}>
