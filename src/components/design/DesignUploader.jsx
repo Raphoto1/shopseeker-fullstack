@@ -71,12 +71,11 @@ export default function DesignUploader(props) {
         if (data.error) {
           toast(`Error Loading design, try again${data.error}`);
         } else {
+          console.log(data);
           toast("uploaded successfully, reload for new upload");
           router.push("/allshops");
         }
-      })
-      .then(() => { });
-    console.log(response);
+      });
     
   };
 
