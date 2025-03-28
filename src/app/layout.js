@@ -26,6 +26,8 @@ export const metadata = {
   openGraph: {
     title: "Creative Rafa Shop Seeker",
     description: "Shop seeker for print on demand creators",
+    url:"shops.creativerafa.com",
+    type: "website",
   }
 };
 

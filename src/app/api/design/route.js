@@ -35,7 +35,7 @@ export async function POST(req) {
     const result = await createDesign(capturedForm);
     return NextResponse.json({ payload: result }, { status: 201 });
   } catch (error) {
-    console.log(`desde route${stringifyError(error)}`);
+    console.log(`Server Error: ${stringifyError(error)}`);
     return NextResponse.json({ error: `Error:${stringifyError(error)}` }, { status: 500 });
   }
 };
