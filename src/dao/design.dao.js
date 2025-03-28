@@ -39,7 +39,7 @@ export const mongoDbCreateNewDesign = async (data) => {
     const newDesign = await designModel.create(data);
     return newDesign;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(`error desde dao: ${error}`);
   }
 };
 
