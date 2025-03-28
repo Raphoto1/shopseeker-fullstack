@@ -60,7 +60,6 @@ export default function DesignUploader(props) {
     formData.append("owner", userId);
     files.forEach((file) => formData.append("photo", file));
     multipleFiles.forEach((file) => formData.append("secondaryImages", file));
-    console.log(formData);
 
     let response = await fetch(props.path, {
       method: props.method,
@@ -98,7 +97,7 @@ export default function DesignUploader(props) {
                   className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
                 />
               </div>
-              <div>
+              <div className='justify-center'>
                 <label htmlFor='title' className='px-1'>
                   Title
                 </label>
