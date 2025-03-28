@@ -33,7 +33,8 @@ export async function POST(req) {
     const capturedForm = await req.formData();
     //enviar data al service
     const result = await createDesign(capturedForm);
-    return NextResponse.json({message:'success', payload: result, status: 201 });
+    console.log(result);
+    return NextResponse.json({ message: "success", payload: result, status: 201  });
   } catch (error) {
     console.log(`Server Error: ${stringifyError(error)}`);
     return NextResponse.json({ error: `Error: ${stringifyError(error)}` }, { status: 500 });
@@ -50,4 +51,4 @@ export async function PUT(req) {
   } catch (error) {
     return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
   }
-}
+};

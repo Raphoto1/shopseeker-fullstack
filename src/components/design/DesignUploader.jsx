@@ -75,7 +75,9 @@ export default function DesignUploader(props) {
           router.push("/allshops");
         }
       })
-      .then(() => {});
+      .then(() => { });
+    console.log(response);
+    
   };
 
   return (
