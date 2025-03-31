@@ -57,6 +57,7 @@ export default function DesignUploader(props) {
         body: formData,
       });
       const data = await response.json();
+console.log("Response data:", data);
 
       if (data.error) {
         toast.error(`Error loading design: ${data.error}`);

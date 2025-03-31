@@ -53,9 +53,9 @@ export async function POST(req) {
 
     // Enviar datos al servicio
     const result = await createDesign(capturedForm);
-    console.log("Design created:", result);
+    // console.log("Design created:", result);
 
-    return NextResponse.json({ message: "success", payload: result, status: 201 });
+    return NextResponse.json({ message: "success", payload: result }, { status: 201 });
   } catch (error) {
     console.error("Error creating design:", error);
     return NextResponse.json({ error: `Error creating design: ${stringifyError(error)}` }, { status: 500 });
