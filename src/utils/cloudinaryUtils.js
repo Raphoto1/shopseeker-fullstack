@@ -9,17 +9,19 @@ cloudinary.config({
   
 export const imageUploaderCloudinary = async (file, pCode) => {
   try {
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const stream = file.stream(); // Obtén el stream del archivo
     const cloudUpload = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({}, (err, result) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "designs", public_id: `${pCode}-${Date.now()}` },
+        (err, result) => {
           if (err) {
+            console.error("Error uploading to Cloudinary:", err);
             reject(err);
           }
           resolve(result);
-        })
-        .end(buffer);
+        }
+      );
+      stream.pipe(uploadStream); // Envía el stream al uploader de Cloudinary
     });
     return cloudUpload.secure_url;
   } catch (error) {
