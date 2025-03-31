@@ -8,6 +8,7 @@ cloudinary.config({
 });
   
 export const imageUploaderCloudinary = async (file, pCode) => {
+  try {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const cloudUpload = await new Promise((resolve, reject) => {
@@ -21,6 +22,10 @@ export const imageUploaderCloudinary = async (file, pCode) => {
         .end(buffer);
     });
     return cloudUpload.secure_url;
+  } catch (error) {
+    console.error("Error in imageUploaderCloudinary:", error);
+    throw new Error("Failed to upload image to Cloudinary");
+  }
 };
   
 export const imageDeleterCloudinary = async (photoUrl) => {
