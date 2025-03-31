@@ -22,6 +22,7 @@ export default function DesignUploader(props) {
   const [files, setFiles] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState([]);
   const [shopsFromUpdate, setShopsFromUpdate] = useState(props.shops || []);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para el loader
 
   // Referencia para el formulario
   const formRef = useRef(null);
@@ -36,6 +37,7 @@ export default function DesignUploader(props) {
   // Manejo del envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Mostrar loader
     const formData = new FormData(formRef.current);
 
     if (SIToWork.length === 1) {
@@ -65,6 +67,8 @@ export default function DesignUploader(props) {
     } catch (error) {
       console.error("Error uploading design:", error);
       toast.error("An unexpected error occurred. Please try again.");
+    }finally {
+      setIsSubmitting(false); // Ocultar loader
     }
   };
 
@@ -183,7 +187,11 @@ export default function DesignUploader(props) {
 
           {/* Botón de envío */}
           <div className="flex justify-center">
-            <input type="submit" className="btn" value="Send" />
+            {isSubmitting ? (
+              <button className="btn btn-disabled loading">Submitting...</button>
+            ) : (
+              <input type="submit" className="btn" value="Send" />
+            )}
           </div>
         </div>
       </form>
