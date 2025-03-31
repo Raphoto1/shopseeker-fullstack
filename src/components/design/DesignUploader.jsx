@@ -52,7 +52,7 @@ export default function DesignUploader(props) {
 
     try {
       const response = await fetch(props.path, {
-        method: props.method,
+        method: `${props.method}`,
         credentials: "include",
         body: formData,
       });
