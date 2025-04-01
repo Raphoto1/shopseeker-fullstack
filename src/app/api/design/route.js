@@ -10,44 +10,63 @@ export async function GET(req) {
     const url = new URL(req.url);
     const searchParam = url.searchParams.get("search");
     const queryKey = url.searchParams.get("queryKey");
-    //sorts
     const limit = url.searchParams.get("limit");
     const page = url.searchParams.get("page");
     const sortField = url.searchParams.get("sortField");
-    //sortQ pegado a title
     const sortQ = url.searchParams.get("sortQ");
     const filterCat = url.searchParams.get("filterCat");
     const filterShop = url.searchParams.get("filterShop");
-    const userId = url.searchParams.get('userId');
-    let designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop,userId);
+    const userId = url.searchParams.get("userId");
+
+    const designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop, userId);
+
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {
-    return NextResponse.json({ message: `error: ${error}` });
+    console.error("Error fetching designs:", error);
+    return NextResponse.json({ message: `Error fetching designs: ${stringifyError(error)}` }, { status: 500 });
   }
-};
+}
 
-//agregar diseno
+//agregar diseño
 export async function POST(req) {
   try {
-    //capturar data
+    // Capturar datos del formulario
     const capturedForm = await req.formData();
-    //enviar data al service
+
+    // Validar datos requeridos
+    if (!capturedForm.has("owner") || !capturedForm.has("photo")) {
+      return NextResponse.json({ error: "Missing required fields: 'owner' or 'photo'" }, { status: 400 });
+    }
+
+    // Enviar datos al servicio
     const result = await createDesign(capturedForm);
-    return NextResponse.json({message:'success', payload: result, status: 201 });
+    // console.log("Design created:", result);
+
+    return NextResponse.json({ message: "success", payload: result }, { status: 201 });
   } catch (error) {
-    console.log(`Server Error: ${stringifyError(error)}`);
-    return NextResponse.json({ error: `Error: ${stringifyError(error)}` }, { status: 500 });
+    console.error("Error creating design:", error);
+    return NextResponse.json({ error: `Error creating design: ${stringifyError(error)}` }, { status: 500 });
   }
-};
+}
 
 //actualizar diseño
 export async function PUT(req) {
   try {
-    //captura de data
+    // Capturar datos del formulario
     const capturedForm = await req.formData();
+
+    // Validar datos requeridos
+    if (!capturedForm.has("id")) {
+      return NextResponse.json({ error: "Missing required field: 'id'" }, { status: 400 });
+    }
+
+    // Enviar datos al servicio
     const result = await updateDesign(capturedForm);
-    return NextResponse.json({ message: "success", payload: result, status: 200  });
+    console.log("Design updated:", result);
+
+    return NextResponse.json({ message: "success", payload: result, status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: `Error:${error}` }, { status: 500 });
+    console.error("Error updating design:", error);
+    return NextResponse.json({ error: `Error updating design: ${stringifyError(error)}` }, { status: 500 });
   }
 }

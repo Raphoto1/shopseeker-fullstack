@@ -16,6 +16,7 @@ import {
 import { categories, shops } from "@/enums/SuperVariables";
 import { addToCart, deleteFromCart, getCart } from "./cart.service";
 import { getUserInfo } from "./auth.service";
+import { imageUploaderCloudinary, imageDeleterCloudinary, imageArrayPacker } from "@/utils/cloudinaryUtils";
 import { log } from "console";
 
 //**codigo**
@@ -126,10 +127,8 @@ export const createDesign = async (data) => {
   } else {
     photosToPush = await imageArrayPacker(secondary, pCode);
   }
-  // console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
   const photoPath = await imageUploaderCloudinary(photo, pCode);
-  // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   // se grega owner especial
   const userInfo = await getUserInfo(uId);
@@ -138,7 +137,6 @@ export const createDesign = async (data) => {
   }
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
-  // const result = dataToPush;
   return result;
 };
 
@@ -157,7 +155,7 @@ export const updateDesign = async (data) => {
   let newSimgs = [];
   let newSimgsExist = false;
   let shops = [...chkDesign.shops];
-  
+
   const packingCycle = async (data) => {
     for (let item in data) {
       let field = item;
@@ -196,17 +194,16 @@ export const updateDesign = async (data) => {
         let shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
         //agregar nueva tienda
         if (shopToUpdateIndex === -1) {
-          let shopToPush = shopFilter(data, shopName, item);             
+          let shopToPush = shopFilter(data, shopName, item);
           shops.push(shopToPush);
         }
         shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
-        updatePack.push(shops);       
+        updatePack.push(shops);
         shops[shopToUpdateIndex].shopUrl = data[item];
         //actualizar tienda
       } else if (field === "id") {
         continue;
       } else {
- 
         updatePack.push({ [item]: data[item] });
       }
     }
@@ -230,8 +227,8 @@ export const updateDesign = async (data) => {
   };
 
   const pack = await packingCycle(dataToUpdate);
-  console.log('llego a la funcion');
-  
+  console.log("llego a la funcion");
+
   shopsExist && updatePack.push({ shops: shops });
   if (deletedSimgs || newSimgsExist) {
     await secondaryImagesOrganizer(secondaryImagesOld, newSimgs);
@@ -294,6 +291,7 @@ export const likeDesign = async (id, value, userCart) => {
   }
 };
 
+//uploader local
 const imageFileUploaderDesign = async (file, pCode) => {
   if (file.size === 0) {
     throw new Error("please add a photo");
@@ -310,55 +308,6 @@ const imageFileUploaderDesign = async (file, pCode) => {
     });
     return fileName;
   }
-};
-
-const imageUploaderCloudinary = async (file, pCode) => {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const cloudUpload = await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({}, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      })
-      .end(buffer);
-  });
-  return cloudUpload.secure_url;
-};
-
-const imageDeleterCloudinary = async (photoUrl) => {
-  const preFilter = photoUrl.lastIndexOf("/") + 1;
-  const fileName = photoUrl.slice(preFilter);
-  const fileNamefilter = fileName.lastIndexOf(".");
-  const fileNameCLear = fileName.slice(0, fileNamefilter);
-  const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
-    console.log(result);
-  });
-  return photoToDelete;
-};
-
-const objectCreator = (index, string) => {
-  let imageObj = {};
-  imageObj["SIUrl"] = `${string}`;
-  return imageObj;
-};
-
-const imageArrayPacker = async (imgs, pCode) => {
-  let secondaryPhotos = [];
-  const packingPhotos = async (img, index) => {
-    let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
-    let objReady = await objectCreator(index, urlSecondaryImg);
-    await secondaryPhotos.push(objReady);
-  };
-  //organizar la data del form, se crea promesa por delay de la db
-  const test = await Promise.all(
-    imgs.map(async (img, index) => {
-      await packingPhotos(img, index);
-    })
-  );
-  return secondaryPhotos;
 };
 
 const shopFilter = (arr, shopName, shopUrl) => {
