@@ -107,8 +107,6 @@ export const getDesignById = async (id) => {
 };
 
 export const createDesign = async (data) => {
-  console.log("llego a la funcion createDesign");
-
   //manipular imagen para guardar en fs y crear el path
   const photo = data.get("photo");
   const secondary = data.getAll("secondaryImages");
@@ -127,16 +125,10 @@ export const createDesign = async (data) => {
   if (!secondary) {
     photosToPush = [];
   } else {
-    console.log("se cargan las imagenes secundarias");
     photosToPush = await imageArrayPacker(secondary, pCode);
   }
-  // console.log(photosToPush);
-  console.log("entro a carga de foto primaria");
   dataToPush["secondaryImages"] = photosToPush;
   const photoPath = await imageUploaderCloudinary(photo, pCode);
-  console.log("resultado carga a cloudinary: ", photoPath);
-
-  // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   // se grega owner especial
   const userInfo = await getUserInfo(uId);
@@ -145,7 +137,6 @@ export const createDesign = async (data) => {
   }
   //   se envia a DB
   const result = await mongoDbCreateNewDesign(dataToPush);
-  // const result = dataToPush;
   return result;
 };
 

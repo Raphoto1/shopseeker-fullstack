@@ -9,20 +9,18 @@ cloudinary.config({
 
 export const imageUploaderCloudinary = async (file, pCode) => {
   try {
-    console.log("Iniciando subida a Cloudinary...");
-
     // Validar archivo
     if (!file || file.size === 0) {
-      throw new Error("El archivo está vacío o no es válido");
+      throw new Error("empty or Invalid file");
     }
 
     if (!file.type.startsWith("image/")) {
-      throw new Error("El archivo no es una imagen válida");
+      throw new Error("Not a Valid Image");
     }
 
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
     if (file.size > MAX_FILE_SIZE) {
-      throw new Error("El archivo excede el tamaño máximo permitido (10 MB)");
+      throw new Error("Max file size allowed is (10 MB)");
     }
 
     // Convertir archivo a base64
@@ -34,12 +32,10 @@ export const imageUploaderCloudinary = async (file, pCode) => {
     const uploadResult = await cloudinary.uploader.upload(fileUri, {
       invalidate: true,
     });
-
-    console.log("Subida exitosa:", uploadResult);
     return uploadResult.secure_url;
   } catch (error) {
     console.error("Error en imageUploaderCloudinary:", error);
-    throw new Error("Error al subir la imagen a Cloudinary");
+    throw new Error("Error uploading image to Cloudinary");
   }
 };
 
