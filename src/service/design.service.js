@@ -337,24 +337,25 @@ const imageUploaderCloudinary = async (file, pCode) => {
 
     // Convertir archivo a buffer
     const bytes = await file.arrayBuffer();
+    console.log("bytes: ", bytes);
+
     const buffer = Buffer.from(bytes);
+    console.log("buffer: ", buffer);
 
     console.log("Subiendo archivo a Cloudinary...");
     const cloudUpload = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "ssfs", public_id: `${pCode}-${Date.now()}` },
-        (err, result) => {
-          if (err) {
-            console.error("Error en Cloudinary:", err);
-            reject(err);
-          } else {
-            console.log("Subida exitosa:", result);
-            resolve(result);
-          }
+      const uploadStream = cloudinary.uploader.upload_stream({}, (err, result) => {
+        if (err) {
+          console.error("Error en Cloudinary:", err);
+          reject(err);
+        } else {
+          console.log("Subida exitosa:", result);
+          resolve(result);
         }
-      );
+      });
       uploadStream.end(buffer);
     });
+    console.log("cloudUpload: ", cloudUpload);
 
     return cloudUpload.secure_url;
   } catch (error) {
