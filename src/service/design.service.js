@@ -106,8 +106,8 @@ export const getDesignById = async (id) => {
 };
 
 export const createDesign = async (data) => {
-  console.log('llego a la funcion createDesign');
-  
+  console.log("llego a la funcion createDesign");
+
   //manipular imagen para guardar en fs y crear el path
   const photo = data.get("photo");
   const secondary = data.getAll("secondaryImages");
@@ -126,13 +126,15 @@ export const createDesign = async (data) => {
   if (!secondary) {
     photosToPush = [];
   } else {
+    console.log("se cargan las imagenes secundarias");
     photosToPush = await imageArrayPacker(secondary, pCode);
   }
   // console.log(photosToPush);
+  console.log("entro a carga de foto primaria");
   dataToPush["secondaryImages"] = photosToPush;
   const photoPath = await imageUploaderCloudinary(photo, pCode);
-  console.log('resultado carga a cloudinary: ',photoPath);
-  
+  console.log("resultado carga a cloudinary: ", photoPath);
+
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   // se grega owner especial
@@ -161,7 +163,7 @@ export const updateDesign = async (data) => {
   let newSimgs = [];
   let newSimgsExist = false;
   let shops = [...chkDesign.shops];
-  
+
   const packingCycle = async (data) => {
     for (let item in data) {
       let field = item;
@@ -200,17 +202,16 @@ export const updateDesign = async (data) => {
         let shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
         //agregar nueva tienda
         if (shopToUpdateIndex === -1) {
-          let shopToPush = shopFilter(data, shopName, item);             
+          let shopToPush = shopFilter(data, shopName, item);
           shops.push(shopToPush);
         }
         shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
-        updatePack.push(shops);       
+        updatePack.push(shops);
         shops[shopToUpdateIndex].shopUrl = data[item];
         //actualizar tienda
       } else if (field === "id") {
         continue;
       } else {
- 
         updatePack.push({ [item]: data[item] });
       }
     }
@@ -234,8 +235,8 @@ export const updateDesign = async (data) => {
   };
 
   const pack = await packingCycle(dataToUpdate);
-  console.log('llego a la funcion');
-  
+  console.log("llego a la funcion");
+
   shopsExist && updatePack.push({ shops: shops });
   if (deletedSimgs || newSimgsExist) {
     await secondaryImagesOrganizer(secondaryImagesOld, newSimgs);
@@ -317,19 +318,32 @@ const imageFileUploaderDesign = async (file, pCode) => {
 };
 
 const imageUploaderCloudinary = async (file, pCode) => {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const cloudUpload = await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({}, (err, result) => {
-        if (err) {
-          reject(err);
+  try {
+    console.log("Iniciando subida a Cloudinary...");
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const cloudUpload = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "ssfs", public_id: `${pCode}-${Date.now()}` },
+        (err, result) => {
+          if (err) {
+            console.error("Error en Cloudinary:", err);
+            reject(err);
+          } else {
+            console.log("Subida exitosa:", result);
+            resolve(result);
+          }
         }
-        resolve(result);
-      })
-      .end(buffer);
-  });
-  return cloudUpload.secure_url;
+      );
+      uploadStream.end(buffer);
+    });
+
+    return cloudUpload.secure_url;
+  } catch (error) {
+    console.error("Error en imageUploaderCloudinary:", error);
+    throw new Error("Error al subir la imagen a Cloudinary");
+  }
 };
 
 const imageDeleterCloudinary = async (photoUrl) => {
