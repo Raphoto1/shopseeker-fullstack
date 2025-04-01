@@ -320,9 +320,26 @@ const imageFileUploaderDesign = async (file, pCode) => {
 const imageUploaderCloudinary = async (file, pCode) => {
   try {
     console.log("Iniciando subida a Cloudinary...");
+
+    // Validar archivo
+    if (!file || file.size === 0) {
+      throw new Error("El archivo está vacío o no es válido");
+    }
+
+    if (!file.type.startsWith("image/")) {
+      throw new Error("El archivo no es una imagen válida");
+    }
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error("El archivo excede el tamaño máximo permitido (10 MB)");
+    }
+
+    // Convertir archivo a buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    console.log("Subiendo archivo a Cloudinary...");
     const cloudUpload = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "ssfs", public_id: `${pCode}-${Date.now()}` },
