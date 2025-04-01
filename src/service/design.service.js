@@ -16,6 +16,7 @@ import {
 import { categories, shops } from "@/enums/SuperVariables";
 import { addToCart, deleteFromCart, getCart } from "./cart.service";
 import { getUserInfo } from "./auth.service";
+import { imageUploaderCloudinary, imageDeleterCloudinary, imageArrayPacker } from "@/utils/cloudinaryUtils";
 import { log } from "console";
 
 //**codigo**
@@ -298,7 +299,7 @@ export const likeDesign = async (id, value, userCart) => {
     throw new Error("Design Not Found");
   }
 };
-
+//uploader local
 const imageFileUploaderDesign = async (file, pCode) => {
   if (file.size === 0) {
     throw new Error("please add a photo");
@@ -316,86 +317,86 @@ const imageFileUploaderDesign = async (file, pCode) => {
     return fileName;
   }
 };
+//uploader clodinary
+// const imageUploaderCloudinary = async (file, pCode) => {
+//   try {
+//     console.log("Iniciando subida a Cloudinary...");
 
-const imageUploaderCloudinary = async (file, pCode) => {
-  try {
-    console.log("Iniciando subida a Cloudinary...");
+//     // Validar archivo
+//     if (!file || file.size === 0) {
+//       throw new Error("El archivo está vacío o no es válido");
+//     }
 
-    // Validar archivo
-    if (!file || file.size === 0) {
-      throw new Error("El archivo está vacío o no es válido");
-    }
+//     if (!file.type.startsWith("image/")) {
+//       throw new Error("El archivo no es una imagen válida");
+//     }
 
-    if (!file.type.startsWith("image/")) {
-      throw new Error("El archivo no es una imagen válida");
-    }
+//     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+//     if (file.size > MAX_FILE_SIZE) {
+//       throw new Error("El archivo excede el tamaño máximo permitido (10 MB)");
+//     }
 
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-    if (file.size > MAX_FILE_SIZE) {
-      throw new Error("El archivo excede el tamaño máximo permitido (10 MB)");
-    }
+//     // Convertir archivo a buffer
+//     const bytes = await file.arrayBuffer();
+//     console.log("bytes: ", bytes);
 
-    // Convertir archivo a buffer
-    const bytes = await file.arrayBuffer();
-    console.log("bytes: ", bytes);
+//     const buffer = Buffer.from(bytes);
+//     console.log("buffer: ", buffer);
 
-    const buffer = Buffer.from(bytes);
-    console.log("buffer: ", buffer);
+//     console.log("Subiendo archivo a Cloudinary...");
+//     const cloudUpload = await new Promise((resolve, reject) => {
+//       const uploadStream = cloudinary.uploader.upload_stream({}, (err, result) => {
+//         if (err) {
+//           console.error("Error en Cloudinary:", err);
+//           reject(err);
+//         } else {
+//           console.log("Subida exitosa:", result);
+//           resolve(result);
+//         }
+//       });
+//       uploadStream.end(buffer);
+//     });
+//     console.log("cloudUpload: ", cloudUpload);
 
-    console.log("Subiendo archivo a Cloudinary...");
-    const cloudUpload = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream({}, (err, result) => {
-        if (err) {
-          console.error("Error en Cloudinary:", err);
-          reject(err);
-        } else {
-          console.log("Subida exitosa:", result);
-          resolve(result);
-        }
-      });
-      uploadStream.end(buffer);
-    });
-    console.log("cloudUpload: ", cloudUpload);
+//     return cloudUpload.secure_url;
+//   } catch (error) {
+//     console.error("Error en imageUploaderCloudinary:", error);
+//     throw new Error("Error al subir la imagen a Cloudinary");
+//   }
+// };
 
-    return cloudUpload.secure_url;
-  } catch (error) {
-    console.error("Error en imageUploaderCloudinary:", error);
-    throw new Error("Error al subir la imagen a Cloudinary");
-  }
-};
+// const imageDeleterCloudinary = async (photoUrl) => {
+//   const preFilter = photoUrl.lastIndexOf("/") + 1;
+//   const fileName = photoUrl.slice(preFilter);
+//   const fileNamefilter = fileName.lastIndexOf(".");
+//   const fileNameCLear = fileName.slice(0, fileNamefilter);
+//   const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
+//     console.log(result);
+//   });
+//   return photoToDelete;
+// };
 
-const imageDeleterCloudinary = async (photoUrl) => {
-  const preFilter = photoUrl.lastIndexOf("/") + 1;
-  const fileName = photoUrl.slice(preFilter);
-  const fileNamefilter = fileName.lastIndexOf(".");
-  const fileNameCLear = fileName.slice(0, fileNamefilter);
-  const photoToDelete = await cloudinary.uploader.destroy(`${fileNameCLear}`, (result) => {
-    console.log(result);
-  });
-  return photoToDelete;
-};
+// const objectCreator = (index, string) => {
+//   let imageObj = {};
+//   imageObj["SIUrl"] = `${string}`;
+//   return imageObj;
+// };
 
-const objectCreator = (index, string) => {
-  let imageObj = {};
-  imageObj["SIUrl"] = `${string}`;
-  return imageObj;
-};
-
-const imageArrayPacker = async (imgs, pCode) => {
-  let secondaryPhotos = [];
-  const packingPhotos = async (img, index) => {
-    let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
-    let objReady = await objectCreator(index, urlSecondaryImg);
-    await secondaryPhotos.push(objReady);
-  };
-  //organizar la data del form, se crea promesa por delay de la db
-  const test = await Promise.all(
-    imgs.map(async (img, index) => {
-      await packingPhotos(img, index);
-    })
-  );
-  return secondaryPhotos;
-};
+// const imageArrayPacker = async (imgs, pCode) => {
+//   let secondaryPhotos = [];
+//   const packingPhotos = async (img, index) => {
+//     let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
+//     let objReady = await objectCreator(index, urlSecondaryImg);
+//     await secondaryPhotos.push(objReady);
+//   };
+//   //organizar la data del form, se crea promesa por delay de la db
+//   const test = await Promise.all(
+//     imgs.map(async (img, index) => {
+//       await packingPhotos(img, index);
+//     })
+//   );
+//   return secondaryPhotos;
+// };
 
 const shopFilter = (arr, shopName, shopUrl) => {
   let shop = {};
