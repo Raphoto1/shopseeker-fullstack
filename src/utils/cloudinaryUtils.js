@@ -25,29 +25,18 @@ export const imageUploaderCloudinary = async (file, pCode) => {
       throw new Error("El archivo excede el tamaño máximo permitido (10 MB)");
     }
 
-    // Convertir archivo a buffer
-    const bytes = await file.arrayBuffer();
-    console.log("bytes: ", bytes);
+    // Convertir archivo a base64
+    const fileBuffer = await file.arrayBuffer();
+    const base64String = Buffer.from(fileBuffer).toString("base64");
+    const fileUri = `data:${file.type};base64,${base64String}`;
 
-    const buffer = Buffer.from(bytes);
-    console.log("buffer: ", buffer);
-
-    console.log("Subiendo archivo a Cloudinary...");
-    const cloudUpload = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream({}, (err, result) => {
-        if (err) {
-          console.error("Error en Cloudinary:", err);
-          reject(err);
-        } else {
-          console.log("Subida exitosa:", result);
-          resolve(result);
-        }
-      });
-      uploadStream.end(buffer);
+    // Subir a Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(fileUri, {
+      invalidate: true,
     });
-    console.log("cloudUpload: ", cloudUpload);
 
-    return cloudUpload.secure_url;
+    console.log("Subida exitosa:", uploadResult);
+    return uploadResult.secure_url;
   } catch (error) {
     console.error("Error en imageUploaderCloudinary:", error);
     throw new Error("Error al subir la imagen a Cloudinary");
