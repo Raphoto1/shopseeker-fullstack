@@ -57,7 +57,7 @@ export default function DesignUploader(props) {
         body: formData,
       });
       const data = await response.json();
-console.log("Response data:", data);
+      console.log("Response data:", data);
 
       if (data.error) {
         toast.error(`Error loading design: ${data.error}`);
@@ -68,74 +68,81 @@ console.log("Response data:", data);
     } catch (error) {
       console.error("Error uploading design:", error);
       toast.error("An unexpected error occurred. Please try again.");
-    }finally {
+    } finally {
       setIsSubmitting(false); // Ocultar loader
     }
   };
 
   return (
     <>
-      <h2 className="text-center text-2xl">Uploader</h2>
+      <h2 className='text-center text-2xl'>Uploader</h2>
       <form ref={formRef} onSubmit={handleSubmit}>
-        <div className="grid grid-flow-row xl:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-2 pt-2 px-1 pb-2">
+        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-2 pt-2 px-1 pb-2'>
           {/* Información del diseño */}
-          <div className="flex justify-center">
-            <div className="textData flex-grid px-1">
-              <div className="justify-center">
-                <label htmlFor="pCode" className="px-1">Personal Code</label>
+          <div className='flex justify-center'>
+            <div className='textData flex-grid px-1'>
+              <div className='justify-center'>
+                <label htmlFor='pCode' className='px-1'>
+                  Personal Code
+                </label>
                 <input
                   defaultValue={props.pCode || ""}
-                  type="text"
-                  id="pCode"
-                  name="pCode"
-                  className="input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2"
+                  type='text'
+                  id='pCode'
+                  name='pCode'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
                 />
               </div>
-              <div className="justify-center">
-                <label htmlFor="title" className="px-1">Title</label>
+              <div className='justify-center'>
+                <label htmlFor='title' className='px-1'>
+                  Title
+                </label>
                 <input
                   defaultValue={props.title || ""}
-                  type="text"
-                  id="title"
-                  name="title"
-                  className="input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2"
+                  type='text'
+                  id='title'
+                  name='title'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
                 />
               </div>
-              <div className="py-2">
+              <div className='py-2'>
                 <textarea
                   defaultValue={props.description || ""}
-                  id="description"
-                  name="description"
-                  className="textarea textarea-bordered h-24 w-full max-w-xs py-2"
-                  placeholder="Description (Max. 300 characters)"
+                  id='description'
+                  name='description'
+                  className='textarea textarea-bordered h-24 w-full max-w-xs py-2'
+                  placeholder='Description (Max. 300 characters)'
                 />
               </div>
               <div>
-                <label htmlFor="blogLink" className="px-1">Blog/post/process Link</label>
+                <label htmlFor='blogLink' className='px-1'>
+                  Blog/post/process Link
+                </label>
                 <input
                   defaultValue={props.blogLink || ""}
-                  type="text"
-                  id="blogLink"
-                  name="blogLink"
-                  className="input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2"
+                  type='text'
+                  id='blogLink'
+                  name='blogLink'
+                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
                 />
               </div>
               <div>
-                <label htmlFor="category" className="px-2">Technique</label>
-                <select
-                  name="category"
-                  id="category"
-                  className="select select-sm select-bordered w-full max-w-xs"
-                  defaultValue={props.category || ""}
-                >
+                <label htmlFor='category' className='px-2'>
+                  Technique
+                </label>
+                <select name='category' id='category' className='select select-sm select-bordered w-full max-w-xs' defaultValue={props.category || ""}>
                   {categories.map((cat, index) => (
-                    <option value={cat} key={index}>{cat}</option>
+                    <option value={cat} key={index}>
+                      {cat}
+                    </option>
                   ))}
                 </select>
               </div>
-              <div className="shopsPack">
-                <label htmlFor="shops" className="bold">URL to Shops</label>
-                <div className="max-w-xs">
+              <div className='shopsPack'>
+                <label htmlFor='shops' className='bold'>
+                  URL to Shops
+                </label>
+                <div className='max-w-xs'>
                   {shops.map((shop, index) => (
                     <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
                   ))}
@@ -145,39 +152,28 @@ console.log("Response data:", data);
           </div>
 
           {/* Imagen principal */}
-          <div className="flex justify-center align-middle items-center">
-            <div className="mainImageDrop justify-center">
-              <h2 className="text-center">Main Image</h2>
+          <div className='flex justify-center align-middle items-center'>
+            <div className='mainImageDrop justify-center'>
+              <h2 className='text-center'>Main Image</h2>
               <DnDSpaceSingle files={files} setFiles={setFiles} />
             </div>
           </div>
 
           {/* Imágenes secundarias */}
-          <div className="flex justify-center align-middle items-center">
-            <div className="secondaryImageDrop justify-center">
-              <h2 className="text-center">Secondary Images</h2>
+          <div className='flex justify-center align-middle items-center'>
+            <div className='secondaryImageDrop justify-center'>
+              <h2 className='text-center'>Secondary Images</h2>
               <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
               {oldSecondaryImages.length > 0 && (
-                <div className="oldSecondary block pt-5">
+                <div className='oldSecondary block pt-5'>
                   <h2>Actual Secondary Images</h2>
-                  <div className="grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pt-2 px-1">
+                  <div className='grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pt-2 px-1'>
                     {oldSecondaryImages.map((image, index) => (
-                      <div key={index} className="relative">
-                        <button
-                          className="EliminateImage absolute btn btn-xs btn-error"
-                          id={image.SIUrl}
-                          onClick={handleOldImages}
-                        >
+                      <div key={index} className='relative'>
+                        <button className='EliminateImage absolute btn btn-xs btn-error' id={image.SIUrl} onClick={handleOldImages}>
                           X
                         </button>
-                        <Image
-                          src={image.SIUrl}
-                          width={100}
-                          height={100}
-                          alt={props.title || "Secondary Image"}
-                          className="rounded"
-                          loading="lazy"
-                        />
+                        <Image src={image.SIUrl} width={100} height={100} alt={props.title || "Secondary Image"} className='rounded' loading='lazy' />
                       </div>
                     ))}
                   </div>
@@ -187,12 +183,8 @@ console.log("Response data:", data);
           </div>
 
           {/* Botón de envío */}
-          <div className="flex justify-center">
-            {isSubmitting ? (
-              <button className="btn btn-disabled loading">Submitting...</button>
-            ) : (
-              <input type="submit" className="btn" value="Send" />
-            )}
+          <div className='flex justify-center'>
+            {isSubmitting ? <button className='btn btn-disabled loading'>Submitting...</button> : <input type='submit' className='btn' value='Send' />}
           </div>
         </div>
       </form>

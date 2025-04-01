@@ -106,6 +106,8 @@ export const getDesignById = async (id) => {
 };
 
 export const createDesign = async (data) => {
+  console.log('llego a la funcion createDesign');
+  
   //manipular imagen para guardar en fs y crear el path
   const photo = data.get("photo");
   const secondary = data.getAll("secondaryImages");
@@ -129,6 +131,8 @@ export const createDesign = async (data) => {
   // console.log(photosToPush);
   dataToPush["secondaryImages"] = photosToPush;
   const photoPath = await imageUploaderCloudinary(photo, pCode);
+  console.log('resultado carga a cloudinary: ',photoPath);
+  
   // const photoPath = "url muy larga de cloud";
   dataToPush["photo"] = photoPath;
   // se grega owner especial

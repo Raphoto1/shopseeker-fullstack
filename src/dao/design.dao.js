@@ -36,6 +36,8 @@ export const mongoDbGetDesignsByOwner = async (uId) => {
 export const mongoDbCreateNewDesign = async (data) => {
   try {
     await dbConnect();
+    console.log('coneccion a mongoDb establecida desde dao en createDesign');
+    
     const newDesign = await designModel.create(data);
     return newDesign;
   } catch (error) {

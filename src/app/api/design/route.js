@@ -18,17 +18,7 @@ export async function GET(req) {
     const filterShop = url.searchParams.get("filterShop");
     const userId = url.searchParams.get("userId");
 
-    const designs = await getAllDesigns(
-      limit,
-      page,
-      sortField,
-      sortQ,
-      queryKey,
-      searchParam,
-      filterCat,
-      filterShop,
-      userId
-    );
+    const designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop, userId);
 
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {
@@ -45,10 +35,7 @@ export async function POST(req) {
 
     // Validar datos requeridos
     if (!capturedForm.has("owner") || !capturedForm.has("photo")) {
-      return NextResponse.json(
-        { error: "Missing required fields: 'owner' or 'photo'" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required fields: 'owner' or 'photo'" }, { status: 400 });
     }
 
     // Enviar datos al servicio
@@ -70,10 +57,7 @@ export async function PUT(req) {
 
     // Validar datos requeridos
     if (!capturedForm.has("id")) {
-      return NextResponse.json(
-        { error: "Missing required field: 'id'" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required field: 'id'" }, { status: 400 });
     }
 
     // Enviar datos al servicio
