@@ -43,7 +43,7 @@ export default function CardHero(props) {
             <div className='flex justify-around'>
               <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />
             </div>
-            <h1 className='text-5xl font-bold'>{design.title}</h1>
+            <h1 className='text-5xl font-bold capitalize'>{design.title}</h1>
             <p className='py-6 text-2xl'>{design.description}</p>
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
               {design.shops.map((shop) => {
