@@ -26,7 +26,7 @@ export default function CardHero(props) {
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content flex-col lg:flex-row-reverse'>
           <div className=' rounded-lg shadow-2xl max-h-screen'>
-            <Carousel autoPlay dynamicHeight={false} className=' rounded-lg shadow-2xl max-h-screen'>
+            <Carousel autoPlay dynamicHeight={false} showThumbs={false} className=' rounded-lg shadow-2xl max-h-screen'>
               <div key={1}>
                 <Image src={design.photo} width={500} height={500} alt={design.title} className='max-w-sm rounded-lg shadow-2xl' loading='lazy' />
               </div>
@@ -48,7 +48,7 @@ export default function CardHero(props) {
             <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
               {design.shops.map((shop) => {
                 return shop.shopUrl === "null" ? null : (
-                  <div className='flex justify-center mx-auto content-center'>
+                  <div className='flex justify-center mx-auto content-center' key={shop.shopName}>
                     <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
                       <Image
                         width={"50"}
