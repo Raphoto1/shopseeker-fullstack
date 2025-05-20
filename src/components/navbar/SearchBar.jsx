@@ -24,7 +24,7 @@ export default function SearchBar({ onSearchTerm, onButtonClick, onSearchFilter,
         <div className='join join-horizontal'>
           <input type='text' onChange={handleSearch} onKeyDown={handleEnter} placeholder='Search…' className='input-sm input-bordered join-item w-40' />
           <select className='select-sm input-bordered join-item' onChange={handleFilter} onSelect={onSearchFilter} id='filter' name='filter'>
-            <option selected value='title'>
+            <option value='title'>
               title
             </option>
             <option value='description'>description</option>

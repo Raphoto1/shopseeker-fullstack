@@ -21,7 +21,7 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
     <>
       <div className='join join-vertical md:join-horizontal flex justify-center align-middle'>
         <select name='category' id='categoryFilter' className='select-sm justify-center join-item' onChange={handleCategoryFilter}>
-          <option disabled selected>
+          <option defaultValue={'Filter by Category'}>
             Filter by Category
           </option>
           {categories.map((cat, index) =>
@@ -37,9 +37,9 @@ export default function Filters({ setFilterCategoryComp, setFilterShopComp, filt
           )}
         </select>
         <select name='shops' id='shopsFilter' className='select-sm join-item' onChange={handleShopFilter}>
-          <option disabled selected>
+          <option value={'Filter by Shop'}>
             Filter by Shop
-          </option>
+            </option>
           {shops.map((shop, index) =>
             filterShop == shop ? (
               <option selected value={shop} key={index}>
