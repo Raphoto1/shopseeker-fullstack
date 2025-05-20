@@ -14,7 +14,7 @@ import { CartProvider } from "@/context/cartContext";
 
 // Cargar componentes de manera diferida
 const Footer = dynamic(() => import("@/components/footer/Footer"), {
-  ssr: false,
+  ssr: true,
   loading: () => <p>Loading...</p>,
 });
 
@@ -34,6 +34,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9669110661270895"
+     crossorigin="anonymous"></script>
       <body className={inter.className}>
         <GoogleAnalytics />
         <Providers>

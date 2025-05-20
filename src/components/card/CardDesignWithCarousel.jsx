@@ -36,7 +36,7 @@ export default function CardDesignWithCarousel(props) {
           <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
             {props.shops.map((shop) => {
               return shop.shopUrl === "null" ? null : (
-                <div className='flex justify-center mx-auto content-center'>
+                <div className='flex justify-center mx-auto content-center' key={shop.shopName}>
                   <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
                     <Image
                       width={"50"}

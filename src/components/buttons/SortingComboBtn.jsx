@@ -17,7 +17,7 @@ export default function SortingComboBtn({ setLimitPerPageComp, setSortOptionComp
       <div className='sort flex justify-center md:justify-end w-30 join pt-2'>
         <div id='limitselect' className='join'>
           <select name='limit' id='' className='select-sm join-item' onChange={handleLimit}>
-            <option disabled selected>
+            <option>
               {limitValue ? `${limitValue}` : "Designs per Page"}
             </option>
             <option value='20'>20</option>
@@ -28,7 +28,7 @@ export default function SortingComboBtn({ setLimitPerPageComp, setSortOptionComp
         <div id='sortSelect'>
           <div id='sortOrder' className='join'>
             <select name='sortOrder' id='' className='select-sm join-item' onChange={handleSort}>
-              <option disabled selected>
+              <option>
                 Designs Order
               </option>
               <option value='1'>A-Z</option>
