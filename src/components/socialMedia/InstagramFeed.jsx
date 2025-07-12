@@ -14,7 +14,9 @@ export default function InstagramFeed() {
   }, []);
   return (
     <div className='container mx-auto p-4'>
-      <h1 className='text-3xl font-bold mb-4 text-center'>Follow me on Instagram</h1>
+      <div className='text-center mb-4'>
+        <a href='https://www.instagram.com/creativerafaco/' target='_blank' className='text-3xl font-bold mb-4 text-center'>Follow me on Instagram</a>
+      </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4'>
         {posts?.slice(0, 8).map((post) => (
           <div key={post.id} className='card shadow-lg'>
