@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Link from 'next/link'
 import { FaCircleArrowRight } from 'react-icons/fa6'
 
-export default function FlowShops() {
+function FlowShops() {
  return (
     <div>
         <div className='flex justify-center p-5'>
-        <Link href={"/allshops"}>
+        <Link href={"/allshops"} prefetch={true}>
           <h1 className='btn btn-info h-auto justify-center text-center text-2xl'>Check All My Designs</h1>
         </Link>
       </div>
         <div className='md:5xl:flex-col sm:flex w-full sm:h-20 pt-5'>
-          <Link href={"/allshops"} className='grid flex-grow card bg-base-300 rounded-box place-items-center px-5'>
+          <Link href={"/allshops"} className='grid flex-grow card bg-base-300 rounded-box place-items-center px-5' prefetch={true}>
             <div>Find your Favorite design</div>
           </Link>
           <div className='divider sm:divider-vertical md:divider-horizontal'>
@@ -26,3 +26,5 @@ export default function FlowShops() {
       </div>
   )
 }
+
+export default memo(FlowShops);
