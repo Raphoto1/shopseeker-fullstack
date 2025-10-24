@@ -1,108 +1,123 @@
 "use client";
 //imports de app
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import UseSWR from "swr";
 //imports propios
 import { LikesCounter } from "../extras/LikesCounter";
 import { useCart } from "@/context/cartContext";
 
+// Función simple para mostrar notificaciones
+const showNotification = (message, type = 'info') => {
+  console.log(`${type.toUpperCase()}: ${message}`);
+  // Opcionalmente, podrías usar alert para debugging
+  // alert(`${type.toUpperCase()}: ${message}`);
+};
+
 export function LikeButton({ desId, likesRecieve }) {
   //info de session
-  const { data: session, status, update } = useSession();
-  const { getCartInfo, cartContent, cart, cartUpdate, setCartUpdate } = useCart();
+  const { data: session, status } = useSession();
+  const { getCartInfo, cart, cartUpdate, setCartUpdate } = useCart();
   const userId = session?.user._id;
   const userCart = session?.cart;
 
-  //fetch para agregar
-  let basePath = `/api/design`;
-  //revisar actualizacion de dislike!!!!!!!!!!
+  //estados
   const [liked, setLiked] = useState(false);
   const [availableBtn, setAvailableBtn] = useState(false);
-  const [likesCount, setLikesCount] = useState(likesRecieve);
+  const [likesCount, setLikesCount] = useState(likesRecieve || 0);
 
-  let formData = new FormData();
-
-  const handleUserLikes = async (cartId) => {
-    getCartInfo(cartId);
-  };
-
-  const chkPrevLikes = (cart, desIn) => {
-    if (cart !== undefined) {
-      const chk = cart?.findIndex((des) => des.design._id.toString() === desIn);
-      if (chk !== -1) {
-        setLiked(true);
-      } else {
-        setLiked(false);
-      }
+  // Memoizar la función para evitar re-creaciones innecesarias
+  const handleUserLikes = useCallback(async (cartId) => {
+    if (cartId) {
+      getCartInfo(cartId);
     }
-  };
+  }, [getCartInfo]);
 
-  if (status === "authenticated") {
-    handleUserLikes(userCart);
-  }
-
-  const chkSession = async () => {
-    if (status === "authenticated") {
-      formData.append("userId", userId);
-    } else {
-      formData.append("userId", null);
+  const chkPrevLikes = useCallback((cart, desIn) => {
+    if (cart !== undefined && Array.isArray(cart)) {
+      const chk = cart.findIndex((des) => des.design._id.toString() === desIn);
+      setLiked(chk !== -1);
     }
-  };
+  }, []);
 
+  // Effect para manejar la autenticación y cargar el carrito
+  useEffect(() => {
+    if (status === "authenticated" && userCart) {
+      handleUserLikes(userCart);
+    }
+  }, [status, userCart, handleUserLikes]);
+
+  // Effect para verificar likes previos
   useEffect(() => {
     chkPrevLikes(cart, desId);
-  }, [cartContent, liked, cartUpdate]);
+  }, [cart, desId, chkPrevLikes, cartUpdate]);
 
   const handleLiked = async () => {
-    //agregar info de user
-    chkSession();
+    if (availableBtn) return; // Prevenir múltiples clicks
+    
+    const formData = new FormData();
+    
+    // Agregar info de usuario
+    if (status === "authenticated" && userId) {
+      formData.append("userId", userId);
+    } else {
+      formData.append("userId", "null");
+    }
+
     setLiked(!liked);
-    //seguridad para no hacer tantas llamadas
     setAvailableBtn(true);
+    
+    // Timeout para prevenir spam
     setTimeout(() => {
       setAvailableBtn(false);
-    }, "800");
+    }, 800);
 
-    if (liked == false) {
-      setLikesCount(likesCount + 1);
-      basePath = `/api/design/${desId}?value=1`;
-      let response = await fetch(basePath, {
-        method: "PUT",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 200) {
-            toast("liked");
-            setCartUpdate(!cartUpdate);
-          }
-        });
+    const newLikedState = !liked;
+    const value = newLikedState ? 1 : -1;
+    const basePath = `/api/design/${desId}?value=${value}`;
+
+    if (newLikedState) {
+      setLikesCount(prev => prev + 1);
     } else {
-      setLikesCount(likesCount - 1);
-      basePath = `/api/design/${desId}?value=-1`;
-      let response = await fetch(basePath, {
+      setLikesCount(prev => prev - 1);
+    }
+
+    try {
+      const response = await fetch(basePath, {
         method: "PUT",
         body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 200) {
-            toast("disliked");
-            //setTimeout(()=>setCartUpdate(!cartUpdate),"800")
-            setCartUpdate(!cartUpdate);
-          }
-        });
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 200) {
+        showNotification(newLikedState ? "Liked!" : "Disliked!", 'success');
+        setCartUpdate(!cartUpdate);
+      } else {
+        // Revertir cambios si hay error
+        setLiked(liked);
+        setLikesCount(likesRecieve || 0);
+        showNotification("Error updating like status", 'error');
+      }
+    } catch (error) {
+      console.error("Error updating like:", error);
+      // Revertir cambios si hay error
+      setLiked(liked);
+      setLikesCount(likesRecieve || 0);
+      showNotification("Network error", 'error');
     }
   };
 
   return (
     <>
-      <button disabled={availableBtn} onClick={handleLiked}>
+      <button 
+        disabled={availableBtn} 
+        onClick={handleLiked}
+        className="btn btn-ghost text-2xl"
+        aria-label={liked ? "Unlike design" : "Like design"}
+      >
         {liked ? `♥` : `♡`}
       </button>
-      {likesCount > 0 && <LikesCounter likeProp={likesCount} liked={liked} />}
+      {likesCount > 0 && <LikesCounter likeProp={likesCount} />}
     </>
   );
 }

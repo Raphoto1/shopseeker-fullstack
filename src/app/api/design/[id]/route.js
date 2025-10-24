@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 //diseno directo
 export async function GET(req, { params }) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const design = await getDesignById(id);
     return NextResponse.json({ status: "success", payload: design });
   } catch (error) {
@@ -17,7 +17,7 @@ export async function GET(req, { params }) {
 //borrar diseno
 export async function DELETE(req, { params }) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const design = await deleteDesign(id);
     return NextResponse.json({ status: "success", payload: design });
   } catch (error) {
@@ -27,7 +27,7 @@ export async function DELETE(req, { params }) {
 //like
 export async function PUT(req, { params }) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const url = new URL(req.url);
     const value = url.searchParams.get("value");
     const capturedForm = await req.formData();

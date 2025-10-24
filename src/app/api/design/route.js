@@ -23,7 +23,7 @@ export async function GET(req) {
     return NextResponse.json({ status: "success", payload: designs });
   } catch (error) {
     console.error("Error fetching designs:", error);
-    return NextResponse.json({ message: `Error fetching designs: ${stringifyError(error)}` }, { status: 500 });
+    return NextResponse.json({ status: "error", error: `Error fetching designs: ${stringifyError(error)}` }, { status: 500 });
   }
 }
 
@@ -42,10 +42,10 @@ export async function POST(req) {
     const result = await createDesign(capturedForm);
     // console.log("Design created:", result);
 
-    return NextResponse.json({ message: "success", payload: result }, { status: 201 });
+    return NextResponse.json({ status: "success", message: "Design created successfully", payload: result }, { status: 201 });
   } catch (error) {
     console.error("Error creating design:", error);
-    return NextResponse.json({ error: `Error creating design: ${stringifyError(error)}` }, { status: 500 });
+    return NextResponse.json({ status: "error", error: `Error creating design: ${stringifyError(error)}` }, { status: 500 });
   }
 }
 
@@ -57,16 +57,16 @@ export async function PUT(req) {
 
     // Validar datos requeridos
     if (!capturedForm.has("id")) {
-      return NextResponse.json({ error: "Missing required field: 'id'" }, { status: 400 });
+      return NextResponse.json({ status: "error", error: "Missing required field: 'id'" }, { status: 400 });
     }
 
     // Enviar datos al servicio
     const result = await updateDesign(capturedForm);
     console.log("Design updated:", result);
 
-    return NextResponse.json({ message: "success", payload: result, status: 200 });
+    return NextResponse.json({ status: "success", message: "Design updated successfully", payload: result }, { status: 200 });
   } catch (error) {
     console.error("Error updating design:", error);
-    return NextResponse.json({ error: `Error updating design: ${stringifyError(error)}` }, { status: 500 });
+    return NextResponse.json({ status: "error", error: `Error updating design: ${stringifyError(error)}` }, { status: 500 });
   }
 }

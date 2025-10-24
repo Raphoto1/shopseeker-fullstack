@@ -1,12 +1,10 @@
 // Imports de app
 import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
 import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
 
 // Imports propios
 import Navbar from "@/components/navbar/Navbar";
-import { ToastContainer } from "react-toastify";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import GoogleAnalytics from "./GoogleAnalytics";
 import { Providers } from "./Providers";
@@ -45,7 +43,6 @@ export default function RootLayout({ children }) {
             <SpeedInsights />
           </CartProvider>
         </Providers>
-        <ToastContainer />
         <Footer />
       </body>
     </html>
