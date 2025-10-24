@@ -56,18 +56,35 @@ export default function DesignUploader(props) {
         credentials: "include",
         body: formData,
       });
+      
+      // Verificar si la respuesta HTTP fue exitosa
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("HTTP Error:", errorData);
+        throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
+      }
+
       const data = await response.json();
       console.log("Response data:", data);
 
-      if (data.error) {
-        toast.error(`Error loading design: ${data.error}`);
-      } else {
-        toast.success("Uploaded successfully! Reload for new upload.");
+      // Verificar si hay error en la respuesta
+      if (data.error || data.status === "error") {
+        toast.error(`Error uploading design: ${data.error}`);
+      } 
+      // Verificar respuesta exitosa
+      else if (data.status === "success") {
+        toast.success(data.message || "Design uploaded successfully!");
+        router.push("/allshops");
+      } 
+      // Respuesta inesperada
+      else {
+        console.warn("Unexpected response format:", data);
+        toast.warning("Upload completed, but response format was unexpected.");
         router.push("/allshops");
       }
     } catch (error) {
       console.error("Error uploading design:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error(`Upload failed: ${error.message}`);
     } finally {
       setIsSubmitting(false); // Ocultar loader
     }
@@ -93,7 +110,7 @@ export default function DesignUploader(props) {
                   className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
                 />
               </div>
-              <div className='justify-center'>
+              <div className='justify-center flex flex-col'>
                 <label htmlFor='title' className='px-1'>
                   Title
                 </label>
