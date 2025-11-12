@@ -1,4 +1,4 @@
-const allowed = process.env.ALLOW_ORIGIN
+const allowed = process.env.ALLOW_ORIGIN || "https://creativerafa.com,https://shops.creativerafa.com"
 /** @type {import('next').NextConfig} */
 //https://codingwithmanny.medium.com/3-ways-to-configure-cors-for-nextjs-13-app-router-api-route-handlers-427e10929818
 const nextConfig = {
@@ -8,7 +8,7 @@ const nextConfig = {
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Origin", value: allowed },
           { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
           {
             key: "Access-Control-Allow-Headers",

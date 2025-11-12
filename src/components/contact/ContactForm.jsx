@@ -2,7 +2,7 @@
 //imports de app
 import { toast } from "react-toastify";
 //imports propios
-import { contactPath } from "@/enums/SuperVariables";
+import { getContactPath } from "@/enums/SuperVariables";
 
 export default function ContactForm() {
   const modalController = () => {
@@ -13,7 +13,7 @@ export default function ContactForm() {
     e.preventDefault();
     let form = document.getElementById("contactForm");
     let formData = new FormData(form);
-    let response = await fetch(contactPath, {
+    let response = await fetch(getContactPath(), {
       method: 'post',
       credentials: 'include',
       body:formData
