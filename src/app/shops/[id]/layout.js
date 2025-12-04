@@ -1,7 +1,7 @@
 import Page from "./page";
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
+  const { id } = await params;
   let basePath = `${process.env.URL}/api/design/${id}`;
   const data = await fetch(basePath).then((res) => res.json());
 
