@@ -9,37 +9,34 @@ const InfoMail = process.env.INFO_MAIL
 
 //transporter
 const transporter = nodemailer.createTransport({
-    service: "hostinger",
-    host:mailHost,
-    port: mailPort,
+    host: mailHost,
+    port: parseInt(mailPort) || 465,
+    secure: true,
     auth: {
         user: contactMail,
         pass: process.env.CONTACT_MAIL_PASSWORD
     },
-    secure: true,
     tls: {
-        ciphers:"SSLv3"
-    },
-    requireTLS: true,
-    debug: true,
-    connectionTimeout:10000,
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
+    }
 });
 
 //funciones de envio
 
 export async function sendContactMail(name,email,messageToSend) {
     const info = await transporter.sendMail({
+        from: contactMail,
         to: InfoMail,
         subject: `${name} is contacting`,
         text: `${name} is contacting with the email ${email}`,
         html: `<div>
         <h1>${name}</h1>
         <h2>${email}</h2>
-        <p>${messageToSend }</p>
+        <p>${messageToSend}</p>
       </div>`
     });
-    const response = await info.messageId
-    return response
+    return info.messageId;
 }
 
 export async function sendResetMailToken(name, uEmail, token) {
