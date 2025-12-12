@@ -22,7 +22,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^7.4.3",
     "mongoose-paginate-v2": "^1.7.31",
-    "next": "^15.5.7",
+    "next": "15.5.9",
     "next-auth": "^4.24.5",
     "next-share": "^0.25.0",
     "nodemailer": "^7.0.7",
