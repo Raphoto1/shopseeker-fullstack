@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import FavoritesBasic from "@/components/extras/FavoritesBasic";
 import FlowShops from "@/components/extras/FlowShops";
 import PageSkeleton from "@/components/ui/PageSkeleton";
+import Hello from "@/components/home/Hello";
 
 // Componentes no críticos con lazy loading optimizado
 const InstagramFeed = dynamic(() => import("@/components/socialMedia/InstagramFeed"), {
@@ -32,8 +33,8 @@ export default function Home() {
     <main>
       {/* Contenido crítico above-the-fold - carga inmediata */}
       <Suspense fallback={<PageSkeleton />}>
-        <FlowShops />
         <FavoritesBasic />
+        <FlowShops />
       </Suspense>
       
       {/* Contenido below-the-fold - lazy loading */}
@@ -42,6 +43,7 @@ export default function Home() {
           <span className='loading loading-infinity loading-lg' />
         </div>
       }>
+        <Hello />
         <InstagramFeed />
       </Suspense>
       
