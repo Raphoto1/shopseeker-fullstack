@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useId, useState } from "react";
 
 export default function TabsSkills(props) {

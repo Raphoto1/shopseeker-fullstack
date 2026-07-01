@@ -7,8 +7,9 @@ import ContactForm from "../contact/ContactForm";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GiLoveLetter } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 
@@ -45,6 +46,8 @@ const TwitterIcon = dynamic(() => import("next-share").then((mod) => mod.Twitter
 export default function Navbar() {
   const { data: session } = useSession();
   const { getCartInfo, cartCount } = useCart();
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (session?.cart) {
@@ -52,22 +55,48 @@ export default function Navbar() {
     }
   }, [getCartInfo, session?.cart]);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   return (
     <header className='navbar bg-base-100 shadow-lg sticky top-0 z-50'>
-      <div className='navbar-start'>
+      <div className='navbar-start gap-2'>
+        <div className='relative lg:hidden'>
+          <button
+            type='button'
+            className='btn btn-ghost btn-circle'
+            aria-label='Open navigation menu'
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 6h16M4 12h16M4 18h16' />
+            </svg>
+          </button>
+          {isMobileMenuOpen ? (
+            <ul className='menu menu-sm absolute left-0 top-full mt-3 w-56 rounded-box bg-base-100 p-2 shadow z-[60]'>
+              <li><a href='/allshops' onClick={() => setIsMobileMenuOpen(false)}>Shop</a></li>
+              <li><a href='/blog' onClick={() => setIsMobileMenuOpen(false)}>Blog</a></li>
+              <li><a href='/dev' onClick={() => setIsMobileMenuOpen(false)}>Dev</a></li>
+              <li><a href='/about' onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
+              <li className='px-2 py-1'><ContactForm /></li>
+            </ul>
+          ) : null}
+        </div>
         <Link href={"/"} className='flex items-center gap-3'>
           <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Creative Rafa' className='h-auto w-auto' />
         </Link>
       </div>
       <div className='navbar-center hidden lg:flex'>
-        <ul>
-          <a href='/allshops' className='btn btn-ghost btn-sm normal-case'>Shop</a>
-          <a href='/blog' className='btn btn-ghost btn-sm normal-case'>Blog</a>
-          <a href='/dev' className='btn btn-ghost btn-sm normal-case'>Dev</a>
-          <a href='/about' className='btn btn-ghost btn-sm normal-case'>About</a>
+        <ul className='menu menu-horizontal px-1 items-center gap-1'>
+          <li><Link href='/allshops' className='btn btn-ghost btn-sm normal-case'>Shop</Link></li>
+          <li><Link href='/blog' className='btn btn-ghost btn-sm normal-case'>Blog</Link></li>
+          <li><Link href='/dev' className='btn btn-ghost btn-sm normal-case'>Dev</Link></li>
+          <li><Link href='/about' className='btn btn-ghost btn-sm normal-case'>About</Link></li>
           <ContactForm />
         </ul>
-        </div>
+      </div>
       <div className='navbar-end'>
         <div className='flex items-center gap-4'>
           <div className='flex items-center gap-2 self-start lg:self-auto'>
