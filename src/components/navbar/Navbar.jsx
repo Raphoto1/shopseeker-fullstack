@@ -1,85 +1,105 @@
 "use client";
 //import propios
-import SearchBar from "./SearchBar";
 import { pageBasePath } from "@/enums/SuperVariables";
 import { useCart } from "@/context/cartContext";
+import ContactForm from "../contact/ContactForm";
 //imports app
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GiLoveLetter } from "react-icons/gi";
+import { FaUser } from "react-icons/fa";
+
+function NavbarLoader() {
+  return (
+    <div className='flex h-full w-full justify-center content-center'>
+      <span className='loading loading-infinity loading-lg' />
+    </div>
+  );
+}
 
 // Cargar componentes de manera diferida
 const ThemeSelect = dynamic(() => import("../buttons/ThemeSelect"), {
   ssr: false,
-  loading: () => {
-    <div className='flex h-full w-full justify-center content-center'>
-      <span className='loading loading-infinity loading-lg' />
-    </div>;
-  },
+  loading: () => <NavbarLoader />,
 });
-const FacebookShareButton = dynamic(() => import("next-share").then(mod => mod.FacebookShareButton), {
+const FacebookShareButton = dynamic(() => import("next-share").then((mod) => mod.FacebookShareButton), {
   ssr: false,
-  loading: () => {
-      <div className='flex h-full w-full justify-center content-center'>
-        <span className='loading loading-infinity loading-lg' />
-      </div>;
-    },
+  loading: () => <NavbarLoader />,
 });
-const FacebookIcon = dynamic(() => import("next-share").then(mod => mod.FacebookIcon), {
+const FacebookIcon = dynamic(() => import("next-share").then((mod) => mod.FacebookIcon), {
   ssr: false,
-  loading: () => {
-      <div className='flex h-full w-full justify-center content-center'>
-        <span className='loading loading-infinity loading-lg' />
-      </div>;
-    },
+  loading: () => <NavbarLoader />,
 });
-const TwitterShareButton = dynamic(() => import("next-share").then(mod => mod.TwitterShareButton), {
+const TwitterShareButton = dynamic(() => import("next-share").then((mod) => mod.TwitterShareButton), {
   ssr: false,
-  loading: () => {
-      <div className='flex h-full w-full justify-center content-center'>
-        <span className='loading loading-infinity loading-lg' />
-      </div>;
-    },
+  loading: () => <NavbarLoader />,
 });
-const TwitterIcon = dynamic(() => import("next-share").then(mod => mod.TwitterIcon), {
+const TwitterIcon = dynamic(() => import("next-share").then((mod) => mod.TwitterIcon), {
   ssr: false,
-  loading: () => {
-      <div className='flex h-full w-full justify-center content-center'>
-        <span className='loading loading-infinity loading-lg' />
-      </div>;
-    },
+  loading: () => <NavbarLoader />,
 });
 
 export default function Navbar() {
-  const { data: session, status, update } = useSession();
-  const { getCartInfo, cartContent, cart, cartCount } = useCart();
-  
+  const { data: session } = useSession();
+  const { getCartInfo, cartCount } = useCart();
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
-    if (session) { 
-      getCartInfo(session?.cart);
+    if (session?.cart) {
+      getCartInfo(session.cart);
     }
-  }, [cartContent, session]);
+  }, [getCartInfo, session?.cart]);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
-    <>
-      <header>
-        <div className='navbar bg-base-200'>
-          <div className='sm:flex-1'>
-            <Link href={"/"}>
-              <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Rafa' />
-            </Link>
-          </div>
-          <div className=''>
-            <ul tabIndex={0} className='btn btn-primary btn-xs invisible md:visible'>
-              <li>
-                <Link href={"/allshops"}>All Designs</Link>
-              </li>
+    <header className='navbar bg-base-100 shadow-lg sticky top-0 z-50'>
+      <div className='navbar-start gap-2'>
+        <div className='relative lg:hidden'>
+          <button
+            type='button'
+            className='btn btn-ghost btn-circle'
+            aria-label='Open navigation menu'
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 6h16M4 12h16M4 18h16' />
+            </svg>
+          </button>
+          {isMobileMenuOpen ? (
+            <ul className='menu menu-sm absolute left-0 top-full mt-3 w-56 rounded-box bg-base-100 p-2 shadow z-[60]'>
+              <li><a href='/allshops' onClick={() => setIsMobileMenuOpen(false)}>Shop</a></li>
+              <li><a href='/blog' onClick={() => setIsMobileMenuOpen(false)}>Blog</a></li>
+              <li><a href='/dev' onClick={() => setIsMobileMenuOpen(false)}>Dev</a></li>
+              <li><a href='/about' onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
+              <li className='px-2 py-1'><ContactForm /></li>
             </ul>
-          </div>
-          <div className='flex justify-between content-center py-2'>
+          ) : null}
+        </div>
+        <Link href={"/"} className='flex items-center gap-3'>
+          <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Creative Rafa' className='h-auto w-auto' />
+        </Link>
+      </div>
+      <div className='navbar-center hidden lg:flex'>
+        <ul className='menu menu-horizontal px-1 items-center gap-1'>
+          <li><Link href='/allshops' className='btn btn-ghost btn-sm normal-case'>Shop</Link></li>
+          <li><Link href='/blog' className='btn btn-ghost btn-sm normal-case'>Blog</Link></li>
+          <li><Link href='/dev' className='btn btn-ghost btn-sm normal-case'>Dev</Link></li>
+          <li><Link href='/about' className='btn btn-ghost btn-sm normal-case'>About</Link></li>
+          <ContactForm />
+        </ul>
+      </div>
+      <div className='navbar-end'>
+        <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-2 self-start lg:self-auto'>
             <FacebookShareButton url={`${pageBasePath}/shops`} quote={"Find My shops!!!"} hashtag={`#creativerafa`}>
               <FacebookIcon size={32} round />
             </FacebookShareButton>
@@ -87,26 +107,35 @@ export default function Navbar() {
               <TwitterIcon size={32} round />
             </TwitterShareButton>
           </div>
-          <ThemeSelect />
-          <div>
-            {session ? (
-              <div className='flex' id='user'>
-                <Link href={"/user"} className='flex pr-2'>
-                  <div className='pr-1'>
-                    <p className='absolute pt-1 text-info drop-shadow-sm'>{cartCount}</p>
-                    <GiLoveLetter />
-                  </div>
-                  {session?.user.name.split(" ")[0]}{" "}
-                </Link>
-              </div>
-            ) : (
-              <Link href={"/auth"}>
-                <p>Register/Login</p>
-              </Link>
-            )}
+
+          <div className='flex items-center gap-2 self-start lg:self-auto'>
+            <ThemeSelect />
+            <NavbarAccount session={session} cartCount={cartCount} />
           </div>
         </div>
-      </header>
-    </>
+      </div>
+    </header>
+  );
+}
+
+function NavbarAccount({ session, cartCount }) {
+  if (session) {
+    return (
+      <Link href={"/user"} className='btn btn-ghost btn-sm normal-case'>
+        <span className='relative mr-1 inline-flex'>
+          <GiLoveLetter className='text-lg' />
+          <span className='badge badge-info badge-xs absolute -right-2 -top-2'>{cartCount}</span>
+        </span>
+        {session.user?.name?.split(" ")[0] ?? "Profile"}
+      </Link>
+    );
+  }
+
+  return (
+    <Link href={"/auth"} className='w-auto rounded-xl'>
+      <div className='avatar'>
+        <FaUser size={24} />
+      </div>
+    </Link>
   );
 }
