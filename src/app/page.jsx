@@ -8,6 +8,7 @@ import FavoritesBasic from "@/components/extras/FavoritesBasic";
 import FlowShops from "@/components/extras/FlowShops";
 import PageSkeleton from "@/components/ui/PageSkeleton";
 import Hello from "@/components/home/Hello";
+import FavoriteModals from "@/components/extras/FavoritesModals";
 
 // Componentes no críticos con lazy loading optimizado
 const InstagramFeed = dynamic(() => import("@/components/socialMedia/InstagramFeed"), {
@@ -33,7 +34,8 @@ export default function Home() {
     <main>
       {/* Contenido crítico above-the-fold - carga inmediata */}
       <Suspense fallback={<PageSkeleton />}>
-        <FavoritesBasic />
+        {/* <FavoritesBasic /> */}
+        <FavoriteModals />
         <FlowShops />
       </Suspense>
       
