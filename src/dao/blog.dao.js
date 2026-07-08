@@ -1,4 +1,5 @@
 import blogModel from "@/models/blog.model";
+import "@/models/design.model";
 import { dbConnect } from "@/utils/mongoDb";
 
 const linkedDesignPopulate = [
@@ -34,7 +35,7 @@ export const mongoDbGetBlogBySlug = async (slug) => {
     const safeSlug = escapeRegex(slug);
     return await blogModel.findOne({ slug: { $regex: `^${safeSlug}$`, $options: "i" } }).populate(linkedDesignPopulate).lean();
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error?.message || String(error));
   }
 };
 
@@ -43,7 +44,7 @@ export const mongoDbGetBlogById = async (id) => {
     await dbConnect();
     return await blogModel.findById(id).populate(linkedDesignPopulate).lean();
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error?.message || String(error));
   }
 };
 
@@ -61,7 +62,7 @@ export const mongoDbUpdateBlogById = async (id, pack) => {
     await dbConnect();
     return await blogModel.updateOne({ _id: id }, [{ $set: pack }]);
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error?.message || String(error));
   }
 };
 
@@ -70,6 +71,6 @@ export const mongoDbDeleteBlogById = async (id) => {
     await dbConnect();
     return await blogModel.findByIdAndDelete(id);
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error?.message || String(error));
   }
 };
