@@ -1,65 +1,112 @@
 "use client";
 
-import { testPath } from "@/enums/SuperVariables";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Forgot from "@/components/user/Forgot";
 
 export default function Login() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const modalController = () => {
     document.getElementById("loginModal").showModal();
   };
 
+  const openForgotModal = () => {
+    document.getElementById("loginModal").close();
+    document.getElementById("forgotPassModalFromLogin").showModal();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let form = document.getElementById("loginForm");
-    let formData = new FormData(form);
-    const emailCatch = formData.get("email");
-    const passCath = formData.get("password");
-    const response = await packSession(emailCatch, passCath);
-    async function packSession(emailIn, passIn) {
+    setErrorMsg("");
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const emailCatch = formData.get("email");
+      const passCatch = formData.get("password");
       const setSession = await signIn("credentials", {
-        email: emailIn,
-        password: passIn,
+        email: emailCatch,
+        password: passCatch,
         redirect: false,
       });
-      if (setSession.ok) return router.push("/");
-      if (setSession.error) return alert("email or password error");
+
+      if (setSession?.ok) {
+        router.push("/");
+        return;
+      }
+
+      setErrorMsg("Email or password is incorrect.");
+    } catch (error) {
+      setErrorMsg("Unexpected error. Please try again in a moment.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <>
-      <button className='btn' onClick={modalController}>
+      <button className='btn btn-accent w-full sm:w-auto' onClick={modalController}>
         Login
       </button>
       <dialog id='loginModal' className='modal modal-bottom sm:modal-middle'>
-        <div className='modal-box flex align-middle justify-center'>
+        <div className='modal-box w-full max-w-md'>
           <form method='dialog'>
             <h3 className='font-bold text-lg pr-2'>Let's Login</h3>
             {/* if there is a button in form, it will close the modal */}
             <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</button>
           </form>
-          <div>
-            <form id='loginForm' onSubmit={handleSubmit}>
-              <div className='pb-2'>
-                <label htmlFor='email'>Email</label>
-                <input type='email' name='email' id='email' className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2' />
+          <div className='mt-4'>
+            <form id='loginForm' onSubmit={handleSubmit} className='space-y-3'>
+              <div>
+                <label htmlFor='login-email' className='label'>
+                  <span className='label-text'>Email</span>
+                </label>
+                <input
+                  type='email'
+                  name='email'
+                  id='login-email'
+                  required
+                  autoComplete='username'
+                  className='input input-bordered w-full'
+                />
               </div>
               <div>
-                <label htmlFor='password'>Password</label>
-                <input type='password' name='password' id='password' className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2' />
+                <label htmlFor='login-password' className='label'>
+                  <span className='label-text'>Password</span>
+                </label>
+                <input
+                  type='password'
+                  name='password'
+                  id='login-password'
+                  required
+                  autoComplete='current-password'
+                  className='input input-bordered w-full'
+                />
               </div>
+
+              <div className='flex justify-end'>
+                <button type='button' className='link link-hover text-sm' onClick={openForgotModal}>
+                  Forgot password?
+                </button>
+              </div>
+
+              {errorMsg && <p className='text-sm text-error'>{errorMsg}</p>}
+
               <div className='flex justify-end pt-2'>
-                <button type='submit' className='btn btn-success'>
-                  Login
+                <button type='submit' className='btn btn-success w-full' disabled={isSubmitting}>
+                  {isSubmitting ? "Signing in..." : "Login"}
                 </button>
               </div>
             </form>
           </div>
         </div>
       </dialog>
+
+      <Forgot showTrigger={false} modalId='forgotPassModalFromLogin' />
     </>
   );
 }

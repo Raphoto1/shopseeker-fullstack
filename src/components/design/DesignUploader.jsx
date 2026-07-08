@@ -91,120 +91,182 @@ export default function DesignUploader(props) {
   };
 
   return (
-    <>
-      <h2 className='text-center text-2xl'>Uploader</h2>
-      <form ref={formRef} onSubmit={handleSubmit}>
-        <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-2 pt-2 px-1 pb-2'>
-          {/* Información del diseño */}
-          <div className='flex justify-center'>
-            <div className='textData flex-grid px-1'>
-              <div className='justify-center'>
-                <label htmlFor='pCode' className='px-1'>
-                  Personal Code
-                </label>
-                <input
-                  defaultValue={props.pCode || ""}
-                  type='text'
-                  id='pCode'
-                  name='pCode'
-                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
-                />
-              </div>
-              <div className='justify-center flex flex-col'>
-                <label htmlFor='title' className='px-1'>
-                  Title
-                </label>
-                <input
-                  defaultValue={props.title || ""}
-                  type='text'
-                  id='title'
-                  name='title'
-                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
-                />
-              </div>
-              <div className='py-2'>
-                <textarea
-                  defaultValue={props.description || ""}
-                  id='description'
-                  name='description'
-                  className='textarea textarea-bordered h-24 w-full max-w-xs py-2'
-                  placeholder='Description (Max. 300 characters)'
-                />
-              </div>
-              <div>
-                <label htmlFor='blogLink' className='px-1'>
-                  Blog/post/process Link
-                </label>
-                <input
-                  defaultValue={props.blogLink || ""}
-                  type='text'
-                  id='blogLink'
-                  name='blogLink'
-                  className='input input-sm input-bordered max-w-xs w-full rounded-lg px-1 py-2'
-                />
-              </div>
-              <div>
-                <label htmlFor='category' className='px-2'>
-                  Technique
-                </label>
-                <select name='category' id='category' className='select select-sm select-bordered w-full max-w-xs' defaultValue={props.category || ""}>
-                  {categories.map((cat, index) => (
-                    <option value={cat} key={index}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className='shopsPack'>
-                <label htmlFor='shops' className='bold'>
-                  URL to Shops
-                </label>
-                <div className='max-w-xs'>
-                  {shops.map((shop, index) => (
-                    <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
-                  ))}
-                </div>
-              </div>
-            </div>
+    <form ref={formRef} onSubmit={handleSubmit} className='space-y-6 px-4'>
+      
+      {/* BASIC INFO */}
+      <div className='space-y-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          {/* Personal Code */}
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text font-semibold'>Personal Code</span>
+            </label>
+            <input
+              defaultValue={props.pCode || ""}
+              type='text'
+              id='pCode'
+              name='pCode'
+              placeholder='Enter personal code'
+              className='input input-bordered input-sm focus:input-primary'
+            />
           </div>
 
-          {/* Imagen principal */}
-          <div className='flex justify-center align-middle items-center'>
-            <div className='mainImageDrop justify-center'>
-              <h2 className='text-center'>Main Image</h2>
-              <DnDSpaceSingle files={files} setFiles={setFiles} />
-            </div>
+          {/* Title */}
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text font-semibold'>Title *</span>
+            </label>
+            <input
+              defaultValue={props.title || ""}
+              type='text'
+              id='title'
+              name='title'
+              placeholder='Design title'
+              className='input input-bordered input-sm focus:input-primary'
+              required
+            />
           </div>
 
-          {/* Imágenes secundarias */}
-          <div className='flex justify-center align-middle items-center'>
-            <div className='secondaryImageDrop justify-center'>
-              <h2 className='text-center'>Secondary Images</h2>
-              <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
-              {oldSecondaryImages.length > 0 && (
-                <div className='oldSecondary block pt-5'>
-                  <h2>Actual Secondary Images</h2>
-                  <div className='grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pt-2 px-1'>
-                    {oldSecondaryImages.map((image, index) => (
-                      <div key={index} className='relative'>
-                        <button className='EliminateImage absolute btn btn-xs btn-error' id={image.SIUrl} onClick={handleOldImages}>
-                          X
-                        </button>
-                        <Image src={image.SIUrl} width={100} height={100} alt={props.title || "Secondary Image"} className='rounded' loading='lazy' />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+          {/* Category */}
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text font-semibold'>Technique</span>
+            </label>
+            <select 
+              name='category' 
+              id='category' 
+              className='select select-bordered select-sm focus:select-primary' 
+              defaultValue={props.category || ""}
+            >
+              <option value="">Select a technique</option>
+              {categories.map((cat, index) => (
+                <option value={cat} key={index}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Botón de envío */}
-          <div className='flex justify-center'>
-            {isSubmitting ? <button className='btn btn-disabled loading'>Submitting...</button> : <input type='submit' className='btn' value='Send' />}
+          {/* Blog Link */}
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text font-semibold'>Blog/Process Link</span>
+            </label>
+            <input
+              defaultValue={props.blogLink || ""}
+              type='url'
+              id='blogLink'
+              name='blogLink'
+              placeholder='https://...'
+              className='input input-bordered input-sm focus:input-primary'
+            />
           </div>
         </div>
-      </form>
-    </>
+
+        {/* Description */}
+        <div className='form-control'>
+          <label className='label'>
+            <span className='label-text font-semibold'>Description</span>
+          </label>
+          <textarea
+            defaultValue={props.description || ""}
+            id='description'
+            name='description'
+            placeholder='Tell us about your design... (Max. 300 characters)'
+            className='textarea textarea-bordered focus:textarea-primary h-24'
+          />
+        </div>
+
+        {/* Shop URLs */}
+        <div className='form-control'>
+          <label className='label'>
+            <span className='label-text font-semibold'>📱 Shop URLs</span>
+          </label>
+          <div className='bg-base-200 rounded-lg p-4 space-y-3'>
+            {shops.map((shop, index) => (
+              <HiddenInput shopName={shop} key={index} shopsFromUpdate={shopsFromUpdate} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* IMAGES SECTION */}
+      <div className='divider'>Images</div>
+      
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+        
+        {/* MAIN IMAGE */}
+        <div>
+          <h3 className='font-semibold mb-3 flex items-center gap-2'>🖼️ Main Image *</h3>
+          <div className='bg-base-200 rounded-lg p-6 min-h-48 flex items-center justify-center border-2 border-dashed border-base-300'>
+            <DnDSpaceSingle files={files} setFiles={setFiles} />
+          </div>
+        </div>
+
+        {/* SECONDARY IMAGES */}
+        <div>
+          <h3 className='font-semibold mb-3 flex items-center gap-2'>🎨 Secondary Images</h3>
+          <div className='bg-base-200 rounded-lg p-6 min-h-48 flex items-center justify-center border-2 border-dashed border-base-300 mb-4'>
+            <DnDSpaceMultiple files={multipleFiles} setFiles={setMultipleFiles} />
+          </div>
+
+          {/* Existing Secondary Images */}
+          {oldSecondaryImages.length > 0 && (
+            <div className='mt-4'>
+              <h4 className='text-sm font-semibold mb-3'>📸 Current Images ({oldSecondaryImages.length})</h4>
+              <div className='grid grid-cols-2 sm:grid-cols-3 gap-3'>
+                {oldSecondaryImages.map((image, index) => (
+                  <div key={index} className='relative group'>
+                    <Image 
+                      src={image.SIUrl} 
+                      width={100} 
+                      height={100} 
+                      alt={`Secondary ${index + 1}`} 
+                      className='rounded-lg w-full h-auto object-cover' 
+                      loading='lazy' 
+                      style={{ width: 'auto', height: 'auto' }} 
+                    />
+                    <button 
+                      className='absolute top-1 right-1 btn btn-xs btn-error opacity-0 group-hover:opacity-100 transition-opacity' 
+                      id={image.SIUrl} 
+                      onClick={handleOldImages}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* SUBMIT BUTTON */}
+      <div className='flex justify-end gap-3 pt-4'>
+        <button 
+          type='button' 
+          onClick={() => router.back()}
+          className='btn btn-ghost'
+        >
+          ← Cancel
+        </button>
+        <button 
+          type='submit' 
+          disabled={isSubmitting}
+          className='btn btn-primary btn-lg gap-2'
+        >
+          {isSubmitting ? (
+            <>
+              <span className='loading loading-spinner loading-sm'></span>
+              Uploading...
+            </>
+          ) : (
+            <>
+              ⬆️ Upload Design
+            </>
+          )}
+        </button>
+      </div>
+    </form>
   );
 }

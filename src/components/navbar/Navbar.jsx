@@ -85,7 +85,16 @@ export default function Navbar() {
           ) : null}
         </div>
         <Link href={"/"} className='flex items-center gap-3'>
-          <Image src={"/img/icons/Icon whiteBG.png"} width={50} height={50} alt='Icono Creative Rafa' className='h-auto w-auto' />
+          <Image
+            src={"/img/icons/Icon whiteBG.png"}
+            width={50}
+            height={50}
+            alt='Icono Creative Rafa'
+            className='h-auto w-auto'
+            style={{ width: 'auto', height: 'auto' }}
+            loading='eager'
+            priority
+          />
         </Link>
       </div>
       <div className='navbar-center hidden lg:flex'>

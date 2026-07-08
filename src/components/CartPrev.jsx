@@ -7,11 +7,21 @@ import useSWR from "swr";
 import { useRouter } from "next/navigation";
 
 export default function CartPrev({ cartId }) {
+  // 🔧 Validar que cartId existe
+  if (!cartId) {
+    return (
+      <div className="flex justify-center text-center">
+        <p className='flex justify-center text-warning font-bold p-2 text-center'>Cart not initialized</p>
+      </div>
+    );
+  }
+  
   const router = useRouter();
   const path = `/api/user/cart/${cartId}`;
 
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
   const { data, error, isLoading } = useSWR(path, fetcher);
+  
   if (error) return <h1>opps, my bad, try reloading :D</h1>;
   if (isLoading)
     return (
@@ -19,6 +29,16 @@ export default function CartPrev({ cartId }) {
         <span className='loading loading-infinity loading-lg' />
       </div>
     );
+  
+  // 🔧 Validar que data existe y tiene la estructura correcta
+  if (!data?.payload?.[0]?.designs) {
+    return (
+      <div className="flex justify-center text-center">
+        <p className='flex justify-center text-warning font-bold p-2 text-center'>No Designs Saved</p>
+      </div>
+    );
+  }
+  
   const designsToShow = data.payload[0].designs;
   console.log(designsToShow);
 

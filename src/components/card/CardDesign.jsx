@@ -12,18 +12,18 @@ export default function CardDesign(props) {
           <LikeButton desId={props.id} likesRecieve={props.likes} key={props.id}/>
         </div>
         <figure>
-          <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy"></Image>
+          <Image src={props.photo} width={500} height={500} alt={props.title} loading="lazy" style={{ width: 'auto', height: 'auto' }}></Image>
         </figure>
         <div className='card-body flex items-center'>
           <h1 className='card-title capitalize'>{props.title}</h1>
           <h3>{props.category}</h3>
           <p className='text-center line-clamp-3'>{props.description}</p>
           <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
-            {props.shops.map((shop) => {
+            {props.shops.map((shop, index) => {
               return shop.shopUrl === "null" ? null : (
-                <div className='flex justify-center mx-auto content-center'>
+                <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
                   <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
-                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full"/>
+                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full" style={{ width: 'auto', height: 'auto' }}/>
                   </Link>
                 </div>
               );

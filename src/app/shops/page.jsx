@@ -45,9 +45,14 @@ export default function Shops() {
       </div>
     );
 
+  // 🔧 Validar que data existe
+  if (!data?.payload) {
+    return <h1>No designs available</h1>;
+  }
+
   //data de paginacion
-  const allDesigns = data.payload.docs;
-  const totalDocs = data.payload.totalDocs;
+  const allDesigns = data.payload.docs || [];
+  const totalDocs = data.payload.totalDocs || 0;
   const paginationTotal = data.payload.totalPages;
 
   //organizar ruta search

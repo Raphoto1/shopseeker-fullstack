@@ -43,15 +43,30 @@ export const register = async (data) => {
 
 export const getUserInfo = async (idIn) => {
   const userChk = await mongoDbUserChkId(idIn);
-  const userToWork = userChk._doc;
-  delete userToWork.password;
-  return userToWork;
+  
+  // 🔧 Validar que el usuario existe
+  if (!userChk) {
+    throw new Error("User not found");
+  }
+  
+  // 🔧 Como estamos usando .lean() en DAOs, userChk ya es un objeto plano, no un documento de Mongoose
+  // Así que no necesitamos acceder a ._doc, pero lo intentamos como fallback
+  const userToWork = userChk._doc || userChk;
+  
+  // Crear una copia sin la contraseña
+  const { password, ...userWithoutPassword } = userToWork;
+  return userWithoutPassword;
 };
 
 const getUserFull = async (idIn) => {
   const userChk = await mongoDbUserChkId(idIn);
-  const userToWork = userChk._doc;
-  return userToWork;
+  
+  if (!userChk) {
+    throw new Error("User not found");
+  }
+  
+  // 🔧 Como estamos usando .lean() en DAOs, ya es un objeto plano
+  return userChk._doc || userChk;
 };
 
 export const updateUserInfo = async (user, data) => {

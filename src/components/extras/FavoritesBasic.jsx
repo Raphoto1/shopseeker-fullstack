@@ -64,6 +64,7 @@ function FavoritesBasic() {
                   priority={index < 2} // Priority solo para las primeras 2 imágenes above-the-fold
                   sizes="(max-width: 768px) 50vw, 25vw"
                   className="w-full h-auto object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+                  style={{ width: 'auto', height: 'auto' }}
                   quality={85} // Mejor balance calidad/tamaño
                 />
               </Link>

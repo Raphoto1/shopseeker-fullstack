@@ -4,7 +4,7 @@ import { dbConnect } from "@/utils/mongoDb";
 export const mongoDbUserChkEmail = async (emailIn) => {
   try {
     await dbConnect();
-    const user = await usersModel.findOne({ email: emailIn });
+    const user = await usersModel.findOne({ email: emailIn }).lean(); // ⚡ lean() para lectura más rápida
     return user;
   } catch (error) {
     throw new Error(`error desde dao: ${error}`);
@@ -14,7 +14,7 @@ export const mongoDbUserChkEmail = async (emailIn) => {
 export const mongoDbUserChkId = async (idIn) => {
   try {
     await dbConnect();
-    const user = await usersModel.findOne({ _id: idIn });
+    const user = await usersModel.findOne({ _id: idIn }).lean(); // ⚡ lean() para lectura más rápida
     return user;
   } catch (error) {
     throw new Error(`error desde dao: ${error}`);
