@@ -100,6 +100,7 @@ export default function detailUpdate() {
                 title={des.title}
                 description={des.description}
                 category={des.category}
+                blogLink={des.blogLink}
                 photo={des.photo}
                 secondaryImages={des.secondaryImages}
                 shops={des.shops}

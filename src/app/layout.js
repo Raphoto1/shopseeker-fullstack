@@ -2,6 +2,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 // Imports propios
 import Navbar from "@/components/navbar/Navbar";
@@ -18,15 +19,41 @@ const Footer = dynamic(() => import("@/components/footer/Footer"), {
 
 const inter = Inter({ subsets: ["latin"] });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://creativerafa.com";
+
 export const metadata = {
-  title: "Creative Rafa",
-  description: "Master on visual arts , multipotential developer and more",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Creative Rafa",
+    template: "%s | Creative Rafa",
+  },
+  description: "Master on visual arts, multipotential developer and more",
+  alternates: {
+    canonical: "/",
+  },
+  keywords: ["creative", "design", "visual arts", "developer", "shop seeker"],
   openGraph: {
-    title: "Creative Rafa Shop Seeker",
+    title: "Creative Rafa",
     description: "Master on visual arts, multipotential developer and more",
-    url:"creativerafa.com",
+    url: siteUrl,
+    siteName: "Creative Rafa",
+    locale: "en_US",
     type: "website",
-  }
+    images: [
+      {
+        url: "/img/icons/Icon whiteBG.png",
+        width: 1200,
+        height: 630,
+        alt: "Creative Rafa",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Creative Rafa",
+    description: "Master on visual arts, multipotential developer and more",
+    images: ["/img/icons/Icon whiteBG.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -35,7 +62,9 @@ export default function RootLayout({ children }) {
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9669110661270895"
      crossOrigin="anonymous"></script>
       <body className={inter.className}>
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         <Providers>
           <CartProvider>
             <Navbar />

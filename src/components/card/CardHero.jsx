@@ -11,9 +11,34 @@ import { FaFacebookF, FaPinterestP, FaXTwitter } from "react-icons/fa6";
 //imports propios
 import { pageBasePath } from "@/enums/SuperVariables";
 import { LikeButton } from "@/components/buttons/LikeButton";
+import { event as trackEvent } from "@/gtag";
+
+const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
+  const shopKey = String(shopName || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+  const actionName = `shop_link_click_${shopKey || "unknown"}`;
+
+  trackEvent({
+    action: actionName,
+    category: "design_shop",
+    label: `${shopName}|${designTitle}|${designId}`,
+    value: 1,
+    params: {
+      action_base: "shop_link_click",
+      shop_name: shopName,
+      shop_key: shopKey,
+      shop_url: shopUrl,
+      design_id: String(designId),
+      design_title: designTitle,
+      source_component: "CardHero",
+    },
+  });
+};
 
 // Componente memoizado para las tiendas
-const ShopLink = memo(({ shop }) => {
+const ShopLink = memo(({ shop, designId, designTitle }) => {
   if (shop.shopUrl === "null") return null;
   
   return (
@@ -22,6 +47,8 @@ const ShopLink = memo(({ shop }) => {
         href={shop.shopUrl}
         passHref={true}
         target='_blank'
+        rel='noopener noreferrer'
+        onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle })}
         className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/85 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
       >
         <Image
@@ -225,7 +252,7 @@ function CardHero(props) {
                 </p>
                 <div className='flex flex-wrap gap-3'>
                   {validShops.map((shop) => (
-                    <ShopLink key={shop.shopName} shop={shop} />
+                    <ShopLink key={shop.shopName} shop={shop} designId={props.id} designTitle={design.title} />
                   ))}
                 </div>
               </div>

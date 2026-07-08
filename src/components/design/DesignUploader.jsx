@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import UseSWR from "swr";
 // Imports propios
 import { categories, shops } from "@/enums/SuperVariables";
 import HiddenInput from "../extras/HiddenInput";
@@ -15,6 +16,7 @@ export default function DesignUploader(props) {
   const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user._id;
+  const [selectedBlogSlug, setSelectedBlogSlug] = useState("");
 
   // Estados
   const [oldSecondaryImages, setOldSecondaryImages] = useState(props.secondaryImages || []);
@@ -26,6 +28,22 @@ export default function DesignUploader(props) {
 
   // Referencia para el formulario
   const formRef = useRef(null);
+
+  const blogPath = userId ? `/api/blog?owner=${userId}&limit=200&sortField=createdAt&sortQ=-1` : null;
+  const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
+  const { data: blogData, isLoading: isLoadingBlogs } = UseSWR(blogPath, fetcher);
+  const availablePosts = blogData?.payload?.docs || [];
+
+  useEffect(() => {
+    const currentBlogLink = String(props.blogLink || "").trim();
+    if (!currentBlogLink) {
+      setSelectedBlogSlug("");
+      return;
+    }
+
+    const match = currentBlogLink.match(/\/blog\/([^/?#]+)/i);
+    setSelectedBlogSlug(match?.[1] || "");
+  }, [props.blogLink]);
 
   // Manejo de imágenes secundarias
   const handleOldImages = useCallback((e) => {
@@ -39,6 +57,12 @@ export default function DesignUploader(props) {
     e.preventDefault();
     setIsSubmitting(true); // Mostrar loader
     const formData = new FormData(formRef.current);
+
+    if (selectedBlogSlug) {
+      formData.set("blogLink", `/blog/${selectedBlogSlug}`);
+    } else {
+      formData.set("blogLink", "");
+    }
 
     if (SIToWork.length === 1) {
       formData.append("secondaryUpdate", JSON.stringify(oldSecondaryImages));
@@ -147,19 +171,26 @@ export default function DesignUploader(props) {
             </select>
           </div>
 
-          {/* Blog Link */}
+          {/* Blog Post Link */}
           <div className='form-control'>
             <label className='label'>
-              <span className='label-text font-semibold'>Blog/Process Link</span>
+              <span className='label-text font-semibold'>Linked Blog Post</span>
             </label>
-            <input
-              defaultValue={props.blogLink || ""}
-              type='url'
-              id='blogLink'
-              name='blogLink'
-              placeholder='https://...'
-              className='input input-bordered input-sm focus:input-primary'
-            />
+            <select
+              id='blogLinkSelector'
+              value={selectedBlogSlug}
+              onChange={(event) => setSelectedBlogSlug(event.target.value)}
+              className='select select-bordered select-sm focus:select-primary'
+            >
+              <option value=''>No linked post</option>
+              {availablePosts.map((post) => (
+                <option key={post._id} value={post.slug}>
+                  {post.title}
+                </option>
+              ))}
+            </select>
+            <p className='mt-1 text-xs opacity-70'>Select a post by title to link this design with its article.</p>
+            {isLoadingBlogs && <p className='mt-1 text-xs opacity-60'>Loading posts...</p>}
           </div>
         </div>
 

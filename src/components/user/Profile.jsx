@@ -4,16 +4,17 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UseSWR from "swr";
 import Link from "next/link";
-import { useState } from "react";
 //imports propios
 import FanOptions from "./fan/FanOptions";
 import ArtistOptions from "./artist/ArtistOptions";
 import EditInfoForm from "./EditInfoForm";
 import ChangePassword from "./ChangePassword";
 import DeleteAccount from "./DeleteAcount";
+import CreateBlogEntryModal from "@/components/blog/CreateBlogEntryModal";
+import BlogAdminPanel from "@/components/blog/BlogAdminPanel";
 
 export default function profile() {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
   
   // 🔧 IMPORTANTE: Todos los hooks ANTES de cualquier return
   // UseSWR usa useContext internamente, así que debe llamarse siempre
@@ -30,6 +31,8 @@ export default function profile() {
   
   // Este hook SIEMPRE se llama, con userPath=null si no hay userId
   const { data, error, isLoading } = UseSWR(userPath, fetcher);
+  const designsPath = status === "authenticated" ? "/api/design?limit=200&sortField=title&sortQ=1" : null;
+  const { data: designsData } = UseSWR(designsPath, fetcher);
   
   // ====== VALIDACIONES DESPUÉS DE LOS HOOKS ======
   
@@ -68,6 +71,9 @@ export default function profile() {
   }
   
   const user = data.payload;
+  const availableDesigns = designsData?.payload?.docs || [];
+  const userEmail = String(user?.email || "").toLowerCase();
+  const showBlogCreator = user?.role === "admin" || userEmail === "rafa@creativerafa.com";
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-base-100 to-base-200 py-12 px-4'>
@@ -113,7 +119,7 @@ export default function profile() {
         </div>
 
         {/* ===== CARD: ACCIONES RÁPIDAS ===== */}
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-6'>
+        <div className={`grid grid-cols-2 ${showBlogCreator ? "md:grid-cols-5" : "md:grid-cols-4"} gap-4 mb-6`}>
           {/* Edit Info */}
           <div className='card bg-base-100 shadow-md hover:shadow-lg transition-shadow'>
             <div className='card-body items-center text-center p-4'>
@@ -147,6 +153,16 @@ export default function profile() {
               </Link>
             </div>
           </div>
+
+          {/* Blog Entry UI */}
+          {showBlogCreator && (
+            <div className='card bg-base-100 shadow-md hover:shadow-lg transition-shadow'>
+              <div className='card-body items-center text-center p-4'>
+                <span className='text-3xl mb-2'>📝</span>
+                <CreateBlogEntryModal availableDesigns={availableDesigns} />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ===== SECCIÓN ESPECIAL: ARTIST/FAN OPTIONS ===== */}
@@ -167,6 +183,8 @@ export default function profile() {
             </div>
           )}
         </div>
+
+        {showBlogCreator && <BlogAdminPanel ownerId={session?.user?._id} />}
 
       </div>
     </div>

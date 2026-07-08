@@ -26,6 +26,11 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+      },
     ],
     qualities: [75, 85], // 🔧 Soportar quality 85 además de 75
   },
