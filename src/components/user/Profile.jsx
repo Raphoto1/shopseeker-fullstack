@@ -11,6 +11,7 @@ import EditInfoForm from "./EditInfoForm";
 import ChangePassword from "./ChangePassword";
 import DeleteAccount from "./DeleteAcount";
 import CreateBlogEntryModal from "@/components/blog/CreateBlogEntryModal";
+import BlogAdminPanel from "@/components/blog/BlogAdminPanel";
 
 export default function profile() {
   const { data: session, status } = useSession();
@@ -72,7 +73,7 @@ export default function profile() {
   const user = data.payload;
   const availableDesigns = designsData?.payload?.docs || [];
   const userEmail = String(user?.email || "").toLowerCase();
-  const showBlogCreator = user?.role === "admin" || userEmail === "rafa@creativerafa.com";
+  const showBlogCreator = user?.role === "admin" || user?.role === "rafa" || userEmail === "rafa@creativerafa.com";
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-base-100 to-base-200 py-12 px-4'>
@@ -182,6 +183,8 @@ export default function profile() {
             </div>
           )}
         </div>
+
+        {showBlogCreator && <BlogAdminPanel ownerId={session?.user?._id} />}
 
       </div>
     </div>
