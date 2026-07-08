@@ -12,6 +12,8 @@ const linkedDesignPopulate = [
   },
 ];
 
+const escapeRegex = (value) => String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 export const mongoDbGetAllBlogs = async (querySearch, options) => {
   try {
     await dbConnect();
@@ -29,7 +31,8 @@ export const mongoDbGetAllBlogs = async (querySearch, options) => {
 export const mongoDbGetBlogBySlug = async (slug) => {
   try {
     await dbConnect();
-    return await blogModel.findOne({ slug }).populate(linkedDesignPopulate).lean();
+    const safeSlug = escapeRegex(slug);
+    return await blogModel.findOne({ slug: { $regex: `^${safeSlug}$`, $options: "i" } }).populate(linkedDesignPopulate).lean();
   } catch (error) {
     throw new Error(error);
   }
