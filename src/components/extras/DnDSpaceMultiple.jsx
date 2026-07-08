@@ -4,36 +4,10 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const thumb = {
-  display: 'inline-flex',
-  borderRadius: 2,
-  border: '1px solid #eaeaea',
-  marginTop:5,
-  marginBottom: 5,
-  marginRight: 8,
-  width: 'auto',
-  height: '100%',
-  padding: 2,
-  boxSizing: 'border-box'
-};
-
-const thumbInner = {
-  height:'auto',
-  display: 'flex',
-  minWidth: 0,
-  overflow: 'hidden'
-};
-
-const img = {
-  display: 'block',
-  width: 'auto',
-  height: '100%'
-};
-
 export default function DnDSpaceMultiple({ files, setFiles }) {
   //file y set file se ajusta en el padre
-    const {getRootProps, getInputProps} = useDropzone({
-      maxFiles:6,
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      maxFiles: 4,
       accept: {
         'image/*': []
       },
@@ -43,19 +17,6 @@ export default function DnDSpaceMultiple({ files, setFiles }) {
         })));
       }
     });
-    
-    const thumbs = files.map(file => (
-      <div className="block self-center border-2 rounded-md border-gray-50"  key={file.name}>
-        <div style={thumbInner}>
-          <img
-            src={file.preview}
-            style={img}
-            // Revoke data uri after image is loaded
-            onLoad={() => { URL.revokeObjectURL(file.preview) }}
-          />
-        </div>
-      </div>
-    ));
   
     useEffect(() => {
       // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
@@ -63,16 +24,44 @@ export default function DnDSpaceMultiple({ files, setFiles }) {
     }, []);
   
     return (
-      <section className="container border-2 bg-slate-200 p-2 rounded-md">
-        <div className="">
-          <div {...getRootProps({className: 'dropzone'})} className="bg-slate-100 border-2 border-slate-300 rounded-md">
-            <input {...getInputProps()} multiple={true} />
-            <p className="text-center">Drag 'n' drop max 4 Images, or click to select files</p>
-          </div>
-          <div  className="grid grid-flow-row xl:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 xs:grid-cols-2 gap-2 px-1 pt-2">
-            {thumbs}
-          </div>
+      <div {...getRootProps()} className={`w-full p-8 rounded-lg border-2 border-dashed transition-colors cursor-pointer text-center ${
+        isDragActive 
+          ? 'border-primary bg-primary/10' 
+          : 'border-base-300 bg-transparent hover:border-primary/50'
+      }`}>
+        <input {...getInputProps()} />
+        
+        <div className='flex flex-col items-center justify-center gap-3'>
+          {files.length > 0 ? (
+            <>
+              <div className='text-3xl'>✅</div>
+              <p className='font-semibold'>{files.length} image{files.length !== 1 ? 's' : ''} selected</p>
+              <p className='text-xs text-base-content/60'>Click to change or drop more images</p>
+            </>
+          ) : (
+            <>
+              <div className='text-3xl'>📁</div>
+              <p className='font-semibold'>Drag and drop images here</p>
+              <p className='text-xs text-base-content/60'>Max 4 images, or click to select</p>
+            </>
+          )}
         </div>
-      </section>
+
+        {/* PREVIEW */}
+        {files.length > 0 && (
+          <div className='mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3'>
+            {files.map((file) => (
+              <div key={file.name} className='relative aspect-square rounded-lg overflow-hidden bg-base-200 border border-base-300'>
+                <img
+                  src={file.preview}
+                  alt={file.name}
+                  className='w-full h-full object-cover'
+                  onLoad={() => { URL.revokeObjectURL(file.preview) }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     );
 }

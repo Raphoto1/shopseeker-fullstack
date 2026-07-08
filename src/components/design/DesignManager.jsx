@@ -8,125 +8,150 @@ import { useRouter } from "next/navigation";
 //imports propios
 import { categories, shops } from "@/enums/SuperVariables";
 import PaginationControl from "@/components/buttons/PaginationControl";
+
 export default function DesignManager(props) {
   const router = useRouter();
-  //control opciones de fields
-  const [idChecked, setIdChecked] = useState(false);
-  const [chkEnabled, setChkEnabled] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [desName, setDesName] = useState("");
-  const [selectValue, setselectValue] = useState("title");
-  const [userId, setUserId] = useState(props.uId);
+  const [userId] = useState(props.uId);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [deleting, setDeleting] = useState(null); // Tracking which design is being deleted
 
   let userPath = "";
-
   if (userId === undefined) {
     userPath = "";
   } else {
     userPath = `&userId=${userId}`;
   }
-  //set de paginas
-  const [pageIndex, setPageIndex] = useState(1);
 
-  //hanlders
-  const handleIdCheck = (e) => {
-    const desId = e.target.id;
-    const desNameIn = e.target.name;
-    setDesName(desNameIn);
-    setIdChecked(desId);
-    setChkEnabled(!chkEnabled);
-    setShowModal(!showModal);
-  };
-
-  const handleDelete = (e) => {
-    if (confirm(`Design ${desName} will be DELETED`)) {
-      applyDelete();
-    } else {
-      alert("canceled");
-    }
-  };
-
-  const applyDelete = async () => {
-    const result = await fetch(`/api/design/${idChecked}`, {
-      method: "delete",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          alert("Error ocurred deleting design");
-        } else {
-          alert("Design Deleted");
-          setDesName(false);
-          setIdChecked(false);
-          setChkEnabled(!chkEnabled);
-          setShowModal(!showModal);
-          router.refresh();
-        }
-      });
-  };
-  //api requests
-  //get designs
+  // API requests - get designs
   let basePath = `/api/design?page=${pageIndex}${userPath}`;
   const fetcher = async (...args) => await fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(basePath, fetcher);
-  if (error) return <h1>Not designs found</h1>;
+  const { data, error, isLoading, mutate } = useSWR(basePath, fetcher);
+
+  if (error) return <h1>❌ No designs found</h1>;
   if (isLoading)
     return (
       <div className='flex h-full w-full justify-center content-center'>
         <span className='loading loading-infinity loading-lg' />
       </div>
     );
-  const allDesigns = data.payload.docs;
-  const totoalDocs = data.payload.totalDocs;
-  const paginationTotal = data.payload.totalPages;
+  
+  if (!data?.payload) {
+    return <h1>No designs available</h1>;
+  }
+  
+  const allDesigns = data.payload.docs || [];
+  const paginationTotal = data.payload.totalPages || 0;
+
+  // Manejar delete directamente en la card
+  const handleDelete = async (designId, designTitle) => {
+    if (!confirm(`🗑️ Design "${designTitle}" will be DELETED. This action cannot be undone.`)) {
+      return;
+    }
+
+    setDeleting(designId);
+    try {
+      const result = await fetch(`/api/design/${designId}`, {
+        method: "delete",
+        credentials: "include",
+      }).then((res) => res.json());
+
+      if (result.error) {
+        alert("❌ Error occurred deleting design");
+      } else {
+        alert("✅ Design Deleted successfully");
+        mutate(); // Recargar la lista
+      }
+    } catch (err) {
+      alert("❌ Error occurred deleting design");
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   return (
-    <div>
-      <h1 className='relative text-center font-black'>Choose a design to update</h1>
-      <div className='w-full'>
-        <table className='table'>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Main Image</th>
-              <th>Title</th>
-            </tr>
+    <div className='min-h-screen bg-gradient-to-br from-base-100 to-base-200 py-12 px-4'>
+      <div className='max-w-6xl mx-auto'>
+        
+        {/* HEADER */}
+        <div className='mb-8'>
+          <h1 className='text-4xl font-bold mb-2'>📋 Designs Manager</h1>
+          <p className='text-base-content/70'>Click Update or Delete directly to manage your designs</p>
+        </div>
+
+        {/* DESIGNS GRID */}
+        {allDesigns.length === 0 ? (
+          <div className='card bg-base-100 shadow-lg'>
+            <div className='card-body items-center text-center'>
+              <p className='text-lg'>📭 You don't have any designs yet</p>
+              <Link href="/addDesign">
+                <button className='btn btn-success mt-4'>⬆️ Upload Your First Design</button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
             {allDesigns.map((des) => (
-              <tr key={des._id}>
-                <th>
-                  <input
-                    type='checkbox'
-                    disabled={idChecked == des._id ? false : chkEnabled}
-                    className='checkbox'
-                    id={des._id}
-                    name={des.title}
-                    value={des.id}
-                    onChange={handleIdCheck}
+              <div key={des._id} className='card bg-base-100 shadow-lg hover:shadow-xl transition-shadow overflow-hidden'>
+                <figure className='relative h-48 w-full bg-base-200 overflow-hidden group'>
+                  <Image 
+                    src={des.photo} 
+                    width={300} 
+                    height={200} 
+                    alt={des.title}
+                    className='w-full h-full object-cover group-hover:scale-105 transition-transform'
+                    style={{ width: 'auto', height: 'auto' }}
                   />
-                </th>
-                <th>
-                  <Image src={des.photo} width={100} height={100} alt={des.title} />
-                </th>
-                <th>{des.title}</th>
-                <th>
-                  <Link href={`/updateDesign/${idChecked}`} className='p-2'>
-                    <button className='btn' disabled={idChecked == des._id ? !chkEnabled : true}>
-                      {" "}
-                      Let's Update
-                    </button>
-                  </Link>
-                  <button onClick={handleDelete} disabled={idChecked == des._id ? !chkEnabled : true} className='btn btn-error'>
-                    Delete Design
-                  </button>
-                </th>
-              </tr>
+                </figure>
+                
+                <div className='card-body p-4'>
+                  <h2 className='card-title text-lg mb-4 line-clamp-2'>{des.title}</h2>
+                  
+                  {/* QUICK ACTIONS */}
+                  <div className='card-actions flex-col gap-2'>
+                    {/* VIEW BUTTON */}
+                    <Link href={`/shops/${des._id}`} className='w-full' target="_blank" rel="noopener noreferrer">
+                      <button className='btn btn-info btn-sm w-full hover:btn-info'>
+                        👁️ View
+                      </button>
+                    </Link>
+                    
+                    {/* UPDATE & DELETE BUTTONS */}
+                    <div className='w-full flex gap-2'>
+                      <Link href={`/updateDesign/${des._id}`} className='flex-1'>
+                        <button className='btn btn-primary btn-sm w-full hover:btn-primary'>
+                          ✏️ Update
+                        </button>
+                      </Link>
+                      <button 
+                        onClick={() => handleDelete(des._id, des.title)}
+                        disabled={deleting === des._id}
+                        className='btn btn-error btn-sm flex-1 hover:btn-error'
+                      >
+                        {deleting === des._id ? (
+                          <span className='loading loading-spinner loading-sm'></span>
+                        ) : (
+                          '🗑️ Delete'
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
-          </thead>
-        </table>
-      </div>
-      <div>
-        <PaginationControl totalPages={paginationTotal} pageIndex={pageIndex} currentPage={pageIndex} setCurrentPage={setPageIndex} />
+          </div>
+        )}
+
+        {/* PAGINATION */}
+        {paginationTotal > 1 && (
+          <div className='flex justify-center'>
+            <PaginationControl 
+              totalPages={paginationTotal} 
+              pageIndex={pageIndex} 
+              currentPage={pageIndex} 
+              setCurrentPage={setPageIndex} 
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,36 +7,63 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const imageUploaderCloudinary = async (file, pCode) => {
-  try {
-    // Validar archivo
-    if (!file || file.size === 0) {
-      throw new Error("empty or Invalid file");
-    }
+export const imageUploaderCloudinary = async (file, pCode, retries = 3) => {
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
-    if (!file.type.startsWith("image/")) {
-      throw new Error("Not a Valid Image");
-    }
-
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-    if (file.size > MAX_FILE_SIZE) {
-      throw new Error("Max file size allowed is (10 MB)");
-    }
-
-    // Convertir archivo a base64
-    const fileBuffer = await file.arrayBuffer();
-    const base64String = Buffer.from(fileBuffer).toString("base64");
-    const fileUri = `data:${file.type};base64,${base64String}`;
-
-    // Subir a Cloudinary
-    const uploadResult = await cloudinary.uploader.upload(fileUri, {
-      invalidate: true,
-    });
-    return uploadResult.secure_url;
-  } catch (error) {
-    console.error("Error en imageUploaderCloudinary:", error);
-    throw new Error("Error uploading image to Cloudinary");
+  // Validar archivo
+  if (!file || file.size === 0) {
+    throw new Error("empty or Invalid file");
   }
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Not a Valid Image");
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error("Max file size allowed is (10 MB)");
+  }
+
+  // Convertir archivo a base64
+  const fileBuffer = await file.arrayBuffer();
+  const base64String = Buffer.from(fileBuffer).toString("base64");
+  const fileUri = `data:${file.type};base64,${base64String}`;
+
+  // Retry logic con exponential backoff
+  let lastError;
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      console.log(`Cloudinary upload attempt ${attempt + 1}/${retries}`);
+      
+      // Subir a Cloudinary con timeout
+      const uploadResult = await Promise.race([
+        cloudinary.uploader.upload(fileUri, {
+          invalidate: true,
+          timeout: 60000, // 60 segundos
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Upload timeout")), 90000) // 90 segundos fallback
+        ),
+      ]);
+      
+      return uploadResult.secure_url;
+    } catch (error) {
+      lastError = error;
+      console.error(`Cloudinary upload error (attempt ${attempt + 1}):`, error.message);
+      
+      // Si es el último intento, lanzar error
+      if (attempt === retries - 1) {
+        console.error("Error en imageUploaderCloudinary:", error);
+        throw new Error("Error uploading image to Cloudinary after multiple retries");
+      }
+      
+      // Exponential backoff: 1s, 2s, 4s
+      const backoffMs = Math.pow(2, attempt) * 1000;
+      console.log(`Retrying in ${backoffMs}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, backoffMs));
+    }
+  }
+
+  throw lastError || new Error("Error uploading image to Cloudinary");
 };
 
 export const imageDeleterCloudinary = async (photoUrl) => {
@@ -52,20 +79,21 @@ export const imageDeleterCloudinary = async (photoUrl) => {
 };
 
 export const imageArrayPacker = async (imgs, pCode) => {
-  let secondaryPhotos = [];
-  const packingPhotos = async (img, index) => {
-    console.log(img);
-    let urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
-    let objReady = await objectCreator(index, urlSecondaryImg);
-    await secondaryPhotos.push(objReady);
-  };
-  //organizar la data del form, se crea promesa por delay de la db
-  const test = await Promise.all(
-    imgs.map(async (img, index) => {
-      await packingPhotos(img, index);
-    })
-  );
-  return secondaryPhotos;
+  // Procesar imágenes en paralelo con mejor manejo de errores
+  try {
+    const uploadedImages = await Promise.all(
+      imgs.map(async (img, index) => {
+        console.log(`Processing image ${index + 1}/${imgs.length}`);
+        const urlSecondaryImg = await imageUploaderCloudinary(img, pCode);
+        const objReady = await objectCreator(index, urlSecondaryImg);
+        return objReady;
+      })
+    );
+    return uploadedImages;
+  } catch (error) {
+    console.error("Error en imageArrayPacker:", error);
+    throw error;
+  }
 };
 
 const objectCreator = (index, string) => {

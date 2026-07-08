@@ -19,6 +19,11 @@ export default function FavoritesCarousel() {
       </div>
     );
 
+  // 🔧 Validar que data existe
+  if (!data?.payload?.docs) {
+    return <h1>No favorites available</h1>;
+  }
+
   const dataToShow = data.payload.docs;
 
   return (

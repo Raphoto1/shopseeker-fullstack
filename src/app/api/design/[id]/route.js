@@ -2,15 +2,36 @@ import { getUserInfo } from "@/service/auth.service";
 import { addToCart, getCart } from "@/service/cart.service";
 import { getDesignById, deleteDesign, likeDesign } from "@/service/design.service";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 //diseno directo
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
+    
+    // Validar que el ID sea válido
+    if (!id || id === 'undefined' || id === 'false') {
+      return NextResponse.json(
+        { status: "error", message: "Invalid design ID" },
+        { status: 400 }
+      );
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { status: "error", message: "Design ID format is invalid" },
+        { status: 400 }
+      );
+    }
+
     const design = await getDesignById(id);
     return NextResponse.json({ status: "success", payload: design });
   } catch (error) {
-    return NextResponse.json({ message: `error: ${error}` });
+    console.error("Error fetching design:", error);
+    return NextResponse.json(
+      { status: "error", message: `Design not found: ${error.message}` },
+      { status: 404 }
+    );
   }
 }
 

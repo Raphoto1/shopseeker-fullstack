@@ -27,6 +27,7 @@ const nextConfig = {
         port: "",
       },
     ],
+    qualities: [75, 85], // 🔧 Soportar quality 85 además de 75
   },
 };
 

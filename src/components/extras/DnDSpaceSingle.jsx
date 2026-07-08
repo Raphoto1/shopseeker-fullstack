@@ -1,54 +1,12 @@
 "use client";
 //imports de app
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
-  justify: "center",
-  align: "middle",
-  alignItems: "center",
-};
-
-const thumb = {
-  display: "inline-flex",
-  justify: "center",
-  align:"middle",
-  borderRadius: 2,
-  border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: "100%",
-  height: "100%",
-  padding: 4,
-  boxSizing: "border-box",
-  alignItems: "center",
-  alignItems: "center",
-};
-
-const thumbInner = {
-  display: "flex",
-  minWidth: 0,
-  overflow: "hidden",
-  justify: "center",
-  align: "middle",
-  borderRadius: 8,
-  alignItems: "center",
-};
-
-const img = {
-  display: "block",
-  width: "auto",
-  height: "100%",
-  alignItems: "center",
-};
-
 export default function DnDSpaceSingle({ files, setFiles }) {
   //file y set file se ajusta en el padre
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: {
       "image/*": [],
@@ -64,40 +22,44 @@ export default function DnDSpaceSingle({ files, setFiles }) {
     },
   });
 
-  const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img
-          src={file.preview}
-          style={img}
-          // Revoke data uri after image is loaded
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </div>
-    </div>
-  ));
-
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, []);
+  }, [files]);
 
   return (
-    <section className='container flex border-2 bg-slate-200 p-2 rounded-md w-1/2 justify-center align-middle text-center'>
-      <div {...getRootProps({ className: "dropzone" })} className='bg-slate-100 border-2 border-slate-300 rounded-md flex justify-center align-middle text-center items-center'>
-        <input {...getInputProps()} />
-
-        {files.length > 0 ? (
-          <div className='flex justify-center align-middle text-center items-center px-1'>
-            <p>File uploaded: {files[0].name}</p>
+    <div {...getRootProps()} className={`w-full rounded-lg border-2 border-dashed transition-colors cursor-pointer ${
+      isDragActive 
+        ? 'border-primary bg-primary/10' 
+        : 'border-base-300 bg-transparent hover:border-primary/50'
+    }`}>
+      <input {...getInputProps()} />
+      
+      {files.length > 0 ? (
+        <div className='p-8 flex flex-col items-center justify-center gap-4'>
+          <div className='relative w-full max-w-xs aspect-square bg-base-200 rounded-lg overflow-hidden'>
+            <img
+              src={files[0].preview}
+              alt={files[0].name}
+              className='w-full h-full object-cover'
+              onLoad={() => URL.revokeObjectURL(files[0].preview)}
+            />
+            <div className='absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center'>
+              <p className='text-white font-semibold'>Click to change</p>
+            </div>
           </div>
-        ) : (
-          <p className="px-1">Drag 'n' drop some file here, or click to select file</p>
-        )}
-      </div>
-      <aside style={thumbsContainer}>{thumbs}</aside>
-    </section>
+          <div className='text-center'>
+            <p className='font-semibold'>{files[0].name}</p>
+            <p className='text-xs text-base-content/60'>Click to replace</p>
+          </div>
+        </div>
+      ) : (
+        <div className='p-8 flex flex-col items-center justify-center gap-3'>
+          <div className='text-3xl'>📁</div>
+          <p className='font-semibold'>Drag and drop your image here</p>
+          <p className='text-xs text-base-content/60'>or click to select</p>
+        </div>
+      )}
+    </div>
   );
 }

@@ -19,12 +19,12 @@ const Footer = dynamic(() => import("@/components/footer/Footer"), {
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Shop Seeker",
-  description: "Shop seeker for print on demand creators",
+  title: "Creative Rafa",
+  description: "Master on visual arts , multipotential developer and more",
   openGraph: {
     title: "Creative Rafa Shop Seeker",
-    description: "Shop seeker for print on demand creators",
-    url:"shops.creativerafa.com",
+    description: "Master on visual arts, multipotential developer and more",
+    url:"creativerafa.com",
     type: "website",
   }
 };
@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en' data-theme='light'>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9669110661270895"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
       <body className={inter.className}>
         <GoogleAnalytics />
         <Providers>

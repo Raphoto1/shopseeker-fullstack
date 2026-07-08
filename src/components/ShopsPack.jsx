@@ -64,10 +64,15 @@ export default function ShopsPack({ mainPath, userId }) {
       </div>
     );
 
+  // 🔧 Validar que data existe
+  if (!data?.payload) {
+    return <h1>No data available</h1>;
+  }
+
   //data de paginacion
-  const allDesigns = data.payload.docs;
-  const totalDocs = data.payload.totalDocs;
-  const paginationTotal = data.payload.totalPages;
+  const allDesigns = data.payload.docs || [];
+  const totalDocs = data.payload.totalDocs || 0;
+  const paginationTotal = data.payload.totalPages || 0;
 
   //organizar ruta search
   if (searchText === "") {

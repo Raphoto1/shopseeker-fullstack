@@ -4,7 +4,6 @@ import {
   mongoDbDeleteCart,
   mongoDbDeleteFromCart,
   mongoDbGetCart,
-  mongoDbGetCartClean,
   mongoDbclearCart,
 } from "@/dao/cart.dao";
 
@@ -20,11 +19,6 @@ export const clearCart = async (cId) => {
 
 export const getCart = async (cId) => {
   const cart = await mongoDbGetCart(cId);
-  return cart;
-};
-
-export const getCartClean = async (cId) => {
-  const cart = await mongoDbGetCartClean(cId);
   return cart;
 };
 

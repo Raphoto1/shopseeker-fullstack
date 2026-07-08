@@ -20,10 +20,20 @@ export async function GET(req) {
 
     const designs = await getAllDesigns(limit, page, sortField, sortQ, queryKey, searchParam, filterCat, filterShop, userId);
 
-    return NextResponse.json({ status: "success", payload: designs });
+    return NextResponse.json(
+      { status: "success", payload: designs },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60", // 🚀 Cache 30s, stale 60s
+        },
+      }
+    );
   } catch (error) {
     console.error("Error fetching designs:", error);
-    return NextResponse.json({ status: "error", error: `Error fetching designs: ${stringifyError(error)}` }, { status: 500 });
+    return NextResponse.json(
+      { status: "error", error: `Error fetching designs: ${stringifyError(error)}` },
+      { status: 500 }
+    );
   }
 }
 

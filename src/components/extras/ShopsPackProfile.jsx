@@ -10,7 +10,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://www.redbubble.com/es/people/Raphoto1/shop?asc=u&ref=account-nav-dropdown'} passHref={true} target="blank">
             <div className='stat-title'> RedBubble </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/RedBubble.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/RedBubble.png`} alt='redbubble' style={{ width: 'auto', height: 'auto' }} />
             </div>
           </Link>
         </div>
@@ -26,7 +26,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://displate.com/Raphoto1?art=5c9d663484046'} passHref={true} target="blank">
             <div className='stat-title justify-center'> Displate </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Displate.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/Displate.png`} alt='redbubble' style={{ width: 'auto', height: 'auto' }} />
             </div>
           </Link>
         </div>
@@ -34,7 +34,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://www.teepublic.com/user/creativerafa'} passHref={true} target="blank">
             <div className='stat-title text-center'> Teepublic </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/TeePublic.png`} alt='redbubble' />
+              <Image width={"50"} height={"50"} src={`/img/icons/TeePublic.png`} alt='redbubble' style={{ width: 'auto', height: 'auto' }} />
             </div>
           </Link>
         </div>
@@ -42,7 +42,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://creative-rafa.myspreadshop.es/'} passHref={true} target="blank">
             <div className='stat-title'> SpreadShirt </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='spreadshirt' />
+              <Image width={"50"} height={"50"} src={`/img/icons/Spreadshirt.png`} alt='spreadshirt' style={{ width: 'auto', height: 'auto' }} />
             </div>
           </Link>
         </div>
@@ -50,7 +50,7 @@ export default function ShopsPackProfile() {
           <Link href={'https://raphoto1.threadless.com/'} passHref={true} target="blank">
             <div className='stat-title'> Threadless </div>
             <div className='stat-figure flex justify-center'>
-              <Image width={"50"} height={"50"} src={`/img/icons/Threadless.png`} alt='redbubble' className="bg-slate-50 rounded-full"/>
+              <Image width={"50"} height={"50"} src={`/img/icons/Threadless.png`} alt='redbubble' className="bg-slate-50 rounded-full" style={{ width: 'auto', height: 'auto' }}/>
             </div>
           </Link>
         </div>

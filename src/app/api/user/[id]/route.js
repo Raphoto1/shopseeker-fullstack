@@ -5,10 +5,32 @@ import { NextResponse } from "next/server";
 export async function GET(req, { params }) {
   try {
     const { id: capturedId } = await params;
+    
+    // 🔧 Validar que capturedId existe
+    if (!capturedId) {
+      return NextResponse.json(
+        { status: 400, message: "User ID is required" },
+        { status: 400 }
+      );
+    }
+    
     const user = await getUserInfo(capturedId);
+    
+    // 🔧 Validar que el usuario existe
+    if (!user) {
+      return NextResponse.json(
+        { status: 404, message: "User not found" },
+        { status: 404 }
+      );
+    }
+    
     return NextResponse.json({ status: 200, payload: user });
   } catch (error) {
-    return NextResponse.json({ message: `error: ${error}` });
+    console.error("GET /api/user/[id] error:", error);
+    return NextResponse.json(
+      { status: 500, message: `Error: ${error.message}` },
+      { status: 500 }
+    );
   }
 }
 

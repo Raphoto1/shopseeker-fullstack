@@ -18,12 +18,12 @@ export default function CardDesignWithCarousel(props) {
         <figure>
           <Carousel showStatus={false} showThumbs={false}>
             <div key={1} className=' flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
-              <Image src={props.photo} width={500} height={500} alt={props.title} loading='lazy' objectFit='scale-down' />
+              <Image src={props.photo} width={500} height={500} alt={props.title} loading='lazy' style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }} />
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
               <div key={index + 1} className='flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
-                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading='lazy' objectFit='scale-down' />
+                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading='lazy' style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }} />
               </div>
             ))}
           </Carousel>
@@ -45,6 +45,7 @@ export default function CardDesignWithCarousel(props) {
                       alt={shop.shopName}
                       loading='lazy'
                       className='bg-slate-50 rounded-full'
+                      style={{ width: 'auto', height: 'auto' }}
                     />
                   </Link>
                 </div>

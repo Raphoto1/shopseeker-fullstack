@@ -1,6 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
+// 🚀 ISR: Regenerar esta página cada 60 segundos
+export const revalidate = 60;
+
 export default function Page() {
   return (
     <main className="relative isolate min-h-[80vh] overflow-hidden bg-slate-950 px-6 py-16 text-slate-100 sm:px-10">
