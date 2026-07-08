@@ -18,15 +18,41 @@ const Footer = dynamic(() => import("@/components/footer/Footer"), {
 
 const inter = Inter({ subsets: ["latin"] });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://creativerafa.com";
+
 export const metadata = {
-  title: "Creative Rafa",
-  description: "Master on visual arts , multipotential developer and more",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Creative Rafa",
+    template: "%s | Creative Rafa",
+  },
+  description: "Master on visual arts, multipotential developer and more",
+  alternates: {
+    canonical: "/",
+  },
+  keywords: ["creative", "design", "visual arts", "developer", "shop seeker"],
   openGraph: {
-    title: "Creative Rafa Shop Seeker",
+    title: "Creative Rafa",
     description: "Master on visual arts, multipotential developer and more",
-    url:"creativerafa.com",
+    url: siteUrl,
+    siteName: "Creative Rafa",
+    locale: "en_US",
     type: "website",
-  }
+    images: [
+      {
+        url: "/img/icons/Icon whiteBG.png",
+        width: 1200,
+        height: 630,
+        alt: "Creative Rafa",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Creative Rafa",
+    description: "Master on visual arts, multipotential developer and more",
+    images: ["/img/icons/Icon whiteBG.png"],
+  },
 };
 
 export default function RootLayout({ children }) {

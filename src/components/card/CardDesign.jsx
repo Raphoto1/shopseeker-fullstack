@@ -2,6 +2,31 @@
 import Image from "next/image";
 import { LikeButton } from "../buttons/LikeButton";
 import Link from "next/link";
+import { event as trackEvent } from "@/gtag";
+
+const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
+  const shopKey = String(shopName || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+  const actionName = `shop_link_click_${shopKey || "unknown"}`;
+
+  trackEvent({
+    action: actionName,
+    category: "design_shop",
+    label: `${shopName}|${designTitle}|${designId}`,
+    value: 1,
+    params: {
+      action_base: "shop_link_click",
+      shop_name: shopName,
+      shop_key: shopKey,
+      shop_url: shopUrl,
+      design_id: String(designId),
+      design_title: designTitle,
+      source_component: "CardDesign",
+    },
+  });
+};
 
 export default function CardDesign(props) {
 
@@ -22,7 +47,14 @@ export default function CardDesign(props) {
             {props.shops.map((shop, index) => {
               return shop.shopUrl === "null" ? null : (
                 <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
-                  <Link href={`${shop.shopUrl}`} passHref={true} target='blank' className='flex-auto content-center'>
+                  <Link
+                    href={`${shop.shopUrl}`}
+                    passHref={true}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId: props.id, designTitle: props.title })}
+                    className='flex-auto content-center'
+                  >
                     <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full" style={{ width: 'auto', height: 'auto' }}/>
                   </Link>
                 </div>
