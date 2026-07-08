@@ -2,6 +2,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 // Imports propios
 import Navbar from "@/components/navbar/Navbar";
@@ -61,7 +62,9 @@ export default function RootLayout({ children }) {
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9669110661270895"
      crossOrigin="anonymous"></script>
       <body className={inter.className}>
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         <Providers>
           <CartProvider>
             <Navbar />

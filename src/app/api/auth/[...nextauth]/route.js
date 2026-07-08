@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { mongoDbUserChkEmail } from "@/dao/user.dao";
 import { mongoDbGetCart } from "@/dao/cart.dao";
 
-const handler = NextAuth({
+export const authOptions = {
   session: {
     strategy: "jwt",
   },
@@ -59,6 +59,8 @@ const handler = NextAuth({
       },
     }),
   ],
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

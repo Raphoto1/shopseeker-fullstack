@@ -73,7 +73,7 @@ export default function CartPrev({ cartId }) {
       <div className="flex justify-center text-center">
         <div className='grid grid-flow-row xl:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1 text-center'>
           {designsToShow.length >= 1 ? (
-            designsToShow.map((des) => (
+            designsToShow.map((des, index) => (
               <div key={v4()} className='p-2'>
                 <CardDesignWithCarousel
                   key={des.design._id}
@@ -85,6 +85,7 @@ export default function CartPrev({ cartId }) {
                   secondaryPhotos={des.design.secondaryImages}
                   shops={des.design.shops}
                   likes={des.design.likes}
+                  eagerImage={index === 0}
                 />
               </div>
             ))

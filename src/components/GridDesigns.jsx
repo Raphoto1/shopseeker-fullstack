@@ -16,7 +16,7 @@ export default function GridDesigns({ designsToSort }) {
       />
       </div>
        <div className='grid grid-flow-row xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-2 pt-2 px-1'>
-          {designsToSort.map((des) => (
+          {designsToSort.map((des, index) => (
             <div key={des._id}>
               <CardDesignWithCarousel
                 key={des._id}
@@ -29,6 +29,7 @@ export default function GridDesigns({ designsToSort }) {
                 shops={des.shops}
                 likes={des.likes}
                 blogLink={des.blogLink}
+                eagerImage={index === 0}
               />
             </div>
           ))}

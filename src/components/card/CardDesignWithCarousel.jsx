@@ -34,6 +34,8 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
 };
 
 export default function CardDesignWithCarousel(props) {
+  const shouldPrioritizeImage = Boolean(props.eagerImage);
+
   return (
     <>
       <div className='card bg-base-100 shadow-xl stretch h-full glass w-auto' key={v4()}>
@@ -43,7 +45,15 @@ export default function CardDesignWithCarousel(props) {
         <figure>
           <Carousel showStatus={false} showThumbs={false}>
             <div key={1} className=' flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
-              <Image src={props.photo} width={500} height={500} alt={props.title} loading='lazy' style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }} />
+              <Image
+                src={props.photo}
+                width={500}
+                height={500}
+                alt={props.title}
+                loading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+                priority={shouldPrioritizeImage}
+                style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }}
+              />
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
