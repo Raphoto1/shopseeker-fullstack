@@ -14,7 +14,10 @@ export async function generateMetadata({ params }) {
   let post;
   try {
     post = await getBlogBySlug(slug);
-  } catch {
+  } catch (error) {
+    if (error?.message !== "Blog not found") {
+      throw error;
+    }
     return {
       title: "Post not found | Creative Rafa",
       description: "The requested post could not be found.",
@@ -38,8 +41,11 @@ export default async function BlogPostPage({ params }) {
   let post;
   try {
     post = await getBlogBySlug(slug);
-  } catch {
-    notFound();
+  } catch (error) {
+    if (error?.message === "Blog not found") {
+      notFound();
+    }
+    throw error;
   }
 
   if (!post) {
