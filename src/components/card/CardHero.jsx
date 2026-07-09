@@ -49,7 +49,7 @@ const ShopLink = memo(({ shop, designId, designTitle }) => {
         target='_blank'
         rel='noopener noreferrer'
         onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle })}
-        className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/85 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
+        className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-base-300 bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
       >
         <Image
           width={50}
@@ -57,7 +57,7 @@ const ShopLink = memo(({ shop, designId, designTitle }) => {
           src={`/img/icons/${shop.shopName}.png`}
           alt={shop.shopName}
           loading='lazy'
-          className='h-10 w-10 rounded-full bg-slate-50 object-contain p-1'
+          className='h-10 w-10 rounded-full bg-slate-100 object-contain p-1'
           sizes="50px"
         />
       </Link>
@@ -72,8 +72,8 @@ const ShareButtons = memo(({ id, description, title, photo }) => {
   const shareUrl = `${pageBasePath}/shops/${id}`;
   
   return (
-    <div className='mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4'>
-      <p className='text-sm font-semibold tracking-wide text-slate-600'>Share this design</p>
+    <div className='mt-6 rounded-2xl border border-base-300 bg-base-200/70 p-4'>
+      <p className='text-sm font-semibold tracking-wide text-base-content/70'>Share this design</p>
       <div className='mt-3 flex flex-wrap items-center gap-2'>
         <a 
           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
@@ -152,11 +152,11 @@ function CardHero(props) {
   if (error) {
     console.error('Error loading design:', error);
     return (
-      <div className='min-h-screen bg-gradient-to-br from-slate-100 via-white to-sky-100 px-4 py-10'>
-        <div className='mx-auto max-w-4xl rounded-3xl border border-red-200 bg-white/90 p-8 text-center shadow-xl'>
+      <div className='min-h-screen bg-base-100 px-4 py-10'>
+        <div className='mx-auto max-w-4xl rounded-3xl border border-error/40 bg-base-200/70 p-8 text-center shadow-xl'>
           <div>
-            <h1 className='text-2xl font-bold text-red-600'>Design not found</h1>
-            <p className='py-4 text-slate-600'>{error.message || 'The design you are looking for could not be loaded.'}</p>
+            <h1 className='text-2xl font-bold text-error'>Design not found</h1>
+            <p className='py-4 text-base-content/70'>{error.message || 'The design you are looking for could not be loaded.'}</p>
           </div>
         </div>
       </div>
@@ -165,9 +165,9 @@ function CardHero(props) {
   
   if (isLoading) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-slate-100 via-white to-sky-100 px-4 py-10'>
-        <div className='mx-auto flex max-w-4xl items-center justify-center rounded-3xl border border-slate-200 bg-white/90 p-10 shadow-xl'>
-          <div className='loading loading-infinity loading-lg text-sky-600'></div>
+      <div className='min-h-screen bg-base-100 px-4 py-10'>
+        <div className='mx-auto flex max-w-4xl items-center justify-center rounded-3xl border border-base-300 bg-base-200/70 p-10 shadow-xl'>
+          <div className='loading loading-infinity loading-lg text-primary'></div>
         </div>
       </div>
     );
@@ -175,12 +175,12 @@ function CardHero(props) {
 
   if (!design) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-slate-100 via-white to-sky-100 px-4 py-10'>
-        <div className='mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white/90 p-8 text-center shadow-xl'>
+      <div className='min-h-screen bg-base-100 px-4 py-10'>
+        <div className='mx-auto max-w-4xl rounded-3xl border border-base-300 bg-base-200/70 p-8 text-center shadow-xl'>
           <div>
-            <h1 className='text-2xl font-bold text-slate-800'>No design data available</h1>
+            <h1 className='text-2xl font-bold text-base-content'>No design data available</h1>
             {!isValidDesignId && (
-              <p className='py-4 text-slate-600'>Invalid design id received in the URL.</p>
+              <p className='py-4 text-base-content/70'>Invalid design id received in the URL.</p>
             )}
           </div>
         </div>
@@ -189,10 +189,10 @@ function CardHero(props) {
   }
 
   return (
-    <section className='min-h-screen bg-gradient-to-br from-slate-100 via-white to-sky-100 px-4 py-10 sm:px-6 lg:px-8'>
-      <div className='mx-auto max-w-7xl rounded-3xl border border-white/70 bg-white/75 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.15)] backdrop-blur md:p-8'>
+    <section className='min-h-screen bg-base-100 px-4 py-10 sm:px-6 lg:px-8'>
+      <div className='mx-auto max-w-7xl rounded-3xl border border-base-300 bg-base-200/50 p-4 shadow-xl backdrop-blur md:p-8'>
         <div className='grid grid-cols-1 items-start gap-8 lg:grid-cols-2'>
-          <div className='overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl'>
+          <div className='overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-xl'>
             <Carousel
               autoPlay
               dynamicHeight={false}
@@ -202,7 +202,7 @@ function CardHero(props) {
               emulateTouch
               showStatus={false}
             >
-              <div key='main-image' className='bg-slate-50 p-4'>
+              <div key='main-image' className='bg-base-200 p-4'>
                 <Image
                   src={design.photo}
                   width={700}
@@ -216,7 +216,7 @@ function CardHero(props) {
               </div>
 
               {design.secondaryImages?.map((img, index) => (
-                <div key={`secondary-${index}`} className='bg-slate-50 p-4'>
+                <div key={`secondary-${index}`} className='bg-base-200 p-4'>
                   <Image
                     src={img.SIUrl}
                     width={700}
@@ -232,22 +232,22 @@ function CardHero(props) {
             </Carousel>
           </div>
 
-          <div className='rounded-2xl border border-slate-200 bg-white p-6 shadow-lg sm:p-8'>
+          <div className='rounded-2xl border border-base-300 bg-base-100 p-6 shadow-lg sm:p-8'>
             <div className='mb-5 flex justify-start'>
               <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />
             </div>
 
-            <h1 className='text-3xl font-extrabold capitalize leading-tight text-slate-900 sm:text-4xl'>
+            <h1 className='text-3xl font-extrabold capitalize leading-tight text-base-content sm:text-4xl'>
               {design.title}
             </h1>
 
-            <p className='mt-4 text-base leading-relaxed text-slate-700 sm:text-lg'>
+            <p className='mt-4 text-base leading-relaxed text-base-content/80 sm:text-lg'>
               {design.description}
             </p>
 
             {validShops.length > 0 && (
               <div className='mt-7'>
-                <p className='mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500'>
+                <p className='mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-base-content/60'>
                   Available at
                 </p>
                 <div className='flex flex-wrap gap-3'>
@@ -263,7 +263,7 @@ function CardHero(props) {
                 <Link
                   href={design.blogLink}
                   target="_blank"
-                  className='inline-flex items-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-slate-700'
+                  className='inline-flex items-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-content transition-all duration-200 hover:opacity-90'
                 >
                   Blog About {design.title}
                 </Link>
