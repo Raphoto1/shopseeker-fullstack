@@ -31,7 +31,7 @@ export default function BlogLayout() {
 
   if (isLoading && postsToRender.length === 0) {
     return (
-      <main className='min-h-screen bg-[linear-gradient(135deg,#0b1324_0%,#13213f_45%,#0e172d_100%)] px-5 py-14 text-slate-100 sm:px-10 lg:px-16'>
+      <main className='min-h-screen bg-base-100 px-5 py-14 text-base-content sm:px-10 lg:px-16'>
         <div className='mx-auto flex max-w-6xl items-center justify-center py-20'>
           <span className='loading loading-infinity loading-lg' />
         </div>
@@ -41,8 +41,8 @@ export default function BlogLayout() {
 
   if (!featuredPost) {
     return (
-      <main className='min-h-screen bg-[linear-gradient(135deg,#0b1324_0%,#13213f_45%,#0e172d_100%)] px-5 py-14 text-slate-100 sm:px-10 lg:px-16'>
-        <div className='mx-auto max-w-6xl rounded-2xl border border-white/10 bg-slate-900/50 p-8'>
+      <main className='min-h-screen bg-base-100 px-5 py-14 text-base-content sm:px-10 lg:px-16'>
+        <div className='mx-auto max-w-6xl rounded-2xl border border-base-300 bg-base-200/60 p-8'>
           <h2 className='text-2xl font-bold'>aun no se ha publicado nada</h2>
         </div>
       </main>
@@ -50,10 +50,10 @@ export default function BlogLayout() {
   }
 
   return (
-    <main className='min-h-screen bg-[linear-gradient(135deg,#0b1324_0%,#13213f_45%,#0e172d_100%)] px-5 py-14 text-slate-100 sm:px-10 lg:px-16'>
+    <main className='min-h-screen bg-base-100 px-5 py-14 text-base-content sm:px-10 lg:px-16'>
       <div className='mx-auto w-full max-w-6xl'>
-        <section className='rounded-3xl border border-cyan-200/20 bg-slate-900/45 p-7 shadow-[0_24px_70px_rgba(3,7,18,0.45)] backdrop-blur md:p-10'>
-          <p className='inline-flex rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200'>
+        <section className='rounded-3xl border border-base-300 bg-base-200/50 p-7 shadow-xl backdrop-blur md:p-10'>
+          <p className='inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary'>
             Creative Rafa Blog
           </p>
 
@@ -61,7 +61,7 @@ export default function BlogLayout() {
             Notes on design, creative strategy, and full-stack execution
           </h1>
 
-          <p className='mt-4 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg'>
+          <p className='mt-4 max-w-2xl text-base leading-relaxed text-base-content/70 sm:text-lg'>
             A curated space for practical breakdowns, experiments, and lessons learned while building creative products.
           </p>
 
@@ -70,21 +70,21 @@ export default function BlogLayout() {
               <button
                 key={category}
                 type='button'
-                className='rounded-full border border-slate-400/40 bg-slate-800/55 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-200 transition hover:border-cyan-300/60 hover:text-cyan-200'
+                className='rounded-full border border-base-300 bg-base-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-base-content/80 transition hover:border-primary hover:text-primary'
               >
                 {category}
               </button>
             ))}
           </div>
 
-          {error && <p className='mt-4 text-xs text-amber-200'>No se pudieron cargar los posts publicados.</p>}
+          {error && <p className='mt-4 text-xs text-warning'>No se pudieron cargar los posts publicados.</p>}
         </section>
 
         <section className='mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
-          <article className='group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/55 p-7 transition hover:border-cyan-300/40 md:p-8'>
-            <div className='absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-300 via-emerald-300 to-orange-300' />
+          <article className='group relative overflow-hidden rounded-3xl border border-base-300 bg-base-200/50 p-7 transition hover:border-primary/60 md:p-8'>
+            <div className='absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent' />
 
-            <p className='text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200'>
+            <p className='text-xs font-semibold uppercase tracking-[0.18em] text-primary'>
               Featured
             </p>
 
@@ -92,20 +92,20 @@ export default function BlogLayout() {
               {featuredPost.title}
             </h2>
 
-            <p className='mt-4 max-w-2xl text-slate-300'>{featuredPost.excerpt}</p>
+            <p className='mt-4 max-w-2xl text-base-content/70'>{featuredPost.excerpt}</p>
 
             {featuredLinkedDesigns.length > 0 && (
               <div className='mt-5 space-y-2'>
-                <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan-200'>Linked Designs</p>
+                <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-primary'>Linked Designs</p>
                 <div className='grid gap-2 sm:grid-cols-2'>
                   {featuredLinkedDesigns.slice(0, 4).map((linkedDesign) => (
                     <Link
                       key={String(linkedDesign._id)}
                       href={`/shops/${linkedDesign._id}`}
-                      className='block overflow-hidden rounded-2xl border border-cyan-200/25 bg-slate-950/45 p-3 transition hover:border-cyan-200/45'
+                      className='block overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-3 transition hover:border-primary/50'
                     >
                       <div className='flex items-center gap-3'>
-                        <div className='relative h-14 w-14 overflow-hidden rounded-lg border border-white/10'>
+                        <div className='relative h-14 w-14 overflow-hidden rounded-lg border border-base-300'>
                           <Image
                             src={linkedDesign.photo || featuredPost.cover}
                             alt={linkedDesign.title || "Linked design"}
@@ -115,8 +115,8 @@ export default function BlogLayout() {
                           />
                         </div>
                         <div className='min-w-0'>
-                          <p className='truncate text-sm font-semibold text-slate-100'>{linkedDesign.title || "View design"}</p>
-                          <p className='text-xs uppercase tracking-[0.12em] text-slate-400'>{linkedDesign.category || "Design"}</p>
+                          <p className='truncate text-sm font-semibold text-base-content'>{linkedDesign.title || "View design"}</p>
+                          <p className='text-xs uppercase tracking-[0.12em] text-base-content/60'>{linkedDesign.category || "Design"}</p>
                         </div>
                       </div>
                     </Link>
@@ -125,34 +125,34 @@ export default function BlogLayout() {
               </div>
             )}
 
-            <div className='mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.14em] text-slate-400'>
+            <div className='mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.14em] text-base-content/60'>
               <span>{featuredPost.category}</span>
-              <span className='h-1 w-1 rounded-full bg-slate-500' />
+              <span className='h-1 w-1 rounded-full bg-base-content/50' />
               <span>{featuredPost.readTime}</span>
-              <span className='h-1 w-1 rounded-full bg-slate-500' />
+              <span className='h-1 w-1 rounded-full bg-base-content/50' />
               <span>{formatPostDate(featuredPost)}</span>
             </div>
 
             <Link
               href={`/blog/${featuredPost.slug}`}
-              className='mt-7 inline-flex items-center rounded-xl bg-cyan-300 px-5 py-3 text-sm font-bold text-slate-900 transition group-hover:translate-x-1'
+              className='mt-7 inline-flex items-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-content transition group-hover:translate-x-1 group-hover:opacity-90'
             >
               Read featured article
             </Link>
           </article>
 
-          <aside className='rounded-3xl border border-white/10 bg-slate-900/55 p-6 md:p-7'>
+          <aside className='rounded-3xl border border-base-300 bg-base-200/50 p-6 md:p-7'>
             <h3 className='text-lg font-semibold'>Trending Topics</h3>
-            <ul className='mt-4 space-y-3 text-sm text-slate-300'>
-              <li className='rounded-xl border border-slate-700/70 bg-slate-800/50 px-3 py-2'>Design pipelines</li>
-              <li className='rounded-xl border border-slate-700/70 bg-slate-800/50 px-3 py-2'>Store platform strategy</li>
-              <li className='rounded-xl border border-slate-700/70 bg-slate-800/50 px-3 py-2'>Content production systems</li>
-              <li className='rounded-xl border border-slate-700/70 bg-slate-800/50 px-3 py-2'>Analytics for creators</li>
+            <ul className='mt-4 space-y-3 text-sm text-base-content/70'>
+              <li className='rounded-xl border border-base-300 bg-base-100 px-3 py-2'>Design pipelines</li>
+              <li className='rounded-xl border border-base-300 bg-base-100 px-3 py-2'>Store platform strategy</li>
+              <li className='rounded-xl border border-base-300 bg-base-100 px-3 py-2'>Content production systems</li>
+              <li className='rounded-xl border border-base-300 bg-base-100 px-3 py-2'>Analytics for creators</li>
             </ul>
 
-            <div className='mt-6 rounded-2xl border border-cyan-300/30 bg-cyan-300/10 p-4'>
-              <p className='text-sm font-semibold text-cyan-100'>Stay in the loop</p>
-              <p className='mt-2 text-sm text-slate-300'>
+            <div className='mt-6 rounded-2xl border border-primary/30 bg-primary/10 p-4'>
+              <p className='text-sm font-semibold text-primary'>Stay in the loop</p>
+              <p className='mt-2 text-sm text-base-content/70'>
                 New writing drops on process, design systems, and experiments from the workshop.
               </p>
             </div>
@@ -167,15 +167,15 @@ export default function BlogLayout() {
             <article
               key={post.slug}
               id={post.slug}
-              className='rounded-2xl border border-white/10 bg-slate-900/45 p-6 transition hover:border-emerald-300/40'
+              className='rounded-2xl border border-base-300 bg-base-200/40 p-6 transition hover:border-primary/60'
             >
-              <div className='flex items-center justify-between gap-3 text-xs uppercase tracking-[0.14em] text-slate-400'>
+              <div className='flex items-center justify-between gap-3 text-xs uppercase tracking-[0.14em] text-base-content/60'>
                 <span>{post.category}</span>
                 <span>{formatPostDate(post)}</span>
               </div>
 
               <h3 className='mt-3 text-xl font-bold leading-snug'>{post.title}</h3>
-              <p className='mt-3 text-sm text-slate-300'>{post.excerpt}</p>
+              <p className='mt-3 text-sm text-base-content/70'>{post.excerpt}</p>
 
               {linkedDesigns.length > 0 && (
                 <div className='mt-4 space-y-2'>
@@ -183,10 +183,10 @@ export default function BlogLayout() {
                     <Link
                       key={String(linkedDesign._id)}
                       href={`/shops/${linkedDesign._id}`}
-                      className='block overflow-hidden rounded-xl border border-cyan-300/25 bg-slate-950/45 p-2 transition hover:border-cyan-300/45'
+                      className='block overflow-hidden rounded-xl border border-base-300 bg-base-100 p-2 transition hover:border-primary/50'
                     >
                       <div className='flex items-center gap-3'>
-                        <div className='relative h-12 w-12 overflow-hidden rounded-md border border-white/10'>
+                        <div className='relative h-12 w-12 overflow-hidden rounded-md border border-base-300'>
                           <Image
                             src={linkedDesign.photo || post.cover}
                             alt={linkedDesign.title || "Linked design"}
@@ -197,8 +197,8 @@ export default function BlogLayout() {
                           />
                         </div>
                         <div className='min-w-0'>
-                          <p className='truncate text-sm font-semibold text-slate-100'>{linkedDesign.title || "View design"}</p>
-                          <p className='text-[11px] uppercase tracking-[0.12em] text-slate-400'>{linkedDesign.category || "Design"}</p>
+                          <p className='truncate text-sm font-semibold text-base-content'>{linkedDesign.title || "View design"}</p>
+                          <p className='text-[11px] uppercase tracking-[0.12em] text-base-content/60'>{linkedDesign.category || "Design"}</p>
                         </div>
                       </div>
                     </Link>
@@ -207,10 +207,10 @@ export default function BlogLayout() {
               )}
 
               <div className='mt-5 flex items-center justify-between'>
-                <span className='text-xs uppercase tracking-[0.14em] text-slate-400'>{post.readTime}</span>
+                <span className='text-xs uppercase tracking-[0.14em] text-base-content/60'>{post.readTime}</span>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className='text-sm font-semibold text-cyan-200 transition hover:text-cyan-100'
+                  className='text-sm font-semibold text-primary transition hover:opacity-80'
                 >
                   Read more
                 </Link>
