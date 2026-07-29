@@ -8,7 +8,7 @@ export const shops = [
 
 export const allShopsPath = '/api/design?page='
 
-export const pageBasePath = 'https://shops.creativerafa.com'
+export const pageBasePath = 'https://www.creativerafa.com/'
 
 export const pageDevPath = 'http://localhost:3000'
 
