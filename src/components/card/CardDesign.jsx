@@ -3,6 +3,18 @@ import Image from "next/image";
 import { LikeButton } from "../buttons/LikeButton";
 import Link from "next/link";
 import { event as trackEvent } from "@/gtag";
+import { FaPalette } from "react-icons/fa6";
+
+const SHOP_ICON_MAP = {
+  RedBubble: "/img/icons/RedBubble.png",
+  Society6: "/img/icons/Society6.png",
+  Displate: "/img/icons/Displate.png",
+  TeePublic: "/img/icons/TeePublic.png",
+  Spreadshirt: "/img/icons/Spreadshirt.png",
+  Threadless: "/img/icons/Threadless.png",
+};
+
+const getShopIconSrc = (shopName) => SHOP_ICON_MAP[shopName] || "/img/icons/shoppingCart.png";
 
 const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
   const shopKey = String(shopName || "")
@@ -45,6 +57,18 @@ export default function CardDesign(props) {
           <p className='text-center line-clamp-3'>{props.description}</p>
           <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
             {props.shops.map((shop, index) => {
+              const isArtisticCopy = shop.shopName === "Artistic Copy";
+
+              if (isArtisticCopy) {
+                return (
+                  <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
+                    <div className='inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-base-300 bg-base-100 text-primary shadow-sm'>
+                      <FaPalette size={20} aria-hidden='true' />
+                    </div>
+                  </div>
+                );
+              }
+
               return shop.shopUrl === "null" ? null : (
                 <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
                   <Link
@@ -55,7 +79,15 @@ export default function CardDesign(props) {
                     onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId: props.id, designTitle: props.title })}
                     className='flex-auto content-center'
                   >
-                    <Image width={"50"} height={"50"} src={`/img/icons/${shop.shopName}.png`} alt={shop.shopName} loading="lazy" className="bg-slate-50 rounded-full" style={{ width: 'auto', height: 'auto' }}/>
+                    <Image
+                      width={"50"}
+                      height={"50"}
+                      src={getShopIconSrc(shop.shopName)}
+                      alt={shop.shopName}
+                      loading="lazy"
+                      className="bg-slate-50 rounded-full"
+                      style={{ width: "auto", height: "auto" }}
+                    />
                   </Link>
                 </div>
               );

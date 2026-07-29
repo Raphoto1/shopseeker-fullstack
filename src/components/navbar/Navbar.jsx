@@ -1,9 +1,8 @@
-"use client";
-//import propios
+'use client';
+import React from "react";
 import { pageBasePath } from "@/enums/SuperVariables";
 import { useCart } from "@/context/cartContext";
 import ContactForm from "../contact/ContactForm";
-//imports app
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +10,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { GiLoveLetter } from "react-icons/gi";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaInstagram, FaTwitter, FaLinkedin, FaFacebook } from "react-icons/fa";
 
 function NavbarLoader() {
   return (
@@ -21,7 +20,6 @@ function NavbarLoader() {
   );
 }
 
-// Cargar componentes de manera diferida
 const ThemeSelect = dynamic(() => import("../buttons/ThemeSelect"), {
   ssr: false,
   loading: () => <NavbarLoader />,
@@ -81,6 +79,7 @@ export default function Navbar() {
               <li><a href='/dev' onClick={() => setIsMobileMenuOpen(false)}>Dev</a></li>
               <li><a href='/about' onClick={() => setIsMobileMenuOpen(false)}>About</a></li>
               <li className='px-2 py-1'><ContactForm /></li>
+              <li className='px-2 py-1'><div className='flex items-center gap-3'><span className='font-bold'>Socials:</span><a href='#' className='hover:text-primary'><FaInstagram /></a><a href='#' className='hover:text-primary'><FaTwitter /></a><a href='#' className='hover:text-primary'><FaLinkedin /></a></div></li>
             </ul>
           ) : null}
         </div>
@@ -116,11 +115,16 @@ export default function Navbar() {
               <TwitterIcon size={32} round />
             </TwitterShareButton>
           </div>
-
           <div className='flex items-center gap-2 self-start lg:self-auto'>
             <ThemeSelect />
             <NavbarAccount session={session} cartCount={cartCount} />
           </div>
+        </div>
+        <div className='flex items-center gap-2 self-start lg:self-auto'>
+          <a href='https://www.instagram.com/creativerafaco/' className='hover:text-primary'><FaInstagram size={24} /></a>
+          <a href='https://x.com/CreativeRafaCo' className='hover:text-primary'><FaTwitter size={24} /></a>
+          <a href='https://www.facebook.com/CreativeRafaCo' className='hover:text-primary'><FaFacebook size={24} /></a>
+          <a href='https://www.linkedin.com/in/rafael-mart%C3%ADnez-0a579b63/' className='hover:text-primary'><FaLinkedin size={24} /></a>
         </div>
       </div>
     </header>

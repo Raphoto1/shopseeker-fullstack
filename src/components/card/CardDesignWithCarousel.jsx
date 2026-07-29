@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { FaPalette } from "react-icons/fa6";
 import { v4 } from "uuid";
 //imports propios
 import { LikeButton } from "@/components/buttons/LikeButton";
 import { event as trackEvent } from "@/gtag";
+import ArtisticCopyViewModal from "../modals/ArtisticCopyViewModal";
 
 const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
   const shopKey = String(shopName || "")
@@ -35,6 +37,7 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
 
 export default function CardDesignWithCarousel(props) {
   const shouldPrioritizeImage = Boolean(props.eagerImage);
+  const artisticCopyLabel = "Original Copy";
 
   return (
     <>
@@ -50,15 +53,22 @@ export default function CardDesignWithCarousel(props) {
                 width={500}
                 height={500}
                 alt={props.title}
-                loading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+                loading={shouldPrioritizeImage ? "eager" : "lazy"}
                 priority={shouldPrioritizeImage}
-                style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }}
+                style={{ objectFit: "scale-down", width: "auto", height: "auto" }}
               />
             </div>
 
             {props.secondaryPhotos.map((img, index) => (
               <div key={index + 1} className='flex max-w-auto aspect-square overflow-hidden align-middle content-center items-center'>
-                <Image src={img.SIUrl} width={500} height={500} alt={props.title} loading='lazy' style={{ objectFit: 'scale-down', width: 'auto', height: 'auto' }} />
+                <Image
+                  src={img.SIUrl}
+                  width={500}
+                  height={500}
+                  alt={props.title}
+                  loading='lazy'
+                  style={{ objectFit: "scale-down", width: "auto", height: "auto" }}
+                />
               </div>
             ))}
           </Carousel>
@@ -69,17 +79,56 @@ export default function CardDesignWithCarousel(props) {
           <h3>{props.category}</h3>
           <p className='text-center line-clamp-3'>{props.description}</p>
           <div className='p-2 grid grid-flow-col auto-cols-auto gap-3 content-center'>
-            {props.shops.map((shop) => {
-              return shop.shopUrl === "null" ? null : (
-                <div className='flex justify-center mx-auto content-center' key={shop.shopName}>
+            {props.shops.map((shop, index) => {
+              const isArtisticCopy = shop.shopName === "Artistic Copy";
+              const hasShopUrl = shop.shopUrl && shop.shopUrl !== "null";
+
+              if (isArtisticCopy) {
+                const artisticCopyIcon = (
+                  <div className='flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-sm'>
+                    <FaPalette size={24} aria-hidden='true' />
+                  </div>
+                );
+                const artisticCopyItem = (
+                  <div className='flex items-center gap-3 rounded-full border border-base-300 bg-base-200 px-3 py-2 text-left text-xs font-medium text-base-content/70'>
+                    {artisticCopyIcon}
+                    <span>{artisticCopyLabel}</span>
+                  </div>
+                );
+
+                return (
+                  <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
+                    <ArtisticCopyViewModal
+                      id={shop._id || `${props.id}-artistic-copy`}
+                      triggerClassName='transition-transform hover:scale-105'
+                      designData={{
+                        id: props.id,
+                        title: props.title,
+                        category: props.category,
+                        description: props.description,
+                        price: props.price,
+                      }}
+                      artisticData={shop}
+                    >
+                      {artisticCopyItem}
+                    </ArtisticCopyViewModal>
+                  </div>
+                );
+              }
+
+              if (!hasShopUrl) {
+                return null;
+              }
+
+              return (
+                <div key={`${shop.shopName}-${index}`} className='flex justify-center mx-auto content-center'>
                   <Link
                     href={`${shop.shopUrl}`}
                     passHref={true}
                     target='_blank'
                     rel='noopener noreferrer'
                     onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId: props.id, designTitle: props.title })}
-                    className='flex-auto content-center'
-                  >
+                    className='flex-auto content-center'>
                     <Image
                       width={"50"}
                       height={"50"}
@@ -87,18 +136,20 @@ export default function CardDesignWithCarousel(props) {
                       alt={shop.shopName}
                       loading='lazy'
                       className='bg-slate-50 rounded-full'
-                      style={{ width: 'auto', height: 'auto' }}
+                      style={{ width: "auto", height: "auto" }}
                     />
                   </Link>
                 </div>
               );
             })}
           </div>
-          {props.blogLink?<div className='card-actions justify-center'>
-            <Link href={props.blogLink} target="blank">
-              <button className='btn btn-primary'>Blog About {props.title}</button>
-            </Link>
-          </div>:null}
+          {props.blogLink ? (
+            <div className='card-actions justify-center'>
+              <Link href={props.blogLink} target='blank'>
+                <button className='btn btn-primary'>Blog About {props.title}</button>
+              </Link>
+            </div>
+          ) : null}
           <div className='card-actions justify-center'>
             <Link href={`/shops/${props.id}`}>
               <button className='btn btn-primary'>Show More</button>

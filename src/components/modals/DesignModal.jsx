@@ -16,6 +16,7 @@ export default function DesignModal({ desPack }) {
             title={desPack?.title}
             description={desPack?.description}
             category={desPack?.category}
+            price={desPack?.price}
             photo={desPack?.photo}
             secondaryPhotos={desPack?.secondaryImages}
             shops={desPack?.shops || []}

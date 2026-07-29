@@ -1,6 +1,7 @@
-//imports propios
+import React from "react";
 import Link from "next/link";
 import ContactForm from "../contact/ContactForm";
+import { FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -64,6 +65,11 @@ export default function Footer() {
             >
               info@creativerafa.com
             </a>
+            <div className='flex items-center gap-4 pt-2'>
+              <a href='#' className='hover:text-primary transition-colors'><FaInstagram size={20} /></a>
+              <a href='#' className='hover:text-primary transition-colors'><FaTwitter size={20} /></a>
+              <a href='#' className='hover:text-primary transition-colors'><FaLinkedin size={20} /></a>
+            </div>
           </div>
         </section>
       </div>
