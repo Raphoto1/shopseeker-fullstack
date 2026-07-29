@@ -3,7 +3,7 @@ export const categories = [
 ]
 //recordar llamar los iconos igual se agregan manualmente en el add!!!
 export const shops = [
-    'RedBubble', 'Society6','Displate','TeePublic','Spreadshirt', 'Threadless'
+    'RedBubble', 'Society6','Displate','TeePublic','Spreadshirt', 'Threadless', 'Artistic Copy'
 ]
 
 export const allShopsPath = '/api/design?page='

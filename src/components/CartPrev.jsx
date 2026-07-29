@@ -81,6 +81,7 @@ export default function CartPrev({ cartId }) {
                   title={des.design.title}
                   description={des.design.description}
                   category={des.design.category}
+                  price={des.design.price}
                   photo={des.design.photo}
                   secondaryPhotos={des.design.secondaryImages}
                   shops={des.design.shops}

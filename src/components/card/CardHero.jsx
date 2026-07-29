@@ -6,12 +6,23 @@ import Link from "next/link";
 import { memo, useMemo } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { FaFacebookF, FaPinterestP, FaXTwitter } from "react-icons/fa6";
+import { FaFacebookF, FaPalette, FaPinterestP, FaXTwitter } from "react-icons/fa6";
 
 //imports propios
 import { pageBasePath } from "@/enums/SuperVariables";
 import { LikeButton } from "@/components/buttons/LikeButton";
 import { event as trackEvent } from "@/gtag";
+
+const SHOP_ICON_MAP = {
+  RedBubble: "/img/icons/RedBubble.png",
+  Society6: "/img/icons/Society6.png",
+  Displate: "/img/icons/Displate.png",
+  TeePublic: "/img/icons/TeePublic.png",
+  Spreadshirt: "/img/icons/Spreadshirt.png",
+  Threadless: "/img/icons/Threadless.png",
+};
+
+const getShopIconSrc = (shopName) => SHOP_ICON_MAP[shopName] || "/img/icons/shoppingCart.png";
 
 const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
   const shopKey = String(shopName || "")
@@ -40,6 +51,25 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
 // Componente memoizado para las tiendas
 const ShopLink = memo(({ shop, designId, designTitle }) => {
   if (shop.shopUrl === "null") return null;
+  const isArtisticCopy = shop.shopName === "Artistic Copy";
+
+  if (isArtisticCopy) {
+    return (
+      <div className='flex justify-center'>
+        <Link
+          href={shop.shopUrl}
+          passHref={true}
+          target='_blank'
+          rel='noopener noreferrer'
+          onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle })}
+          className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/35 bg-primary/10 text-primary shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
+          aria-label={`Open ${shop.shopName}`}
+        >
+          <FaPalette size={20} aria-hidden='true' />
+        </Link>
+      </div>
+    );
+  }
   
   return (
     <div className='flex justify-center'>
@@ -54,7 +84,7 @@ const ShopLink = memo(({ shop, designId, designTitle }) => {
         <Image
           width={50}
           height={50}
-          src={`/img/icons/${shop.shopName}.png`}
+          src={getShopIconSrc(shop.shopName)}
           alt={shop.shopName}
           loading='lazy'
           className='h-10 w-10 rounded-full bg-slate-100 object-contain p-1'

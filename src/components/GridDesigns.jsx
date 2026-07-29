@@ -24,6 +24,7 @@ export default function GridDesigns({ designsToSort }) {
                 title={des.title}
                 description={des.description}
                 category={des.category}
+                price={des.price}
                 photo={des.photo}
                 secondaryPhotos={des.secondaryImages}
                 shops={des.shops}

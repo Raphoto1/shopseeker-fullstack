@@ -19,6 +19,32 @@ import { getUserInfo } from "./auth.service";
 import { imageUploaderCloudinary, imageDeleterCloudinary, imageArrayPacker } from "@/utils/cloudinaryUtils";
 import { log } from "console";
 
+const ARTISTIC_COPY_SHOP_NAME = "Artistic Copy";
+const ARTISTIC_COPY_FIELDS = [
+  "editionType",
+  "isSerial",
+  "serialNumber",
+  "totalCopies",
+  "copyNumber",
+  "availableCopies",
+  "soldCopies",
+  "certificateOfAuthenticity",
+  "signedByArtist",
+  "technique",
+  "support",
+  "dimensions",
+  "framedDimensions",
+  "series",
+  "year",
+  "currency",
+  "price",
+  "availability",
+  "shippingScope",
+  "deliveryTime",
+  "paymentOptions",
+  "purchaseUrl",
+];
+
 //**codigo**
 //cloudinary
 cloudinary.config({
@@ -155,6 +181,8 @@ export const updateDesign = async (data) => {
   let newSimgs = [];
   let newSimgsExist = false;
   let shops = [...chkDesign.shops];
+  const artisticPayload = extractArtisticCopyData(dataToUpdate);
+  const hasArtisticPayload = Object.keys(artisticPayload).length > 0;
 
   const packingCycle = async (data) => {
     for (let item in data) {
@@ -198,9 +226,11 @@ export const updateDesign = async (data) => {
           shops.push(shopToPush);
         }
         shopToUpdateIndex = shops.findIndex((e) => e.shopName === `${shopName}`);
-        updatePack.push(shops);
         shops[shopToUpdateIndex].shopUrl = data[item];
         //actualizar tienda
+      } else if (item.startsWith("artisticCopy__")) {
+        // Artistic Copy metadata is merged in one step after iterating all fields.
+        continue;
       } else if (field === "id") {
         continue;
       } else {
@@ -228,6 +258,19 @@ export const updateDesign = async (data) => {
 
   const pack = await packingCycle(dataToUpdate);
   console.log("llego a la funcion");
+
+  if (hasArtisticPayload) {
+    let artisticShopIndex = shops.findIndex((shop) => shop.shopName === ARTISTIC_COPY_SHOP_NAME);
+    if (artisticShopIndex === -1) {
+      shops.push({ shopName: ARTISTIC_COPY_SHOP_NAME, shopUrl: "null" });
+      artisticShopIndex = shops.length - 1;
+    }
+    shops[artisticShopIndex] = {
+      ...shops[artisticShopIndex],
+      ...artisticPayload,
+    };
+    shopsExist = true;
+  }
 
   shopsExist && updatePack.push({ shops: shops });
   if (deletedSimgs || newSimgsExist) {
@@ -315,10 +358,57 @@ const shopFilter = (arr, shopName, shopUrl) => {
   if (arr[`${shopUrl}`]) {
     shop["shopName"] = `${shopName}`;
     shop["shopUrl"] = `${arr[shopUrl]}`;
-    return shop;
   } else {
     shop["shopName"] = `${shopName}`;
     shop["shopUrl"] = `null`;
-    return shop;
   }
+
+  if (shopName === ARTISTIC_COPY_SHOP_NAME) {
+    const artisticData = extractArtisticCopyData(arr);
+    shop = { ...shop, ...artisticData };
+  }
+
+  return shop;
+};
+
+const extractArtisticCopyData = (source) => {
+  const result = {};
+
+  ARTISTIC_COPY_FIELDS.forEach((field) => {
+    const formKey = `artisticCopy__${field}`;
+    const rawValue = source?.[formKey];
+    if (rawValue === undefined || rawValue === null) {
+      return;
+    }
+
+    const valueAsString = `${rawValue}`.trim();
+    if (valueAsString === "") {
+      return;
+    }
+
+    if (["isSerial", "certificateOfAuthenticity", "signedByArtist"].includes(field)) {
+      result[field] = valueAsString.toLowerCase() === "true";
+      return;
+    }
+
+    if (["totalCopies", "copyNumber", "availableCopies", "soldCopies", "year"].includes(field)) {
+      const parsed = Number(valueAsString);
+      if (Number.isFinite(parsed)) {
+        result[field] = parsed;
+      }
+      return;
+    }
+
+    if (field === "price") {
+      const parsedPrice = Number(valueAsString);
+      if (Number.isFinite(parsedPrice)) {
+        result[field] = parsedPrice;
+      }
+      return;
+    }
+
+    result[field] = valueAsString;
+  });
+
+  return result;
 };
