@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
-    
     // Validar que el ID sea válido
     if (!id || id === 'undefined' || id === 'false') {
       return NextResponse.json(
@@ -25,9 +24,19 @@ export async function GET(req, { params }) {
     }
 
     const design = await getDesignById(id);
-    return NextResponse.json({ status: "success", payload: design });
+    
+    if (!design) {
+      console.warn(`DEBUG: No design found for ID: ${id}`);
+      return NextResponse.json(
+        { status: "error", message: "Design not found" },
+        { status: 404 }
+      );
+    }
+
+    // Changed to return 200 explicitly
+    return NextResponse.json({ status: "success", payload: design }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching design:", error);
+    console.error("DEBUG: Error fetching design:", error);
     return NextResponse.json(
       { status: "error", message: `Design not found: ${error.message}` },
       { status: 404 }
