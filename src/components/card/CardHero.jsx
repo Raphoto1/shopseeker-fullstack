@@ -9,9 +9,9 @@ import { Carousel } from "react-responsive-carousel";
 import { FaFacebookF, FaPalette, FaPinterestP, FaXTwitter } from "react-icons/fa6";
 
 //imports propios
-import { pageBasePath } from "@/enums/SuperVariables";
 import { LikeButton } from "@/components/buttons/LikeButton";
 import { event as trackEvent } from "@/gtag";
+import ArtisticCopyViewModal from "../modals/ArtisticCopyViewModal";
 
 const SHOP_ICON_MAP = {
   RedBubble: "/img/icons/RedBubble.png",
@@ -48,29 +48,35 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
   });
 };
 
-// Componente memoizado para las tiendas
-const ShopLink = memo(({ shop, designId, designTitle }) => {
+const ShopLink = memo(({ shop, design, designId }) => {
   if (shop.shopUrl === "null") return null;
   const isArtisticCopy = shop.shopName === "Artistic Copy";
 
   if (isArtisticCopy) {
     return (
       <div className='flex justify-center'>
-        <Link
-          href={shop.shopUrl}
-          passHref={true}
-          target='_blank'
-          rel='noopener noreferrer'
-          onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle })}
-          className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/35 bg-primary/10 text-primary shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
-          aria-label={`Open ${shop.shopName}`}
+        <ArtisticCopyViewModal
+          id={shop._id || `${designId}-artistic-copy`}
+          triggerClassName='transition-transform hover:scale-105'
+          designData={{
+            id: designId,
+            title: design.title,
+            category: design.category,
+            description: design.description,
+            price: design.price,
+          }}
+          artisticData={shop}
         >
-          <FaPalette size={20} aria-hidden='true' />
-        </Link>
+          <div className='flex items-center gap-3 rounded-full border border-base-300 bg-base-200 px-3 py-2 text-left text-xs font-medium text-base-content/70'>
+            <div className='flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-sm'>
+              <FaPalette size={18} aria-hidden='true' />
+            </div>
+          </div>
+        </ArtisticCopyViewModal>
       </div>
     );
   }
-  
+
   return (
     <div className='flex justify-center'>
       <Link
@@ -78,7 +84,7 @@ const ShopLink = memo(({ shop, designId, designTitle }) => {
         passHref={true}
         target='_blank'
         rel='noopener noreferrer'
-        onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle })}
+        onClick={() => trackShopClick({ shopName: shop.shopName, shopUrl: shop.shopUrl, designId, designTitle: design.title })}
         className='group inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-base-300 bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md'
       >
         <Image
@@ -97,52 +103,68 @@ const ShopLink = memo(({ shop, designId, designTitle }) => {
 
 ShopLink.displayName = 'ShopLink';
 
-// Componente memoizado para los botones de compartir
-const ShareButtons = memo(({ id, description, title, photo }) => {
-  const shareUrl = `${pageBasePath}/shops/${id}`;
-  
+const ShareButtons = ({ design }) => {
+  const shareTitle = design?.title || "Design";
+  const shareText = design?.description || shareTitle;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://creativerafa.com";
+  const shareUrl = `${siteUrl.replace(/\/$/, "")}/shops/${design?.id}`;
+
+  const openShareWindow = (url) => {
+    window.open(url, "_blank", "noopener,noreferrer,width=600,height=500");
+  };
+
+  const handleFacebookShare = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    openShareWindow(facebookUrl);
+  };
+
+  const handlePinterestShare = () => {
+    const pinterestUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent(design?.photo || "")}&description=${encodeURIComponent(shareText)}`;
+    openShareWindow(pinterestUrl);
+  };
+
+  const handleXShare = () => {
+    const xUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+    openShareWindow(xUrl);
+  };
+
   return (
-    <div className='mt-6 rounded-2xl border border-base-300 bg-base-200/70 p-4'>
-      <p className='text-sm font-semibold tracking-wide text-base-content/70'>Share this design</p>
-      <div className='mt-3 flex flex-wrap items-center gap-2'>
-        <a 
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className='inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5'
-          aria-label='Share on Facebook'
-        >
-          <FaFacebookF size={14} />
-        </a>
-        <a 
-          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`New design available: ${title}`)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className='inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky-500 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5'
-          aria-label='Share on X'
-        >
-          <FaXTwitter size={14} />
-        </a>
-        <a 
-          href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent(photo)}&description=${encodeURIComponent(description)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className='inline-flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5'
-          aria-label='Share on Pinterest'
-        >
-          <FaPinterestP size={14} />
-        </a>
-      </div>
+    <div className='flex flex-wrap justify-center gap-2'>
+      <button
+        type='button'
+        className='btn btn-outline btn-sm'
+        onClick={handleFacebookShare}
+        aria-label='Share on Facebook'
+        title='Share on Facebook'
+      >
+        <FaFacebookF />
+      </button>
+      <button
+        type='button'
+        className='btn btn-outline btn-sm'
+        onClick={handlePinterestShare}
+        aria-label='Share on Pinterest'
+        title='Share on Pinterest'
+      >
+        <FaPinterestP />
+      </button>
+      <button
+        type='button'
+        className='btn btn-outline btn-sm'
+        onClick={handleXShare}
+        aria-label='Share on X'
+        title='Share on X'
+      >
+        <FaXTwitter />
+      </button>
     </div>
   );
-});
+};
 
-ShareButtons.displayName = 'ShareButtons';
-
-// Componente principal memoizado
-function CardHero(props) {
-  //api requests
+export default memo(function CardHero(props) {
+   //api requests
   //get designs
+  const { id } = props;
   const designId = props?.id ? String(props.id) : "";
   const isValidDesignId = designId && designId !== "undefined" && designId !== "false";
   const basePath = isValidDesignId ? `/api/design/${designId}` : null;
@@ -172,32 +194,24 @@ function CardHero(props) {
   
   // Memoizar el diseño para evitar re-renders innecesarios
   const design = useMemo(() => data?.payload, [data]);
-  
-  // Memoizar las tiendas válidas
-  const validShops = useMemo(() => 
-    design?.shops?.filter(shop => shop.shopUrl !== "null") || [], 
-    [design?.shops]
-  );
+
+  const validShops = useMemo(() => {
+    if (!design?.shops) return [];
+    return design.shops.filter(shop => shop.shopUrl && shop.shopUrl !== "null");
+  }, [design]);
+
+  if (isLoading) {
+    return <div className='min-h-screen flex items-center justify-center'>Loading...</div>;
+  }
 
   if (error) {
-    console.error('Error loading design:', error);
     return (
       <div className='min-h-screen bg-base-100 px-4 py-10'>
-        <div className='mx-auto max-w-4xl rounded-3xl border border-error/40 bg-base-200/70 p-8 text-center shadow-xl'>
+        <div className='mx-auto max-w-4xl rounded-3xl border border-base-300 bg-base-200/70 p-8 text-center shadow-xl'>
           <div>
-            <h1 className='text-2xl font-bold text-error'>Design not found</h1>
-            <p className='py-4 text-base-content/70'>{error.message || 'The design you are looking for could not be loaded.'}</p>
+            <h1 className='text-2xl font-bold text-base-content'>Error loading design</h1>
+            <p className='py-4 text-base-content/70'>{error.message}</p>
           </div>
-        </div>
-      </div>
-    );
-  }
-  
-  if (isLoading) {
-    return (
-      <div className='min-h-screen bg-base-100 px-4 py-10'>
-        <div className='mx-auto flex max-w-4xl items-center justify-center rounded-3xl border border-base-300 bg-base-200/70 p-10 shadow-xl'>
-          <div className='loading loading-infinity loading-lg text-primary'></div>
         </div>
       </div>
     );
@@ -264,7 +278,7 @@ function CardHero(props) {
 
           <div className='rounded-2xl border border-base-300 bg-base-100 p-6 shadow-lg sm:p-8'>
             <div className='mb-5 flex justify-start'>
-              <LikeButton desId={props.id} likesRecieve={design.likes} key={props.id} />
+              <LikeButton desId={id} likesRecieve={design.likes} key={id} />
             </div>
 
             <h1 className='text-3xl font-extrabold capitalize leading-tight text-base-content sm:text-4xl'>
@@ -282,7 +296,7 @@ function CardHero(props) {
                 </p>
                 <div className='flex flex-wrap gap-3'>
                   {validShops.map((shop) => (
-                    <ShopLink key={shop.shopName} shop={shop} designId={props.id} designTitle={design.title} />
+                    <ShopLink key={shop.shopName} shop={shop} design={design} designId={id} />
                   ))}
                 </div>
               </div>
@@ -292,7 +306,7 @@ function CardHero(props) {
               <div className='mt-7'>
                 <Link
                   href={design.blogLink}
-                  target="_blank"
+                  target='_blank'
                   className='inline-flex items-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-content transition-all duration-200 hover:opacity-90'
                 >
                   Blog About {design.title}
@@ -300,17 +314,12 @@ function CardHero(props) {
               </div>
             )}
 
-            <ShareButtons
-              id={props.id}
-              description={design.description}
-              title={design.title}
-              photo={design.photo}
-            />
+            <div className='mt-7'>
+              <ShareButtons design={design} />
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
-}
-
-export default memo(CardHero);
+});

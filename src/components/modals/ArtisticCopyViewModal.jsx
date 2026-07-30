@@ -126,20 +126,42 @@ export default function ArtisticCopyViewModal({ id, children, triggerClassName =
   const shippingScope = pickFirst(artisticData, ["shippingScope", "shipping", "deliveryScope"], "Not Specified");
   const deliveryTime = pickFirst(artisticData, ["deliveryTime", "leadTime"], "Not Specified");
 
+  const handleClose = () => {
+    const dialog = document.getElementById(`my_modal_${id}`);
+    if (dialog) dialog.close();
+  };
+
   return (
     <>
       <button type='button' className={triggerClassName} onClick={() => document.getElementById(`my_modal_${id}`).showModal()}>
         {children}
       </button>
-      <dialog id={`my_modal_${id}`} className='modal modal-middle'>
+      <dialog 
+        id={`my_modal_${id}`} 
+        className='modal modal-middle'
+        onClick={(e) => {
+          if (e.target.id === `my_modal_${id}`) {
+            handleClose();
+          }
+        }}
+      >
         <div className='modal-box w-11/12 max-w-2xl border border-base-300 bg-base-100 p-0'>
           <div className='rounded-t-2xl bg-gradient-to-r from-base-200 via-base-100 to-base-200 px-6 py-5'>
             <div className='flex flex-wrap items-center justify-between gap-3'>
-              <div>
+              <div className='flex-1'>
                 <p className='text-xs uppercase tracking-[0.2em] text-base-content/60'>Artistic Version</p>
                 <h3 className='text-2xl font-bold text-base-content'>{title}</h3>
               </div>
-              <span className='badge badge-primary badge-lg'>{editionLabel}</span>
+              <div className='flex items-center gap-3'>
+                <span className='badge badge-primary badge-lg'>{editionLabel}</span>
+                <button 
+                  onClick={handleClose} 
+                  className='btn btn-ghost btn-sm btn-circle'
+                  aria-label='Close modal'
+                >
+                  ✕
+                </button>
+              </div>
             </div>
             <p className='mt-2 text-sm text-base-content/70'>{editionDetail}</p>
           </div>
