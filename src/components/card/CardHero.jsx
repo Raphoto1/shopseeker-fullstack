@@ -49,8 +49,8 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
 };
 
 const ShopLink = memo(({ shop, design, designId }) => {
-  if (shop.shopUrl === "null") return null;
   const isArtisticCopy = shop.shopName === "Artistic Copy";
+  const hasShopUrl = shop.shopUrl && shop.shopUrl !== "null";
 
   if (isArtisticCopy) {
     return (
@@ -68,7 +68,7 @@ const ShopLink = memo(({ shop, design, designId }) => {
           artisticData={shop}
         >
           <div className='flex items-center gap-3 rounded-full border border-base-300 bg-base-200 px-3 py-2 text-left text-xs font-medium text-base-content/70'>
-            <div className='flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-sm'>
+            <div className='flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-sm'>
               <FaPalette size={18} aria-hidden='true' />
             </div>
           </div>
@@ -76,6 +76,8 @@ const ShopLink = memo(({ shop, design, designId }) => {
       </div>
     );
   }
+
+  if (!hasShopUrl) return null;
 
   return (
     <div className='flex justify-center'>
