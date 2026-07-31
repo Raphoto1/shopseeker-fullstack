@@ -9,6 +9,7 @@ import FlowShops from "@/components/extras/FlowShops";
 import PageSkeleton from "@/components/ui/PageSkeleton";
 import Hello from "@/components/home/Hello";
 import FavoriteModals from "@/components/extras/FavoritesModals";
+import HomePreviewBlog from "@/components/blog/HomePreviewBlog";
 
 // Componentes no críticos con lazy loading optimizado
 const InstagramFeed = dynamic(() => import("@/components/socialMedia/InstagramFeed"), {
@@ -56,6 +57,7 @@ export default function Home() {
       }>
         <ShopsPackProfile />
       </Suspense>
+      <HomePreviewBlog />
     </main>
   );
 }
