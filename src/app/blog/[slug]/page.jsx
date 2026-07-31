@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ShareButtons from "@/components/buttons/ShareButtons";
 import { getBlogBySlug } from "@/service/blog.service";
 
 export const revalidate = 60;
@@ -53,6 +54,8 @@ export default async function BlogPostPage({ params }) {
   }
 
   const postDate = new Date(post.publishedAt || post.createdAt || Date.now()).toLocaleDateString();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://creativerafa.com";
+  const postUrl = `${siteUrl.replace(/\/$/, "")}/blog/${post.slug}`;
   const htmlContent = post.contentHtml || "";
   const plainContent = post.contentText || "";
   const linkedDesigns = Array.isArray(post?.linkedDesignIds)
@@ -78,6 +81,7 @@ export default async function BlogPostPage({ params }) {
           <p className='mt-4 max-w-3xl text-base-content/70 sm:text-lg'>{post.excerpt}</p>
 
           <p className='mt-5 text-sm text-base-content/60'>By {post.author}</p>
+          <ShareButtons url={postUrl} title={post.title} description={post.excerpt} />
         </header>
 
         <div className='mt-8 overflow-hidden rounded-3xl border border-base-300'>
@@ -113,7 +117,7 @@ export default async function BlogPostPage({ params }) {
           {hasLinkedDesign && (
             <aside className='h-fit rounded-3xl border border-primary/30 bg-base-200/60 p-4 lg:sticky lg:top-24'>
               <p className='text-xs font-semibold uppercase tracking-[0.16em] text-primary'>Linked Designs</p>
-              <div className='mt-3 space-y-3'>
+              <div className='mt-3 space-y-3'>qwen
                 {linkedDesigns.map((linkedDesign) => (
                   <Link key={String(linkedDesign._id)} href={`/shops/${linkedDesign._id}`} className='group block overflow-hidden rounded-2xl border border-base-300 bg-base-100'>
                     <div className='relative aspect-[4/3] overflow-hidden'>
