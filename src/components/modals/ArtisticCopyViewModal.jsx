@@ -67,6 +67,7 @@ export default function ArtisticCopyViewModal({ id, children, triggerClassName =
   const isUnique = isSerialRaw !== null ? !isSerialRaw : isUniqueLegacy !== null ? isUniqueLegacy : looksUniqueByText;
 
   const title = designData.title || `Artwork ${id}`;
+  const notes = pickFirst(artisticData, ["notes", "note", "observations"], pickFirst(designData, ["notes"], "Not specified"));
   const technique = pickFirst(artisticData, ["technique", "medium", "category"], designData.category || "Not specified");
   const support = pickFirst(artisticData, ["support", "surface", "canvas"], "Not specified");
   const dimensions = pickFirst(artisticData, ["dimensions", "size", "measures"], "Not Specified");
@@ -151,6 +152,7 @@ export default function ArtisticCopyViewModal({ id, children, triggerClassName =
               <div className='flex-1'>
                 <p className='text-xs uppercase tracking-[0.2em] text-base-content/60'>Artistic Version</p>
                 <h3 className='text-2xl font-bold text-base-content'>{title}</h3>
+                <p className='mt-1 text-sm text-base-content/70'>Notes: {notes}</p>
               </div>
               <div className='flex items-center gap-3'>
                 <span className='badge badge-primary badge-lg'>{editionLabel}</span>
@@ -177,11 +179,11 @@ export default function ArtisticCopyViewModal({ id, children, triggerClassName =
                 <p className='text-sm font-medium text-base-content'>{support}</p>
               </div>
               <div className='rounded-xl border border-base-300 bg-base-200/40 p-3'>
-                <p className='text-xs uppercase tracking-wide text-base-content/60'>Dimensions</p>
+                <p className='text-xs uppercase tracking-wide text-base-content/60'>Dimensions in Cm</p>
                 <p className='text-sm font-medium text-base-content'>{dimensions}</p>
               </div>
               <div className='rounded-xl border border-base-300 bg-base-200/40 p-3'>
-                <p className='text-xs uppercase tracking-wide text-base-content/60'>Framed Dimensions</p>
+                <p className='text-xs uppercase tracking-wide text-base-content/60'>Framed Dimensions in Cm</p>
                 <p className='text-sm font-medium text-base-content'>{framedDimensions}</p>
               </div>
             </div>

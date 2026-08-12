@@ -37,7 +37,6 @@ const trackShopClick = ({ shopName, shopUrl, designId, designTitle }) => {
 
 export default function CardDesignWithCarousel(props) {
   const shouldPrioritizeImage = Boolean(props.eagerImage);
-  const artisticCopyLabel = "Original Copy";
 
   return (
     <>
@@ -84,15 +83,9 @@ export default function CardDesignWithCarousel(props) {
               const hasShopUrl = shop.shopUrl && shop.shopUrl !== "null";
 
               if (isArtisticCopy) {
-                const artisticCopyIcon = (
-                  <div className='flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-sm'>
-                    <FaPalette size={24} aria-hidden='true' />
-                  </div>
-                );
                 const artisticCopyItem = (
-                  <div className='flex items-center gap-3 rounded-full border border-base-300 bg-base-200 px-3 py-2 text-left text-xs font-medium text-base-content/70'>
-                    {artisticCopyIcon}
-                    <span>{artisticCopyLabel}</span>
+                  <div className='flex items-center gap-3 rounded-full border bg-primary p-2 text-white shadow-md transition-transform hover:scale-105'>
+                    <FaPalette size={24} aria-hidden='true' />
                   </div>
                 );
 
@@ -108,8 +101,7 @@ export default function CardDesignWithCarousel(props) {
                         description: props.description,
                         price: props.price,
                       }}
-                      artisticData={shop}
-                    >
+                      artisticData={shop}>
                       {artisticCopyItem}
                     </ArtisticCopyViewModal>
                   </div>

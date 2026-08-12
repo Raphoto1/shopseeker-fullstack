@@ -42,6 +42,7 @@ const ARTISTIC_COPY_FIELDS = [
   "shippingScope",
   "deliveryTime",
   "paymentOptions",
+  "notes",
   "purchaseUrl",
 ];
 
