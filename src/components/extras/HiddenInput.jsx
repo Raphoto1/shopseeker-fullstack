@@ -22,6 +22,7 @@ const ARTISTIC_COPY_FIELDS = [
   { key: "shippingScope", label: "Shipping scope", type: "text", placeholder: "Local, national, international" },
   { key: "deliveryTime", label: "Delivery time", type: "text", placeholder: "3-7 business days" },
   { key: "paymentOptions", label: "Payment options", type: "select", options: ["Bank transfer", "Card", "PayPal", "Crypto", "Other"] },
+  { key: "notes", label: "Notes", type: "textarea", placeholder: "Additional notes" },
   { key: "purchaseUrl", label: "Purchase URL", type: "text", placeholder: "Optional direct purchase link" },
 ];
 
@@ -136,6 +137,25 @@ export default function HiddenInput({ shopName, shopsFromUpdate }) {
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
+                  </label>
+                );
+              }
+
+              if (field.type === "textarea") {
+                return (
+                  <label key={field.key} className='form-control w-full md:col-span-2'>
+                    <span className='mb-1 text-xs font-semibold'>{field.label}</span>
+                    <textarea
+                      name={inputName}
+                      value={artisticForm[field.key]}
+                      onChange={(event) => handleArtisticInput(field.key, event.target.value)}
+                      placeholder={field.placeholder || ""}
+                      className='textarea textarea-bordered textarea-sm w-full'
+                      rows={3}
+                    />
+                    {field.helperText && (
+                      <p className='text-[10px] text-base-content/50 mt-1'>{field.helperText}</p>
+                    )}
                   </label>
                 );
               }
